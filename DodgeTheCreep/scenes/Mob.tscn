@@ -1,0 +1,66 @@
+[gd_scene load_steps=10 format=3 uid="uid://co4nkoysgyuyy"]
+
+[ext_resource type="Script" path="res://DodgeTheCreep/scripts/Mob.cs" id="1_ao8dp"]
+[ext_resource type="Texture2D" uid="uid://cspt10mi57vp4" path="res://DodgeTheCreep/assets/dodge_the_creeps_2d_assets/art/enemyFlyingAlt_1.png" id="1_qgnxp"]
+[ext_resource type="Texture2D" uid="uid://64k0y7wol8ki" path="res://DodgeTheCreep/assets/dodge_the_creeps_2d_assets/art/enemyFlyingAlt_2.png" id="2_rxu3l"]
+[ext_resource type="Texture2D" uid="uid://lfh4j0i2y5rk" path="res://DodgeTheCreep/assets/dodge_the_creeps_2d_assets/art/enemySwimming_1.png" id="3_5vgs6"]
+[ext_resource type="Texture2D" uid="uid://cqrdkda0tnx6q" path="res://DodgeTheCreep/assets/dodge_the_creeps_2d_assets/art/enemySwimming_2.png" id="4_nvym2"]
+[ext_resource type="Texture2D" uid="uid://qa3t1l283de" path="res://DodgeTheCreep/assets/dodge_the_creeps_2d_assets/art/enemyWalking_1.png" id="5_8xsmf"]
+[ext_resource type="Texture2D" uid="uid://btf4cxod3tqlu" path="res://DodgeTheCreep/assets/dodge_the_creeps_2d_assets/art/enemyWalking_2.png" id="6_ujwii"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_nru6o"]
+radius = 58.0
+height = 180.0
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_m5ylb"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_qgnxp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_rxu3l")
+}],
+"loop": true,
+"name": &"fly",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_5vgs6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_nvym2")
+}],
+"loop": true,
+"name": &"swim",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_8xsmf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_ujwii")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[node name="Mob" type="RigidBody2D" groups=["Mobs"]]
+collision_mask = 0
+gravity_scale = 0.0
+script = ExtResource("1_ao8dp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_nru6o")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.75, 0.75)
+sprite_frames = SubResource("SpriteFrames_m5ylb")
+animation = &"fly"
+frame_progress = 0.595716
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
