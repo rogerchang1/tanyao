@@ -36,6 +36,14 @@ public partial class TileStateMachine : Node
 		}
 	}
 	
+	public void OnInput(InputEvent @event)
+	{
+		if(CurrentState != null)
+		{
+			CurrentState.OnInput(@event);
+		}
+	}
+	
 	public void OnGuiInput(InputEvent @event)
 	{
 		if(CurrentState != null)
@@ -49,6 +57,14 @@ public partial class TileStateMachine : Node
 		if(CurrentState != null)
 		{
 			CurrentState.OnMouseEntered();
+		}
+	}
+	
+	public void OnMouseExited()
+	{
+		if(CurrentState != null)
+		{
+			CurrentState.OnMouseExited();
 		}
 	}
 	

@@ -15,7 +15,17 @@ public partial class TileClickedState : TileState
 	
 	public override void Enter()
 	{
-		_TileUI.StateLabel.Text = "CLICKED";
+		_TileUI._StateLabel.Text = "CLICKED";
+		_TileUI._DropPointDetector.Monitoring = true;
+	}
+	
+	public override void OnInput(InputEvent @event)
+	{
+		bool IsInMotion = @event is InputEventMouseMotion motionEvent;
+		if(IsInMotion)
+		{
+			EmitSignal(TileState.SignalName.TransitionRequested, this, (int)TileState.State.DRAGGING);
+		}
 	}
 	
 }

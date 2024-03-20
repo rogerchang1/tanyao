@@ -34,6 +34,11 @@ public partial class TileState : Node
 		return;
 	}
 	
+	public virtual void OnInput(InputEvent @event)
+	{
+		return;
+	}
+	
 	public virtual void OnGuiInput(InputEvent @event)
 	{
 		return;

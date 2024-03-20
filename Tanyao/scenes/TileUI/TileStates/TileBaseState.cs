@@ -15,10 +15,14 @@ public partial class TileBaseState : TileState
 	
 	public async override void Enter()
 	{
-		await ToSignal(GetParent(), "ready");
+		if(!_TileUI.IsNodeReady()){
+			await ToSignal(_TileUI, "ready");
+		}
 
-		_TileUI.StateLabel.Text = "BASE";
-		EmitSignal(TileUI.SignalName.ReparentRequested, _TileUI);
+		_TileUI._StateLabel.Text = "BASE";
+		_TileUI._Color.Color = new Color(0x387ddb);
+		
+		_TileUI.EmitSignal(TileUI.SignalName.ReparentRequested, _TileUI);
 		_TileUI.PivotOffset = Vector2.Zero;
 	}
 	
@@ -28,8 +32,6 @@ public partial class TileBaseState : TileState
 		{
 			_TileUI.PivotOffset = _TileUI.GetGlobalMousePosition() - _TileUI.GlobalPosition;
 			EmitSignal(TileState.SignalName.TransitionRequested, this, (int)TileState.State.CLICKED);
-			//card_ui.pivot_offset = card_ui.get_global_mouse_position() - card_ui.global_position
-			//transition_requested.emit(self, CardState.State.CLICKED)
 		}
 	}
 }
