@@ -16,3 +16,4 @@ R:\roger\coding\tanyao\.godot\mono\temp\obj\Debug\tanyao.pdb
 R:\roger\coding\tanyao\.godot\mono\temp\obj\Debug\tanyao.genruntimeconfig.cache
 R:\roger\coding\tanyao\.godot\mono\temp\obj\Debug\ref\tanyao.dll
 R:\roger\coding\tanyao\.godot\mono\temp\bin\Debug\mahjong.dll
+R:\roger\coding\tanyao\.godot\mono\temp\obj\Debug\tanyao.sourcelink.json

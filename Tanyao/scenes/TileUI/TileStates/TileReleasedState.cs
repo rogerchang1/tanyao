@@ -1,12 +1,8 @@
 using Godot;
 using System;
-using Mahjong.Model;
 
-public partial class Tile : Node
+public partial class TileReleasedState : TileState
 {
-	[Export]
-	String _tile;
-	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{

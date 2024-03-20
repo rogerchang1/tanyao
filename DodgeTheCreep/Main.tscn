@@ -1,9 +1,9 @@
 [gd_scene load_steps=6 format=3 uid="uid://ck2vpteiew5yj"]
 
-[ext_resource type="PackedScene" uid="uid://blbcky1m3jxs5" path="res://DodgeTheCreep/scenes/Player.tscn" id="1_ocgmd"]
-[ext_resource type="Script" path="res://DodgeTheCreep/scripts/Main.cs" id="1_uchrl"]
-[ext_resource type="PackedScene" uid="uid://co4nkoysgyuyy" path="res://DodgeTheCreep/scenes/Mob.tscn" id="2_tfj7b"]
-[ext_resource type="PackedScene" uid="uid://cujpdw0lrkmhs" path="res://DodgeTheCreep/scenes/DodgeHUD.tscn" id="4_e7m22"]
+[ext_resource type="PackedScene" uid="uid://blbcky1m3jxs5" path="res://DodgeTheCreep/Player.tscn" id="1_ocgmd"]
+[ext_resource type="Script" path="res://DodgeTheCreep/Main.cs" id="1_uchrl"]
+[ext_resource type="PackedScene" uid="uid://co4nkoysgyuyy" path="res://DodgeTheCreep/Mob.tscn" id="2_tfj7b"]
+[ext_resource type="PackedScene" uid="uid://cujpdw0lrkmhs" path="res://DodgeTheCreep/DodgeHUD.tscn" id="4_e7m22"]
 
 [sub_resource type="Curve2D" id="Curve2D_rc86x"]
 _data = {
@@ -36,9 +36,11 @@ position = Vector2(-493.714, -125.333)
 scale = Vector2(1.64286, 1.24479)
 curve = SubResource("Curve2D_rc86x")
 
-[node name="MobSpawnLocation" type="PathFollow2D" parent="."]
+[node name="MobSpawnLocation" type="PathFollow2D" parent="MobPath"]
 position = Vector2(320, 128)
 rotation = -0.00242653
+scale = Vector2(0.608696, 0.803347)
+skew = 0.00136387
 
 [connection signal="Hit" from="Player" to="." method="game_over"]
 [connection signal="timeout" from="MobTimer" to="." method="_on_mob_timer_timeout"]

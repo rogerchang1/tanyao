@@ -1,0 +1,81 @@
+[gd_scene load_steps=4 format=3 uid="uid://dvpig2rtau57s"]
+
+[ext_resource type="Script" path="res://Tanyao/scenes/Table/Table.cs" id="1_kw13y"]
+[ext_resource type="PackedScene" uid="uid://5643582tkyan" path="res://Tanyao/scenes/TileUI/TileUI.tscn" id="2_wqckx"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5qduj"]
+size = Vector2(1280, 512)
+
+[node name="Table" type="Node2D"]
+script = ExtResource("1_kw13y")
+metadata/_edit_lock_ = true
+
+[node name="TileDropArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TileDropArea"]
+position = Vector2(640, 256)
+shape = SubResource("RectangleShape2D_5qduj")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TableUI" type="CanvasLayer" parent="."]
+
+[node name="Hand" type="HBoxContainer" parent="TableUI"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -446.0
+offset_top = -120.0
+offset_right = 446.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="TileUI" parent="TableUI/Hand" instance=ExtResource("2_wqckx")]
+layout_mode = 2
+
+[node name="TileUI2" parent="TableUI/Hand" instance=ExtResource("2_wqckx")]
+layout_mode = 2
+
+[node name="TileUI3" parent="TableUI/Hand" instance=ExtResource("2_wqckx")]
+layout_mode = 2
+
+[node name="TileUI4" parent="TableUI/Hand" instance=ExtResource("2_wqckx")]
+layout_mode = 2
+
+[node name="TileUI5" parent="TableUI/Hand" instance=ExtResource("2_wqckx")]
+layout_mode = 2
+
+[node name="TileUI6" parent="TableUI/Hand" instance=ExtResource("2_wqckx")]
+layout_mode = 2
+
+[node name="TileUI7" parent="TableUI/Hand" instance=ExtResource("2_wqckx")]
+layout_mode = 2
+
+[node name="TileUI8" parent="TableUI/Hand" instance=ExtResource("2_wqckx")]
+layout_mode = 2
+
+[node name="TileUI9" parent="TableUI/Hand" instance=ExtResource("2_wqckx")]
+layout_mode = 2
+
+[node name="TileUI10" parent="TableUI/Hand" instance=ExtResource("2_wqckx")]
+layout_mode = 2
+
+[node name="TileUI11" parent="TableUI/Hand" instance=ExtResource("2_wqckx")]
+layout_mode = 2
+
+[node name="TileUI12" parent="TableUI/Hand" instance=ExtResource("2_wqckx")]
+layout_mode = 2
+
+[node name="TileUI13" parent="TableUI/Hand" instance=ExtResource("2_wqckx")]
+layout_mode = 2
+
+[node name="TileUI14" parent="TableUI/Hand" instance=ExtResource("2_wqckx")]
+layout_mode = 2

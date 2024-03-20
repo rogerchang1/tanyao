@@ -1,0 +1,80 @@
+[gd_scene load_steps=9 format=3 uid="uid://5643582tkyan"]
+
+[ext_resource type="Theme" uid="uid://lq7ql6qc76jt" path="res://main_theme.tres" id="1_ywr73"]
+[ext_resource type="Script" path="res://Tanyao/scenes/TileUI/TileUI.cs" id="2_ox5kw"]
+[ext_resource type="Script" path="res://Tanyao/scenes/TileUI/TileStateMachine.cs" id="3_o0tp8"]
+[ext_resource type="Script" path="res://Tanyao/scenes/TileUI/TileStates/TileBaseState.cs" id="4_8h7u6"]
+[ext_resource type="Script" path="res://Tanyao/scenes/TileUI/TileStates/TileClickedState.cs" id="5_clgtg"]
+[ext_resource type="Script" path="res://Tanyao/scenes/TileUI/TileStates/TileDraggingState.cs" id="6_5tqj7"]
+[ext_resource type="Script" path="res://Tanyao/scenes/TileUI/TileStates/TileReleasedState.cs" id="7_0j3nj"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2kr2p"]
+size = Vector2(60, 80)
+
+[node name="TileUI" type="Control"]
+custom_minimum_size = Vector2(60, 80)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1220.0
+offset_bottom = -640.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_ywr73")
+script = ExtResource("2_ox5kw")
+
+[node name="Color" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.219608, 0.490196, 0.858824, 1)
+
+[node name="StateLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "state"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TileLabel" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="DropPointDetector" type="Area2D" parent="."]
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DropPointDetector"]
+position = Vector2(30, 40)
+shape = SubResource("RectangleShape2D_2kr2p")
+
+[node name="TileStateMachine" type="Node" parent="." node_paths=PackedStringArray("InitialState")]
+script = ExtResource("3_o0tp8")
+InitialState = NodePath("TileBaseState")
+
+[node name="TileBaseState" type="Node" parent="TileStateMachine"]
+script = ExtResource("4_8h7u6")
+
+[node name="TileClickedState" type="Node" parent="TileStateMachine"]
+script = ExtResource("5_clgtg")
+_State = 1
+
+[node name="TileDraggingState" type="Node" parent="TileStateMachine"]
+script = ExtResource("6_5tqj7")
+_State = 2
+
+[node name="TileReleasedState" type="Node" parent="TileStateMachine"]
+script = ExtResource("7_0j3nj")
+_State = 3
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]

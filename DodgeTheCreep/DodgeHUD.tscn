@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cujpdw0lrkmhs"]
 
 [ext_resource type="FontFile" uid="uid://bb2q8lpgtqy0" path="res://DodgeTheCreep/assets/dodge_the_creeps_2d_assets/fonts/Xolonium-Regular.ttf" id="1_7b03r"]
-[ext_resource type="Script" path="res://DodgeTheCreep/scripts/DodgeHUD.cs" id="1_aluhu"]
+[ext_resource type="Script" path="res://DodgeTheCreep/DodgeHUD.cs" id="1_aluhu"]
 
 [node name="DodgeHUD" type="CanvasLayer"]
 script = ExtResource("1_aluhu")

@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://co4nkoysgyuyy"]
 
-[ext_resource type="Script" path="res://DodgeTheCreep/scripts/Mob.cs" id="1_ao8dp"]
+[ext_resource type="Script" path="res://DodgeTheCreep/Mob.cs" id="1_q5ajw"]
 [ext_resource type="Texture2D" uid="uid://cspt10mi57vp4" path="res://DodgeTheCreep/assets/dodge_the_creeps_2d_assets/art/enemyFlyingAlt_1.png" id="1_qgnxp"]
 [ext_resource type="Texture2D" uid="uid://64k0y7wol8ki" path="res://DodgeTheCreep/assets/dodge_the_creeps_2d_assets/art/enemyFlyingAlt_2.png" id="2_rxu3l"]
 [ext_resource type="Texture2D" uid="uid://lfh4j0i2y5rk" path="res://DodgeTheCreep/assets/dodge_the_creeps_2d_assets/art/enemySwimming_1.png" id="3_5vgs6"]
@@ -51,7 +51,7 @@ animations = [{
 [node name="Mob" type="RigidBody2D" groups=["Mobs"]]
 collision_mask = 0
 gravity_scale = 0.0
-script = ExtResource("1_ao8dp")
+script = ExtResource("1_q5ajw")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 rotation = 1.5708

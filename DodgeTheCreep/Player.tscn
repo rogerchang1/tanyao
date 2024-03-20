@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://blbcky1m3jxs5"]
 
 [ext_resource type="Texture2D" uid="uid://chhusavkvcql2" path="res://DodgeTheCreep/assets/dodge_the_creeps_2d_assets/art/playerGrey_up1.png" id="1_g7pem"]
-[ext_resource type="Script" path="res://DodgeTheCreep/scripts/Player.cs" id="1_xbqud"]
+[ext_resource type="Script" path="res://DodgeTheCreep/Player.cs" id="1_xbqud"]
 [ext_resource type="Texture2D" uid="uid://dw2m7ivpni3tg" path="res://DodgeTheCreep/assets/dodge_the_creeps_2d_assets/art/playerGrey_up2.png" id="2_vpiyl"]
 [ext_resource type="Texture2D" uid="uid://d28r35pdu3xcs" path="res://DodgeTheCreep/assets/dodge_the_creeps_2d_assets/art/playerGrey_walk1.png" id="3_7dkp3"]
 [ext_resource type="Texture2D" uid="uid://ecrqt5vexlyb" path="res://DodgeTheCreep/assets/dodge_the_creeps_2d_assets/art/playerGrey_walk2.png" id="4_6mi7k"]
