@@ -27,6 +27,22 @@ grow_vertical = 2
 
 [node name="TableUI" type="CanvasLayer" parent="." groups=["UILayer"]]
 
+[node name="Discards" type="GridContainer" parent="TableUI" groups=["DiscardsGroup"]]
+custom_minimum_size = Vector2(720, 160)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -82.0
+offset_top = 18.0
+offset_right = 682.0
+offset_bottom = 182.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.75, 0.75)
+columns = 12
+
 [node name="Hand" type="HBoxContainer" parent="TableUI"]
 anchors_preset = 7
 anchor_left = 0.5

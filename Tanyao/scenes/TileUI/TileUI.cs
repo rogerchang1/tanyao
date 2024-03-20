@@ -10,7 +10,7 @@ public partial class TileUI : Control
 	public Label _StateLabel;
 	public TileStateMachine _TileStateMachine;
 	public Area2D _DropPointDetector;
-	public bool _DropPointDetectorOn;
+	public bool _CanBeDiscarded;
 	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -20,7 +20,7 @@ public partial class TileUI : Control
 		_DropPointDetector = GetNode<Area2D>("DropPointDetector");
 		_TileStateMachine = GetNode<TileStateMachine>("TileStateMachine");
 		_TileStateMachine.init(this);
-		_DropPointDetectorOn = false;
+		_CanBeDiscarded = false;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -51,14 +51,12 @@ public partial class TileUI : Control
 	
 	private void _on_drop_point_detector_area_entered(Area2D area)
 	{
-		_DropPointDetectorOn = true;
-		GD.Print("area entered");
+		_CanBeDiscarded = true;
 	}
 
 	private void _on_drop_point_detector_area_exited(Area2D area)
 	{
-		_DropPointDetectorOn = false;
-		GD.Print("area exited");
+		_CanBeDiscarded = false;
 	}
 }
 

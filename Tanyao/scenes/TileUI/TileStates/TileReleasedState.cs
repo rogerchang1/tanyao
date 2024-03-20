@@ -19,9 +19,14 @@ public partial class TileReleasedState : TileState
 		played = false;
 		_TileUI._StateLabel.Text = "RELEASED";
 		_TileUI._Color.Color = new Color(0, 1, 0, 1);
-		if(_TileUI._DropPointDetectorOn)
+		if(_TileUI._CanBeDiscarded)
 		{
 			played = true;
+			var Discards = GetTree().GetFirstNodeInGroup("DiscardsGroup");
+			if(Discards != null)
+			{
+				_TileUI.Reparent(Discards);
+			}
 		}
 	}
 	

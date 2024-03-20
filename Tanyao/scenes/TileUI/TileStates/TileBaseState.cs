@@ -3,6 +3,8 @@ using System;
 
 public partial class TileBaseState : TileState
 {
+	double nClickTimeHeld = 0;
+	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -11,6 +13,14 @@ public partial class TileBaseState : TileState
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
+		if(Input.IsActionPressed("left_mouse")){
+			if(nClickTimeHeld < 1)
+			{
+				nClickTimeHeld += 0;
+			}else{
+				nClickTimeHeld = 0;
+			}
+		}
 	}
 	
 	public async override void Enter()
