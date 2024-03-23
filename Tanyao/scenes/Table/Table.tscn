@@ -44,6 +44,7 @@ scale = Vector2(0.75, 0.75)
 columns = 12
 
 [node name="Hand" type="HBoxContainer" parent="TableUI"]
+custom_minimum_size = Vector2(1020, 80)
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
@@ -56,9 +57,11 @@ offset_bottom = -40.0
 grow_horizontal = 2
 grow_vertical = 0
 script = ExtResource("2_3n81g")
+TileUIScene = ExtResource("2_wqckx")
 
 [node name="TileUI" parent="TableUI/Hand" instance=ExtResource("2_wqckx")]
 layout_mode = 2
+_Tile = "8s"
 
 [node name="TileUI2" parent="TableUI/Hand" instance=ExtResource("2_wqckx")]
 layout_mode = 2
