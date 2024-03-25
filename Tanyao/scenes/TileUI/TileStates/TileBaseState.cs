@@ -5,6 +5,7 @@ public partial class TileBaseState : TileState
 {
 	double nClickTimeHeld = 0;
 	
+	private float OriginalPositionY;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -44,4 +45,16 @@ public partial class TileBaseState : TileState
 			EmitSignal(TileState.SignalName.TransitionRequested, this, (int)TileState.State.CLICKED);
 		}
 	}
+	
+	public override void OnMouseEntered()
+	{
+		OriginalPositionY = _TileUI.Position.Y;
+		_TileUI.SetPosition(new Vector2(_TileUI.Position.X, _TileUI.Position.Y - (_TileUI.Size.Y / 10)));
+	}
+
+	public override void OnMouseExited()
+	{
+		_TileUI.SetPosition(new Vector2(_TileUI.Position.X, OriginalPositionY)) ;
+	}
+	
 }

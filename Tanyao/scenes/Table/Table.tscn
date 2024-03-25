@@ -61,43 +61,56 @@ TileUIScene = ExtResource("2_wqckx")
 
 [node name="TileUI" parent="TableUI/Hand" instance=ExtResource("2_wqckx")]
 layout_mode = 2
-_Tile = "8s"
+_Tile = "9p"
 
 [node name="TileUI2" parent="TableUI/Hand" instance=ExtResource("2_wqckx")]
 layout_mode = 2
+_Tile = "8p"
 
 [node name="TileUI3" parent="TableUI/Hand" instance=ExtResource("2_wqckx")]
 layout_mode = 2
+_Tile = "7p"
 
 [node name="TileUI4" parent="TableUI/Hand" instance=ExtResource("2_wqckx")]
 layout_mode = 2
+_Tile = "6p"
 
 [node name="TileUI5" parent="TableUI/Hand" instance=ExtResource("2_wqckx")]
 layout_mode = 2
+_Tile = "5p"
 
 [node name="TileUI6" parent="TableUI/Hand" instance=ExtResource("2_wqckx")]
 layout_mode = 2
+_Tile = "7m"
 
 [node name="TileUI7" parent="TableUI/Hand" instance=ExtResource("2_wqckx")]
 layout_mode = 2
+_Tile = "6m"
 
 [node name="TileUI8" parent="TableUI/Hand" instance=ExtResource("2_wqckx")]
 layout_mode = 2
+_Tile = "5m"
 
 [node name="TileUI9" parent="TableUI/Hand" instance=ExtResource("2_wqckx")]
 layout_mode = 2
+_Tile = "4m"
 
 [node name="TileUI10" parent="TableUI/Hand" instance=ExtResource("2_wqckx")]
 layout_mode = 2
+_Tile = "3m"
 
 [node name="TileUI11" parent="TableUI/Hand" instance=ExtResource("2_wqckx")]
 layout_mode = 2
+_Tile = "4s"
 
 [node name="TileUI12" parent="TableUI/Hand" instance=ExtResource("2_wqckx")]
 layout_mode = 2
+_Tile = "3s"
 
 [node name="TileUI13" parent="TableUI/Hand" instance=ExtResource("2_wqckx")]
 layout_mode = 2
+_Tile = "2s"
 
 [node name="TileUI14" parent="TableUI/Hand" instance=ExtResource("2_wqckx")]
 layout_mode = 2
+_Tile = "2s"

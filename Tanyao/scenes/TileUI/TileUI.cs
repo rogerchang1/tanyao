@@ -40,6 +40,18 @@ public partial class TileUI : Control
 		}
 		_TileLabel.Text = _TileModel.ToString();
 	}
+	
+	public void SetTile(Mahjong.Model.Tile poTile)
+	{
+		_TileModel = poTile;
+		_Tile = poTile.ToString();
+	}
+	
+	public void SetTile(string psTile)
+	{
+		_TileModel = new Mahjong.Model.Tile(psTile);
+		_Tile = psTile;
+	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
