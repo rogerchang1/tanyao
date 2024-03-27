@@ -7,23 +7,15 @@ public partial class Hand : HBoxContainer
 	[Export]
 	public PackedScene TileUIScene;
 	
-	[Signal]
-	public delegate void DrawTileRequestedEventHandler();
-	//public Mahjong.Model.Hand _HandModel;
-	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
-	{
-		//TileUIScene = GD.Load<PackedScene>("res://Tanyao/scenes/TileUI/TileUI.tscn");
-		
-		//_HandModel = new Mahjong.Model.Hand;
+	{		
 		foreach(TileUI oTileUI in GetChildren())
 		{
 			oTileUI.ReparentRequested += OnTileUIReparentRequested;
 			oTileUI.TileDiscarded += OnTileDiscarded;
-			//_HandModel.Tiles.Add(oTileUI._TileModel);
-			
 		}
+		SortTiles();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -44,8 +36,6 @@ public partial class Hand : HBoxContainer
 		Mahjong.CTilesManager oTilesManager = new Mahjong.CTilesManager();
 		oTilesManager.SortTiles(TilesToSort);
 		
-		var tween = CreateTween();
-		
 		foreach(TileUI oChild in GetChildren())
 		{
 			int newPositionIndex = oTilesManager.FindFirstIndexOfTile(TilesToSort, oChild._TileModel);
@@ -53,6 +43,8 @@ public partial class Hand : HBoxContainer
 			TilesToSort[newPositionIndex] = null;
 		}
 		
+		//Tweening Start
+		var tween = CreateTween();
 		for(int i = 0; i < NewPositionIndexes.Count;i++)
 		{
 			//GD.Print(oChild._Tile + ": " + oChild.Position + ", From: " + oChild.Position.X/64 + " To: " + newPositionIndex);
@@ -62,17 +54,17 @@ public partial class Hand : HBoxContainer
 				TilesInInitialPositions[i], 
 				"position", 
 				new Vector2(NewPositionIndexes[i] * (TilesInInitialPositions[i].Size.X+4), 0),
-			 	1
+			 	.15
 			);
 		}
 		await ToSignal(tween, Tween.SignalName.Finished);
+		GD.Print("----");
+		//Tweening End
 
 		for(int i = 0; i < NewPositionIndexes.Count;i++)
 		{
 			MoveChild(TilesInInitialPositions[i],NewPositionIndexes[i]);
 		}
-		
-		GD.Print("----");
 	}
 	
 	public void AddTile(Mahjong.Model.Tile poNewTileModel)
@@ -96,13 +88,20 @@ public partial class Hand : HBoxContainer
 	public void OnTileUIReparentRequested(TileUI oChild)
 	{
 		oChild.Reparent(this);
+		SortTiles();
 	}
 	
 	public void OnTileDiscarded()
 	{
 		SortTiles();
 		//AddTile();
-		EmitSignal(SignalName.DrawTileRequested);
+		var events = GetNode<Events>("/root/Events");
+		events.EmitSignal(Events.SignalName.DrawTileRequested);
+	}
+	
+	public void OnSortHandRequested()
+	{
+		SortTiles();
 	}
 	
 }

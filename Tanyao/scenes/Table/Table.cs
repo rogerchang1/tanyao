@@ -20,7 +20,8 @@ public partial class Table : Godot.Node2D
 		_TableManager = new Mahjong.CTableManager();
 		InitializeTable();
 		_PlayerHand = GetNode<Hand>("TableUI/Hand");
-		_PlayerHand.DrawTileRequested += OnDrawTileRequested;
+		var events = GetNode<Events>("/root/Events");
+		events.DrawTileRequested += OnDrawTileRequested;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

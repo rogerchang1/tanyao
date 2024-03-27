@@ -15,6 +15,10 @@ run/main_scene="res://Tanyao/scenes/Table/Table.tscn"
 config/features=PackedStringArray("4.2", "C#")
 config/icon="res://icon.png"
 
+[autoload]
+
+Events="*res://Tanyao/global/Events.cs"
+
 [display]
 
 window/size/viewport_width=1280
