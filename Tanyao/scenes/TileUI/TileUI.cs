@@ -5,7 +5,7 @@ using Mahjong.Model;
 public partial class TileUI : Control
 {
 	[Signal]
-	public delegate void ReparentRequestedEventHandler(TileUI poTile);
+	public delegate void ReparentRequestedEventHandler(TileUI poTile, HBoxContainer poParent);
 	
 	[Signal]
 	public delegate void TileDiscardedEventHandler();
@@ -16,6 +16,7 @@ public partial class TileUI : Control
 	public TileStateMachine _TileStateMachine;
 	public Area2D _DropPointDetector;
 	public bool _CanBeDiscarded;
+	public Node _ParentContainer;
 	
 	[Export]
 	public string _Tile;
@@ -39,6 +40,9 @@ public partial class TileUI : Control
 			_TileModel = new Mahjong.Model.Tile(_Tile);
 		}
 		_TileLabel.Text = _TileModel.ToString();
+		//Might not need this after experimentation.
+		//Might be best to assign the Parent during AddTile to Hand.
+		_ParentContainer = GetParent();
 	}
 	
 	public void SetTile(Mahjong.Model.Tile poTile)

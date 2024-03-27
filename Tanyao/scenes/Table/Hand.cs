@@ -7,10 +7,20 @@ public partial class Hand : HBoxContainer
 	[Export]
 	public PackedScene TileUIScene;
 	
+	public HBoxContainer _HandClosed;
+	public HBoxContainer _HandTsumo;
+	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{		
-		foreach(TileUI oTileUI in GetChildren())
+		_HandClosed = GetNode<HBoxContainer>("HandClosed");
+		_HandTsumo = GetNode<HBoxContainer>("HandTsumo");
+		foreach(TileUI oTileUI in _HandClosed.GetChildren())
+		{
+			oTileUI.ReparentRequested += OnTileUIReparentRequested;
+			oTileUI.TileDiscarded += OnTileDiscarded;
+		}
+		foreach(TileUI oTileUI in _HandTsumo.GetChildren())
 		{
 			oTileUI.ReparentRequested += OnTileUIReparentRequested;
 			oTileUI.TileDiscarded += OnTileDiscarded;
@@ -28,7 +38,7 @@ public partial class Hand : HBoxContainer
 		List<TileUI> TilesInInitialPositions = new List<TileUI>();
 		List<int> NewPositionIndexes = new List<int>();
 		List<Mahjong.Model.Tile> TilesToSort = new List<Mahjong.Model.Tile>();
-		foreach(TileUI oChild in GetChildren())
+		foreach(TileUI oChild in _HandClosed.GetChildren())
 		{
 			TilesInInitialPositions.Add(oChild);
 			TilesToSort.Add(oChild._TileModel);
@@ -36,7 +46,7 @@ public partial class Hand : HBoxContainer
 		Mahjong.CTilesManager oTilesManager = new Mahjong.CTilesManager();
 		oTilesManager.SortTiles(TilesToSort);
 		
-		foreach(TileUI oChild in GetChildren())
+		foreach(TileUI oChild in _HandClosed.GetChildren())
 		{
 			int newPositionIndex = oTilesManager.FindFirstIndexOfTile(TilesToSort, oChild._TileModel);
 			NewPositionIndexes.Add(newPositionIndex);
@@ -63,7 +73,7 @@ public partial class Hand : HBoxContainer
 
 		for(int i = 0; i < NewPositionIndexes.Count;i++)
 		{
-			MoveChild(TilesInInitialPositions[i],NewPositionIndexes[i]);
+			_HandClosed.MoveChild(TilesInInitialPositions[i],NewPositionIndexes[i]);
 		}
 	}
 	
@@ -74,28 +84,46 @@ public partial class Hand : HBoxContainer
 		
 		NewTileUI.ReparentRequested += OnTileUIReparentRequested;
 		NewTileUI.TileDiscarded += OnTileDiscarded;
-		AddChild(NewTileUI);
 		
-		var tween = CreateTween();
-		tween.TweenProperty(
-			NewTileUI, 
-			"position", 
-			new Vector2((GetChildCount()) * (NewTileUI.Size.X),0),
-		 	.1
-		);
+		NewTileUI._ParentContainer = _HandTsumo;
+		_HandTsumo.AddChild(NewTileUI);
+		
+		//var tween = CreateTween();
+		//tween.TweenProperty(
+			//NewTileUI, 
+			//"position", 
+			//new Vector2(NewTileUI.Size.X,0),
+		 	//.1
+		//);
 	}
 	
-	public void OnTileUIReparentRequested(TileUI oChild)
+	public void OnTileUIReparentRequested(TileUI oChild, HBoxContainer oParent)
 	{
-		oChild.Reparent(this);
-		SortTiles();
+		oChild.Reparent(oParent);
+		if(oParent.Name == "HandClosed")
+		{
+			SortTiles();
+		}
 	}
 	
-	public void OnTileDiscarded()
+	//TODO: Remove async if you remove await later.
+	public async void OnTileDiscarded()
 	{
+		if(_HandTsumo.GetChildren().Count > 0)
+		{
+			foreach(TileUI oTileUI in _HandTsumo.GetChildren())
+			{
+				oTileUI.Reparent(_HandClosed);
+				oTileUI._ParentContainer = _HandClosed;
+			}
+		}
 		SortTiles();
-		//AddTile();
 		var events = GetNode<Events>("/root/Events");
+		
+		//TODO: Remove this later
+		await ToSignal(GetTree().CreateTimer(.5), "timeout");
+
+
 		events.EmitSignal(Events.SignalName.DrawTileRequested);
 	}
 	
