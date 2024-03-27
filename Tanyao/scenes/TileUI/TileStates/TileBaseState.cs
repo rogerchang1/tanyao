@@ -33,7 +33,7 @@ public partial class TileBaseState : TileState
 		_TileUI._StateLabel.Text = "BASE";
 		_TileUI._Color.Color = new Color(0x387ddb);
 		
-		_TileUI.EmitSignal(TileUI.SignalName.ReparentRequested, _TileUI);
+		_TileUI.EmitSignal(TileUI.SignalName.ReparentRequested, _TileUI, _TileUI._ParentContainer);
 		_TileUI.PivotOffset = Vector2.Zero;
 	}
 	
