@@ -9,6 +9,9 @@ public partial class Table : Godot.Node2D
 	Mahjong.CTableManager _TableManager;
 	
 	public Hand _PlayerHand;
+	public PlayerHandler _PlayerHandler;
+	
+	Events _Events;
 	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -17,8 +20,11 @@ public partial class Table : Godot.Node2D
 		_TableManager = new Mahjong.CTableManager();
 		
 		_PlayerHand = GetNode<Hand>("TableUI/Hand");
-		var events = GetNode<Events>("/root/Events");
-		events.DrawTileRequested += OnDrawTileRequested;
+		_PlayerHandler = GetNode<PlayerHandler>("PlayerHandler");
+		_Events = GetNode<Events>("/root/Events");
+		_Events.DrawTileRequested += OnDrawTileRequested;
+		_Events.InitialTilesRequested += OnInitialTilesRequested;
+		_Events.PlayerTurnEnded += OnPlayerTurnEnded;
 		
 		InitializeTable();
 	}
@@ -31,23 +37,40 @@ public partial class Table : Godot.Node2D
 	public void InitializeTable()
 	{
 		_TableManager.InitializeTable(_TableModel);
-		InitializePlayerHand();
+		_PlayerHandler.InitializePlayerHand();
+		StartRound();
 	}
 	
-	//TODO: Maybe should move the logic into some sort of PlayerHandler?
-	public void InitializePlayerHand()
+	public void StartRound()
 	{
-		for(int i = 0;i <13;i++)
-		{
-			Mahjong.Model.Tile DrawnTile = _TableManager.DrawNextTileFromWall(_TableModel);
-			_PlayerHand.AddTileToHandClosed(DrawnTile);
-		}
-		OnDrawTileRequested();
+		//TODO: Later when there's an enemy handler
+		//Just do a rand to flip a coin on who starts
+		
+		_PlayerHandler.StartTurn();
 	}
 	
 	public void OnDrawTileRequested()
 	{
 		Mahjong.Model.Tile DrawnTile = _TableManager.DrawNextTileFromWall(_TableModel);
-		_PlayerHand.AddTileToHandTsumo(DrawnTile);
+		_PlayerHandler.AddTileToHandTsumo(DrawnTile);
+	}
+	
+	public void OnInitialTilesRequested()
+	{
+		Mahjong.Model.Tile DrawnTile = _TableManager.DrawNextTileFromWall(_TableModel);
+		_PlayerHandler.AddTileToHandClosed(DrawnTile);
+	}
+	
+	public void OnPlayerTurnStarted()
+	{
+		_PlayerHandler.StartTurn();
+	}
+	
+	//TODO: Switch to EnemyHandler Turn when you implement EnemyHandler
+	//TODO: Remove async when you don't need it anymore
+	public async void OnPlayerTurnEnded()
+	{
+		await ToSignal(GetTree().CreateTimer(.5), "timeout");
+		_PlayerHandler.StartTurn();
 	}
 }

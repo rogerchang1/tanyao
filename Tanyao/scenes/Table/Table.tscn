@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://dvpig2rtau57s"]
+[gd_scene load_steps=6 format=3 uid="uid://dvpig2rtau57s"]
 
 [ext_resource type="Script" path="res://Tanyao/scenes/Table/Table.cs" id="1_kw13y"]
 [ext_resource type="Script" path="res://Tanyao/scenes/Table/Hand.cs" id="2_3n81g"]
+[ext_resource type="Script" path="res://Tanyao/scenes/Player/PlayerHandler.cs" id="2_8xuov"]
 [ext_resource type="PackedScene" uid="uid://5643582tkyan" path="res://Tanyao/scenes/TileUI/TileUI.tscn" id="2_wqckx"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5qduj"]
@@ -24,6 +25,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="PlayerHandler" type="Node" parent="." node_paths=PackedStringArray("_PlayerHand")]
+script = ExtResource("2_8xuov")
+_PlayerHand = NodePath("../TableUI/Hand")
 
 [node name="TableUI" type="CanvasLayer" parent="." groups=["UILayer"]]
 
