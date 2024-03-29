@@ -15,17 +15,6 @@ public partial class Hand : HBoxContainer
 	{		
 		_HandClosed = GetNode<HBoxContainer>("HandClosed");
 		_HandTsumo = GetNode<HBoxContainer>("HandTsumo");
-		foreach(TileUI oTileUI in _HandClosed.GetChildren())
-		{
-			oTileUI.ReparentRequested += OnTileUIReparentRequested;
-			oTileUI.TileDiscarded += OnTileDiscarded;
-		}
-		foreach(TileUI oTileUI in _HandTsumo.GetChildren())
-		{
-			oTileUI.ReparentRequested += OnTileUIReparentRequested;
-			oTileUI.TileDiscarded += OnTileDiscarded;
-		}
-		SortTiles();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -77,30 +66,33 @@ public partial class Hand : HBoxContainer
 		}
 	}
 	
-	public void AddTile(Mahjong.Model.Tile poNewTileModel)
+	public void AddTileToHandTsumo(Mahjong.Model.Tile poNewTileModel)
+	{
+		TileUI NewTileUI = CreateNewTileUI(poNewTileModel);
+		NewTileUI._ParentContainer = _HandTsumo;
+		_HandTsumo.AddChild(NewTileUI);
+	}
+	
+	public void AddTileToHandClosed(Mahjong.Model.Tile poNewTileModel)
+	{
+		TileUI NewTileUI = CreateNewTileUI(poNewTileModel);
+		NewTileUI._ParentContainer = _HandClosed;
+		_HandClosed.AddChild(NewTileUI);
+	}
+	
+	private TileUI CreateNewTileUI(Mahjong.Model.Tile poNewTileModel)
 	{
 		TileUI NewTileUI = (TileUI) TileUIScene.Instantiate();
 		NewTileUI.SetTile(poNewTileModel);
-		
 		NewTileUI.ReparentRequested += OnTileUIReparentRequested;
 		NewTileUI.TileDiscarded += OnTileDiscarded;
-		
-		NewTileUI._ParentContainer = _HandTsumo;
-		_HandTsumo.AddChild(NewTileUI);
-		
-		//var tween = CreateTween();
-		//tween.TweenProperty(
-			//NewTileUI, 
-			//"position", 
-			//new Vector2(NewTileUI.Size.X,0),
-		 	//.1
-		//);
+		return NewTileUI;
 	}
 	
 	public void OnTileUIReparentRequested(TileUI oChild, HBoxContainer oParent)
 	{
 		oChild.Reparent(oParent);
-		if(oParent.Name == "HandClosed")
+		if(oParent.Name == "HandClosed" && oParent.GetChildren().Count > 0)
 		{
 			SortTiles();
 		}
