@@ -46,9 +46,8 @@ public partial class Hand : HBoxContainer
 		var tween = CreateTween();
 		for(int i = 0; i < NewPositionIndexes.Count;i++)
 		{
-			//GD.Print(oChild._Tile + ": " + oChild.Position + ", From: " + oChild.Position.X/64 + " To: " + newPositionIndex);
 			TileUI t = TilesInInitialPositions[i];
-			GD.Print(t._Tile + ": " + t.Position + ", From: " + t.Position.X/64 + " To: " + NewPositionIndexes[i]);
+			//GD.Print(t._Tile + ": " + t.Position + ", From: " + t.Position.X/64 + " To: " + NewPositionIndexes[i]);
 			tween.Parallel().TweenProperty(
 				TilesInInitialPositions[i], 
 				"position", 
@@ -57,7 +56,7 @@ public partial class Hand : HBoxContainer
 			);
 		}
 		await ToSignal(tween, Tween.SignalName.Finished);
-		GD.Print("----");
+		//GD.Print("----");
 		//Tweening End
 
 		for(int i = 0; i < NewPositionIndexes.Count;i++)

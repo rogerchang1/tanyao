@@ -1,12 +1,13 @@
 using Godot;
 using System;
 
-public partial class PlayerHandler : Node
+//TODO: not sure if inheritance is the right thing to do
+public partial class PlayerHandler : BaseHandler
 {	
 	[Export]
 	Hand _PlayerHand;
 	
-	Events _Events;
+	//Events _Events;
 	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -30,11 +31,6 @@ public partial class PlayerHandler : Node
 			_Events.EmitSignal(Events.SignalName.InitialTilesRequested);
 		}
 		//OnDrawTileRequested();
-	}
-	
-	public void StartTurn()
-	{
-		_Events.EmitSignal(Events.SignalName.DrawTileRequested);
 	}
 	
 	public void EndTurn()

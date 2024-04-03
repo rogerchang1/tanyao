@@ -11,11 +11,16 @@ public partial class Events : Node
 	[Signal]
 	public delegate void InitialTilesRequestedEventHandler();
 	[Signal]
-	public delegate void DrawTileRequestedEventHandler();
+	public delegate void DrawTileRequestedEventHandler(BaseHandler oBaseHandler);
 	[Signal]
 	public delegate void PlayerTileDiscardedEventHandler();
 	[Signal]
 	public delegate void PlayerTurnStartedEventHandler();
 	[Signal]
 	public delegate void PlayerTurnEndedEventHandler();
+	
+	[Signal]
+	public delegate void EnemyTurnStartedEventHandler();
+	[Signal]
+	public delegate void EnemyTurnEndedEventHandler();
 }
