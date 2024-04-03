@@ -46,9 +46,8 @@ public partial class Hand : HBoxContainer
 		var tween = CreateTween();
 		for(int i = 0; i < NewPositionIndexes.Count;i++)
 		{
-			//GD.Print(oChild._Tile + ": " + oChild.Position + ", From: " + oChild.Position.X/64 + " To: " + newPositionIndex);
 			TileUI t = TilesInInitialPositions[i];
-			GD.Print(t._Tile + ": " + t.Position + ", From: " + t.Position.X/64 + " To: " + NewPositionIndexes[i]);
+			//GD.Print(t._Tile + ": " + t.Position + ", From: " + t.Position.X/64 + " To: " + NewPositionIndexes[i]);
 			tween.Parallel().TweenProperty(
 				TilesInInitialPositions[i], 
 				"position", 
@@ -57,7 +56,7 @@ public partial class Hand : HBoxContainer
 			);
 		}
 		await ToSignal(tween, Tween.SignalName.Finished);
-		GD.Print("----");
+		//GD.Print("----");
 		//Tweening End
 
 		for(int i = 0; i < NewPositionIndexes.Count;i++)
@@ -99,7 +98,7 @@ public partial class Hand : HBoxContainer
 	}
 	
 	//TODO: Remove async if you remove await later.
-	public async void OnTileDiscarded()
+	public void OnTileDiscarded()
 	{
 		if(_HandTsumo.GetChildren().Count > 0)
 		{
@@ -110,13 +109,12 @@ public partial class Hand : HBoxContainer
 			}
 		}
 		SortTiles();
-		var events = GetNode<Events>("/root/Events");
-		
 		//TODO: Remove this later
-		await ToSignal(GetTree().CreateTimer(.5), "timeout");
+		//await ToSignal(GetTree().CreateTimer(.5), "timeout");
 
-
-		events.EmitSignal(Events.SignalName.DrawTileRequested);
+		//TODO: This should later go in the StartTurn phase.
+		var events = GetNode<Events>("/root/Events");
+		events.EmitSignal(Events.SignalName.PlayerTileDiscarded);
 	}
 	
 	public void OnSortHandRequested()
