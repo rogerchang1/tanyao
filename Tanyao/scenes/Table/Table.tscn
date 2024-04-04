@@ -73,14 +73,15 @@ script = ExtResource("2_8xuov")
 _PlayerHand = NodePath("../TableUI/Hand")
 _ShantenLabel = NodePath("../ShantenLabel")
 
-[node name="EnemyHandler" type="Node" parent="."]
+[node name="EnemyHandler" type="Node" parent="." node_paths=PackedStringArray("_EnemyHand")]
 script = ExtResource("3_hftm0")
+_EnemyHand = NodePath("../TableUI/EnemyHand")
 TileUIScene = ExtResource("2_wqckx")
 
 [node name="TableUI" type="CanvasLayer" parent="." groups=["UILayer"]]
 
 [node name="Discards" type="GridContainer" parent="TableUI" groups=["DiscardsGroup"]]
-custom_minimum_size = Vector2(720, 160)
+custom_minimum_size = Vector2(480, 160)
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -93,10 +94,10 @@ offset_bottom = 182.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.75, 0.75)
-columns = 12
+columns = 8
 
 [node name="EnemyDiscards" type="GridContainer" parent="TableUI" groups=["EnemyDiscardsGroup"]]
-custom_minimum_size = Vector2(720, 160)
+custom_minimum_size = Vector2(480, 160)
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -109,7 +110,7 @@ offset_bottom = -18.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.75, 0.75)
-columns = 12
+columns = 8
 
 [node name="Hand" type="HBoxContainer" parent="TableUI"]
 anchors_preset = 7
@@ -130,4 +131,24 @@ TileUIScene = ExtResource("2_wqckx")
 layout_mode = 2
 
 [node name="HandTsumo" type="HBoxContainer" parent="TableUI/Hand"]
+layout_mode = 2
+
+[node name="EnemyHand" type="HBoxContainer" parent="TableUI"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -1256.0
+offset_top = 24.0
+offset_right = -232.0
+offset_bottom = 104.0
+grow_horizontal = 0
+theme_override_constants/separation = 15
+alignment = 2
+script = ExtResource("2_3n81g")
+TileUIScene = ExtResource("2_wqckx")
+
+[node name="HandTsumo" type="HBoxContainer" parent="TableUI/EnemyHand"]
+layout_mode = 2
+
+[node name="HandClosed" type="HBoxContainer" parent="TableUI/EnemyHand"]
 layout_mode = 2

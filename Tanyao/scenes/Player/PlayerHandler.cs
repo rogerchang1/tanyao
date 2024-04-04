@@ -24,18 +24,6 @@ public partial class PlayerHandler : BaseHandler
 	{
 	}
 	
-	//TODO: Maybe should move the logic into some sort of PlayerHandler?
-	public void InitializePlayerHand()
-	{
-		for(int i = 0;i <13;i++)
-		{
-			//Mahjong.Model.Tile DrawnTile = _TableManager.DrawNextTileFromWall(_TableModel);
-			//_PlayerHand.AddTileToHandClosed(DrawnTile);
-			_Events.EmitSignal(Events.SignalName.InitialTilesRequested);
-		}
-		//OnDrawTileRequested();
-	}
-	
 	public void EndTurn()
 	{
 		_Events.EmitSignal(Events.SignalName.PlayerTurnEnded);

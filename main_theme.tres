@@ -1,7 +1,7 @@
 [gd_resource type="Theme" load_steps=2 format=3 uid="uid://lq7ql6qc76jt"]
 
-[ext_resource type="FontFile" uid="uid://dskmdk146n4rq" path="res://Tanyao/assets/fonts/pixel_rpg.ttf" id="1_t0ysk"]
+[ext_resource type="FontFile" uid="uid://bb2q8lpgtqy0" path="res://DodgeTheCreep/assets/dodge_the_creeps_2d_assets/fonts/Xolonium-Regular.ttf" id="1_05ku7"]
 
 [resource]
-default_font = ExtResource("1_t0ysk")
+default_font = ExtResource("1_05ku7")
 default_font_size = 6

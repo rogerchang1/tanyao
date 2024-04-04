@@ -28,7 +28,6 @@ public partial class Table : Godot.Node2D
 		
 		_Events = GetNode<Events>("/root/Events");
 		_Events.DrawTileRequested += OnDrawTileRequested;
-		_Events.InitialTilesRequested += OnInitialTilesRequested;
 		_Events.PlayerTurnEnded += OnPlayerTurnEnded;
 		_Events.EnemyTurnEnded += OnEnemyTurnEnded;
 		
@@ -43,9 +42,37 @@ public partial class Table : Godot.Node2D
 	public void InitializeTable()
 	{
 		_TableManager.InitializeTable(_TableModel);
-		_PlayerHandler.InitializePlayerHand();
+		//TODO: randomize who draws first
+		InitializeHands(true);
 		UpdateTilesLeftLabel();
 		StartRound();
+	}
+	
+	public void InitializeHands(bool pbShouldAddTilesToPlayerFirst)
+	{
+		for(int i = 0; i< 6; i++)
+		{
+			for(int j = 0; j < 4; j++)
+			{
+				if(pbShouldAddTilesToPlayerFirst)
+				{
+					_PlayerHandler.AddTileToHandClosed(_TableManager.DrawNextTileFromWall(_TableModel));
+					
+				}else
+				{
+					_EnemyHandler.AddTileToHandClosed(_TableManager.DrawNextTileFromWall(_TableModel));
+				}
+			}
+			pbShouldAddTilesToPlayerFirst = !pbShouldAddTilesToPlayerFirst;
+		}
+		if(pbShouldAddTilesToPlayerFirst)
+		{
+			_PlayerHandler.AddTileToHandClosed(_TableManager.DrawNextTileFromWall(_TableModel));
+			_EnemyHandler.AddTileToHandClosed(_TableManager.DrawNextTileFromWall(_TableModel));
+		}else{
+			_EnemyHandler.AddTileToHandClosed(_TableManager.DrawNextTileFromWall(_TableModel));
+			_PlayerHandler.AddTileToHandClosed(_TableManager.DrawNextTileFromWall(_TableModel));
+		}
 	}
 	
 	public void StartRound()
@@ -71,15 +98,9 @@ public partial class Table : Godot.Node2D
 		if(oBaseHandler.GetType() == typeof(EnemyHandler))
 		{
 			//TODO: change this later
-			((EnemyHandler)oBaseHandler).AddTileToDiscards(DrawnTile);
+			((EnemyHandler)oBaseHandler).AddTileToHandTsumo(DrawnTile);
 		}
 		UpdateTilesLeftLabel();
-	}
-	
-	public void OnInitialTilesRequested()
-	{
-		Mahjong.Model.Tile DrawnTile = _TableManager.DrawNextTileFromWall(_TableModel);
-		_PlayerHandler.AddTileToHandClosed(DrawnTile);
 	}
 	
 	public void OnPlayerTurnStarted()

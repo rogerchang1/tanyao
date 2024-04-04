@@ -39,6 +39,10 @@ public partial class TileBaseState : TileState
 	
 	public override void OnGuiInput(InputEvent @event)
 	{
+		if(!_IsInteractable)
+		{
+			return;
+		}
 		if(@event.IsActionPressed("left_mouse"))
 		{
 			_TileUI.PivotOffset = _TileUI.GetGlobalMousePosition() - _TileUI.GlobalPosition;
@@ -48,12 +52,20 @@ public partial class TileBaseState : TileState
 	
 	public override void OnMouseEntered()
 	{
+		if(!_IsInteractable)
+		{
+			return;
+		}
 		OriginalPositionY = _TileUI.Position.Y;
 		_TileUI.SetPosition(new Vector2(_TileUI.Position.X, _TileUI.Position.Y - (_TileUI.Size.Y / 10)));
 	}
 
 	public override void OnMouseExited()
 	{
+		if(!_IsInteractable)
+		{
+			return;
+		}
 		_TileUI.SetPosition(new Vector2(_TileUI.Position.X, OriginalPositionY)) ;
 	}
 	
