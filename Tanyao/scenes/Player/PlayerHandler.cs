@@ -7,6 +7,9 @@ public partial class PlayerHandler : BaseHandler
 	[Export]
 	Hand _PlayerHand;
 	
+	[Export]
+	Label _ShantenLabel;
+	
 	//Events _Events;
 	
 	// Called when the node enters the scene tree for the first time.
@@ -69,6 +72,7 @@ public partial class PlayerHandler : BaseHandler
 		
 		Mahjong.CShantenEvaluator oShantenEvaluator = new Mahjong.CShantenEvaluator();
 		int nShanten = oShantenEvaluator.EvaluateShanten(oHand);
+		_ShantenLabel.Text = "Shanten: " + nShanten;
 		if(nShanten == -1)
 		{
 			//TODO evaluate the type of hand here.

@@ -13,6 +13,47 @@ size = Vector2(1280, 512)
 script = ExtResource("1_kw13y")
 metadata/_edit_lock_ = true
 
+[node name="TilesLeftLabel" type="Label" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = 1152.0
+offset_top = 16.0
+offset_right = 1230.0
+offset_bottom = 39.0
+grow_horizontal = 0
+text = "Tiles Left: "
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ShantenLabel" type="Label" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = 1152.0
+offset_top = 576.0
+offset_right = 1217.0
+offset_bottom = 599.0
+grow_horizontal = 0
+text = "
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="WinLabel" type="Label" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = 352.0
+offset_top = 88.0
+offset_right = 1008.0
+offset_bottom = 176.0
+grow_horizontal = 0
+text = "
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="TileDropArea" type="Area2D" parent="."]
 collision_layer = 2
 
@@ -27,9 +68,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PlayerHandler" type="Node" parent="." node_paths=PackedStringArray("_PlayerHand")]
+[node name="PlayerHandler" type="Node" parent="." node_paths=PackedStringArray("_PlayerHand", "_ShantenLabel")]
 script = ExtResource("2_8xuov")
 _PlayerHand = NodePath("../TableUI/Hand")
+_ShantenLabel = NodePath("../ShantenLabel")
 
 [node name="EnemyHandler" type="Node" parent="."]
 script = ExtResource("3_hftm0")

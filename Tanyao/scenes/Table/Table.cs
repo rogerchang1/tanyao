@@ -11,6 +11,7 @@ public partial class Table : Godot.Node2D
 	public Hand _PlayerHand;
 	public PlayerHandler _PlayerHandler;
 	public EnemyHandler _EnemyHandler;
+	public Label _TilesLeftLabel;
 	
 	Events _Events;
 	
@@ -23,6 +24,8 @@ public partial class Table : Godot.Node2D
 		_PlayerHand = GetNode<Hand>("TableUI/Hand");
 		_PlayerHandler = GetNode<PlayerHandler>("PlayerHandler");
 		_EnemyHandler = GetNode<EnemyHandler>("EnemyHandler");
+		_TilesLeftLabel = GetNode<Label>("TilesLeftLabel");
+		
 		_Events = GetNode<Events>("/root/Events");
 		_Events.DrawTileRequested += OnDrawTileRequested;
 		_Events.InitialTilesRequested += OnInitialTilesRequested;
@@ -41,6 +44,7 @@ public partial class Table : Godot.Node2D
 	{
 		_TableManager.InitializeTable(_TableModel);
 		_PlayerHandler.InitializePlayerHand();
+		UpdateTilesLeftLabel();
 		StartRound();
 	}
 	
@@ -54,17 +58,22 @@ public partial class Table : Godot.Node2D
 	
 	public void OnDrawTileRequested(BaseHandler oBaseHandler)
 	{
+		if(!_TableManager.CanDrawFromWall(_TableModel))
+		{
+			return;
+		}
 		Mahjong.Model.Tile DrawnTile = _TableManager.DrawNextTileFromWall(_TableModel);
 		if(oBaseHandler.GetType() == typeof(PlayerHandler))
 		{
 			((PlayerHandler)oBaseHandler).AddTileToHandTsumo(DrawnTile);
+			
 		}
 		if(oBaseHandler.GetType() == typeof(EnemyHandler))
 		{
 			//TODO: change this later
 			((EnemyHandler)oBaseHandler).AddTileToDiscards(DrawnTile);
 		}
-		
+		UpdateTilesLeftLabel();
 	}
 	
 	public void OnInitialTilesRequested()
@@ -97,5 +106,10 @@ public partial class Table : Godot.Node2D
 	{
 		await ToSignal(GetTree().CreateTimer(.5), "timeout");
 		_PlayerHandler.StartTurn();
+	}
+	
+	private void UpdateTilesLeftLabel()
+	{
+		 _TilesLeftLabel.Text = "Tiles Left: " + (_TableModel.Wall.Count - 14);
 	}
 }
