@@ -25,12 +25,18 @@ public partial class EnemyHandler : BaseHandler
 	
 	public void AddTileToHandClosed(Mahjong.Model.Tile poNewTileModel)
 	{
-		_EnemyHand.AddTileToHandClosed(poNewTileModel);
+		TileUIConfiguration oTileUIConfiguration = new TileUIConfiguration();
+		oTileUIConfiguration.IsInteractable = false;
+		oTileUIConfiguration.InitialHandAreaToAppendTo = "CLOSED";
+		_EnemyHand.AddTileToHand(poNewTileModel, oTileUIConfiguration);
 	}
 	
 	public void AddTileToHandTsumo(Mahjong.Model.Tile poNewTileModel)
 	{
-		_EnemyHand.AddTileToHandTsumo(poNewTileModel);
+		TileUIConfiguration oTileUIConfiguration = new TileUIConfiguration();
+		oTileUIConfiguration.IsInteractable = false;
+		oTileUIConfiguration.InitialHandAreaToAppendTo = "TSUMO";
+		_EnemyHand.AddTileToHand(poNewTileModel, oTileUIConfiguration);
 		DiscardTile();
 	}
 	

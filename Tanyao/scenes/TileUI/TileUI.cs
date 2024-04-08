@@ -17,6 +17,7 @@ public partial class TileUI : Control
 	public Area2D _DropPointDetector;
 	public bool _CanBeDiscarded;
 	public Node _ParentContainer;
+	public bool _IsInteractable = true;
 	
 	[Export]
 	public string _Tile;
@@ -65,21 +66,41 @@ public partial class TileUI : Control
 	
 	public override void _Input(InputEvent @event)
 	{
+		if(!_IsInteractable)
+		{
+			return;
+		}
+		
 		_TileStateMachine.OnInput(@event);
 	}
 	
 	private void _on_gui_input(InputEvent @event)
 	{
+		if(!_IsInteractable)
+		{
+			return;
+		}
+		
 		_TileStateMachine.OnGuiInput(@event);
 	}
 	
 	private void _on_mouse_entered()
 	{
+		if(!_IsInteractable)
+		{
+			return;
+		}
+		
 		_TileStateMachine.OnMouseEntered();
 	}
 
 	private void _on_mouse_exited()
 	{
+		if(!_IsInteractable)
+		{
+			return;
+		}
+		
 		_TileStateMachine.OnMouseExited();
 	}
 	

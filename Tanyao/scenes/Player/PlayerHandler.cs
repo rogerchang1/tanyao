@@ -27,19 +27,30 @@ public partial class PlayerHandler : BaseHandler
 	{
 	}
 	
+	public override void StartTurn()
+	{
+		_PlayerHand.EnableAllTilesInteractability();
+		_Events.EmitSignal(Events.SignalName.DrawTileRequested, this);
+	}
+	
 	public void EndTurn()
 	{
+		_PlayerHand.DisableAllTilesInteractability();
 		_Events.EmitSignal(Events.SignalName.PlayerTurnEnded);
 	}
 	
 	public void AddTileToHandClosed(Mahjong.Model.Tile poNewTileModel)
 	{
-		_PlayerHand.AddTileToHandClosed(poNewTileModel);
+		TileUIConfiguration oTileUIConfiguration = new TileUIConfiguration();
+		oTileUIConfiguration.InitialHandAreaToAppendTo = "CLOSED";
+		_PlayerHand.AddTileToHand(poNewTileModel, oTileUIConfiguration);
 	}
 	
 	public void AddTileToHandTsumo(Mahjong.Model.Tile poNewTileModel)
 	{
-		_PlayerHand.AddTileToHandTsumo(poNewTileModel);
+		TileUIConfiguration oTileUIConfiguration = new TileUIConfiguration();
+		oTileUIConfiguration.InitialHandAreaToAppendTo = "TSUMO";
+		_PlayerHand.AddTileToHand(poNewTileModel, oTileUIConfiguration);
 		IsValidHand(poNewTileModel);
 	}
 	

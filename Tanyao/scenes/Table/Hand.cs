@@ -65,26 +65,34 @@ public partial class Hand : HBoxContainer
 		}
 	}
 	
-	public void AddTileToHandTsumo(Mahjong.Model.Tile poNewTileModel)
+	public void AddTileToHand(Mahjong.Model.Tile poNewTileModel, TileUIConfiguration poTileUIConfiguration)
 	{
-		TileUI NewTileUI = CreateNewTileUI(poNewTileModel);
-		NewTileUI._ParentContainer = _HandTsumo;
-		_HandTsumo.AddChild(NewTileUI);
+		TileUI NewTileUI = CreateNewTileUI(poNewTileModel, poTileUIConfiguration);
+		
+		switch(poTileUIConfiguration.InitialHandAreaToAppendTo)
+		{
+			case "CLOSED":
+				NewTileUI._ParentContainer = _HandClosed;
+				_HandClosed.AddChild(NewTileUI);
+				break;
+			case "TSUMO":
+				NewTileUI._ParentContainer = _HandTsumo;
+				_HandTsumo.AddChild(NewTileUI);
+				break;
+			default:
+				NewTileUI._ParentContainer = _HandClosed;
+				_HandClosed.AddChild(NewTileUI);
+				break;
+		}
 	}
 	
-	public void AddTileToHandClosed(Mahjong.Model.Tile poNewTileModel)
-	{
-		TileUI NewTileUI = CreateNewTileUI(poNewTileModel);
-		NewTileUI._ParentContainer = _HandClosed;
-		_HandClosed.AddChild(NewTileUI);
-	}
-	
-	private TileUI CreateNewTileUI(Mahjong.Model.Tile poNewTileModel)
+	private TileUI CreateNewTileUI(Mahjong.Model.Tile poNewTileModel, TileUIConfiguration poTileUIConfiguration)
 	{
 		TileUI NewTileUI = (TileUI) TileUIScene.Instantiate();
 		NewTileUI.SetTile(poNewTileModel);
 		NewTileUI.ReparentRequested += OnTileUIReparentRequested;
 		NewTileUI.TileDiscarded += OnTileDiscarded;
+		NewTileUI._IsInteractable = poTileUIConfiguration.IsInteractable;
 		return NewTileUI;
 	}
 	
@@ -120,6 +128,22 @@ public partial class Hand : HBoxContainer
 	public void OnSortHandRequested()
 	{
 		SortTiles();
+	}
+	
+	public void DisableAllTilesInteractability()
+	{
+		foreach(TileUI oTileUI in _HandClosed.GetChildren())
+		{
+			oTileUI._IsInteractable = false;
+		}
+	}
+	
+	public void EnableAllTilesInteractability()
+	{
+		foreach(TileUI oTileUI in _HandClosed.GetChildren())
+		{
+			oTileUI._IsInteractable = true;
+		}
 	}
 	
 }
