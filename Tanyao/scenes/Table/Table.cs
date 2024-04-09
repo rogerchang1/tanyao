@@ -4,13 +4,14 @@ using Mahjong;
 using Mahjong.Model;
 
 public partial class Table : Godot.Node2D
-{
+{	
 	Mahjong.Model.Table _TableModel;
 	Mahjong.CTableManager _TableManager;
 	
 	public Hand _PlayerHand;
 	public PlayerHandler _PlayerHandler;
 	public EnemyHandler _EnemyHandler;
+	public CallOptions _CallOptions;
 	public Label _TilesLeftLabel;
 	
 	Events _Events;
@@ -24,6 +25,7 @@ public partial class Table : Godot.Node2D
 		_PlayerHand = GetNode<Hand>("TableUI/Hand");
 		_PlayerHandler = GetNode<PlayerHandler>("PlayerHandler");
 		_EnemyHandler = GetNode<EnemyHandler>("EnemyHandler");
+		_CallOptions = GetNode<CallOptions>("CallOptions");
 		_TilesLeftLabel = GetNode<Label>("TilesLeftLabel");
 		
 		_Events = GetNode<Events>("/root/Events");
@@ -103,30 +105,30 @@ public partial class Table : Godot.Node2D
 		UpdateTilesLeftLabel();
 	}
 	
-	public void OnPlayerTurnStarted()
+	public void OnPlayerTurnStarted(string psTile)
 	{
-		_PlayerHandler.StartTurn();
+		_PlayerHandler.StartTurn(psTile);
 	}
 	
-	public void OnEnemyTurnStarted()
+	public void OnEnemyTurnStarted(string psTile)
 	{
-		_EnemyHandler.StartTurn();
-	}
-	
-	//TODO: Switch to EnemyHandler Turn when you implement EnemyHandler
-	//TODO: Remove async when you don't need it anymore
-	public async void OnPlayerTurnEnded()
-	{
-		await ToSignal(GetTree().CreateTimer(.5), "timeout");
-		_EnemyHandler.StartTurn();
+		_EnemyHandler.StartTurn(psTile);
 	}
 	
 	//TODO: Switch to EnemyHandler Turn when you implement EnemyHandler
 	//TODO: Remove async when you don't need it anymore
-	public async void OnEnemyTurnEnded()
+	public async void OnPlayerTurnEnded(string psTile)
 	{
 		await ToSignal(GetTree().CreateTimer(.5), "timeout");
-		_PlayerHandler.StartTurn();
+		_EnemyHandler.StartTurn(psTile);
+	}
+	
+	//TODO: Switch to EnemyHandler Turn when you implement EnemyHandler
+	//TODO: Remove async when you don't need it anymore
+	public async void OnEnemyTurnEnded(string psTile)
+	{
+		await ToSignal(GetTree().CreateTimer(.5), "timeout");
+		_PlayerHandler.StartTurn(psTile);
 	}
 	
 	private void UpdateTilesLeftLabel()

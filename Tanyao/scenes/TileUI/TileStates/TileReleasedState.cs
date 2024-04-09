@@ -27,7 +27,9 @@ public partial class TileReleasedState : TileState
 			{
 				_TileUI.Reparent(Discards);
 			}
-			_TileUI.EmitSignal(TileUI.SignalName.TileDiscarded);
+			Events _Events = GetNode<Events>("/root/Events");
+			_Events.EmitSignal(Events.SignalName.TileDiscarded, _TileUI);
+			//_TileUI.EmitSignal(TileUI.SignalName.TileDiscarded, _TileUI);
 		}
 	}
 	

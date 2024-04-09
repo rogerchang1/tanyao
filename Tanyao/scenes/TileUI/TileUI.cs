@@ -8,7 +8,7 @@ public partial class TileUI : Control
 	public delegate void ReparentRequestedEventHandler(TileUI poTile, HBoxContainer poParent);
 	
 	[Signal]
-	public delegate void TileDiscardedEventHandler();
+	public delegate void TileDiscardedEventHandler(TileUI poTileUI);
 	
 	public ColorRect _Color;
 	public Label _StateLabel;
