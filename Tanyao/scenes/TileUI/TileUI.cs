@@ -17,6 +17,8 @@ public partial class TileUI : Control
 	public Area2D _DropPointDetector;
 	public bool _CanBeDiscarded;
 	public Node _ParentContainer;
+	
+	[Export]
 	public bool _IsInteractable = true;
 	
 	[Export]

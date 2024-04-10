@@ -11,7 +11,6 @@ public partial class Table : Godot.Node2D
 	public Hand _PlayerHand;
 	public PlayerHandler _PlayerHandler;
 	public EnemyHandler _EnemyHandler;
-	public CallOptions _CallOptions;
 	public Label _TilesLeftLabel;
 	
 	Events _Events;
@@ -25,7 +24,6 @@ public partial class Table : Godot.Node2D
 		_PlayerHand = GetNode<Hand>("TableUI/Hand");
 		_PlayerHandler = GetNode<PlayerHandler>("PlayerHandler");
 		_EnemyHandler = GetNode<EnemyHandler>("EnemyHandler");
-		_CallOptions = GetNode<CallOptions>("CallOptions");
 		_TilesLeftLabel = GetNode<Label>("TilesLeftLabel");
 		
 		_Events = GetNode<Events>("/root/Events");
@@ -94,13 +92,13 @@ public partial class Table : Godot.Node2D
 		Mahjong.Model.Tile DrawnTile = _TableManager.DrawNextTileFromWall(_TableModel);
 		if(oBaseHandler.GetType() == typeof(PlayerHandler))
 		{
-			((PlayerHandler)oBaseHandler).AddTileToHandTsumo(DrawnTile);
+			((PlayerHandler) oBaseHandler).AddTileToHandTsumo(DrawnTile);
 			
 		}
 		if(oBaseHandler.GetType() == typeof(EnemyHandler))
 		{
 			//TODO: change this later
-			((EnemyHandler)oBaseHandler).AddTileToHandTsumo(DrawnTile);
+			((EnemyHandler) oBaseHandler).AddTileToHandTsumo(DrawnTile);
 		}
 		UpdateTilesLeftLabel();
 	}

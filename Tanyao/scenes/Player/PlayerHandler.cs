@@ -1,6 +1,8 @@
 using Godot;
 using System;
 using Mahjong;
+using System.Collections.Generic;
+
 //TODO: not sure if inheritance is the right thing to do
 public partial class PlayerHandler : BaseHandler
 {	
@@ -9,6 +11,9 @@ public partial class PlayerHandler : BaseHandler
 	
 	[Export]
 	Label _ShantenLabel;
+	
+	[Export]
+	CallOptionsUI _CallOptionsUI;
 	
 	[Export]
 	Label _WinLabel;
@@ -36,6 +41,14 @@ public partial class PlayerHandler : BaseHandler
 		if(psDiscardedTile != "")
 		{
 			GD.Print("Enemy discarded " + psDiscardedTile);
+			List<List<Mahjong.Model.Tile>> oChiAbleTiles = IsChi(new Mahjong.Model.Tile(psDiscardedTile));
+			if(oChiAbleTiles.Count > 0)
+			{
+				_CallOptionsUI.Show();
+				_CallOptionsUI._Chi.Show();
+				_CallOptionsUI._ChiTileOptions = oChiAbleTiles;
+			}
+			
 		}
 		_PlayerHand.EnableAllTilesInteractability();
 		_Events.EmitSignal(Events.SignalName.DrawTileRequested, this);
@@ -66,22 +79,6 @@ public partial class PlayerHandler : BaseHandler
 	
 	public bool IsValidHand(Mahjong.Model.Tile poWinTile)
 	{
-		//Mahjong.Model.Hand oHand = new Mahjong.Model.Hand();
-		//foreach(TileUI oTileUI in _PlayerHand._HandClosed.GetChildren())
-		//{
-			//oHand.Tiles.Add(oTileUI._TileModel);
-		//}
-		//if(_PlayerHand._HandTsumo.GetChildren().Count == 0)
-		//{
-			//return false;
-		//}else{
-			//var oNode = _PlayerHand._HandTsumo.GetChild(0);
-			//if(oNode != null && oNode.GetType() == typeof(TileUI))
-			//{
-				//oHand.Tiles.Add(((TileUI) oNode)._TileModel);
-			//}
-		//}
-		
 		Mahjong.CShantenEvaluator oShantenEvaluator = new Mahjong.CShantenEvaluator();
 		int nShanten = oShantenEvaluator.EvaluateShanten(_Hand);
 		_ShantenLabel.Text = "Shanten: " + nShanten;
@@ -146,5 +143,46 @@ public partial class PlayerHandler : BaseHandler
 		_Hand.DiscardedTiles.Add(oTileUI._TileModel);
 		EndTurn(oTileUI._TileModel);
 	}
-
+	
+	public List<List<Mahjong.Model.Tile>> IsChi(Mahjong.Model.Tile poTile)
+	{
+		List<List<Mahjong.Model.Tile>> TilesCanChiWith = new List<List<Mahjong.Model.Tile>>();
+		
+		if(poTile.suit == "z")
+		{
+			return TilesCanChiWith;
+		}
+		
+		Mahjong.CTilesManager oTilesManager = new Mahjong.CTilesManager();
+		
+		List<Mahjong.Model.Tile> TilesToSearchFor = new List<Mahjong.Model.Tile>();
+		
+		if(poTile.num - 2 > 0)
+		{
+			TilesToSearchFor.Add(new Mahjong.Model.Tile((poTile.num - 2) + poTile.suit));	
+		}
+		if(poTile.num - 1 > 0)
+		{
+			TilesToSearchFor.Add(new Mahjong.Model.Tile((poTile.num - 1) + poTile.suit));	
+		}
+		if(poTile.num + 1 < 10)
+		{
+			TilesToSearchFor.Add(new Mahjong.Model.Tile((poTile.num + 1) + poTile.suit));	
+		}
+		if(poTile.num + 2 < 10)
+		{
+			TilesToSearchFor.Add(new Mahjong.Model.Tile((poTile.num + 2) + poTile.suit));	
+		}
+		
+		for(int i = 0;i < TilesToSearchFor.Count - 1;i++)
+		{
+			if(oTilesManager.ContainsTileOf(_Hand.Tiles,TilesToSearchFor[i]) && 
+			oTilesManager.ContainsTileOf(_Hand.Tiles,TilesToSearchFor[i+1]))
+			{
+				List<Mahjong.Model.Tile> oChiTileBlock = new List<Mahjong.Model.Tile>(){TilesToSearchFor[i], TilesToSearchFor[i+1]};
+				TilesCanChiWith.Add(oChiTileBlock);
+			}
+		}
+		return TilesCanChiWith;
+	}
 }

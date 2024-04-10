@@ -1,0 +1,79 @@
+[gd_scene load_steps=4 format=3 uid="uid://wasyrhuimo5i"]
+
+[ext_resource type="Script" path="res://Tanyao/scenes/UI/CallOptionsUI.cs" id="1_4kebo"]
+[ext_resource type="PackedScene" uid="uid://c764eye1j7tfq" path="res://Tanyao/scenes/UI/ChiTileOptions.tscn" id="2_q3jvt"]
+[ext_resource type="Theme" uid="uid://lq7ql6qc76jt" path="res://main_theme.tres" id="3_1sy23"]
+
+[node name="CallOptionsUI" type="Node2D"]
+script = ExtResource("1_4kebo")
+
+[node name="ChiTileOptions" parent="." instance=ExtResource("2_q3jvt")]
+offset_left = 472.0
+offset_top = 507.0
+offset_right = 884.0
+offset_bottom = 587.0
+
+[node name="CallOptions" type="PanelContainer" parent="."]
+offset_left = 1039.0
+offset_top = 73.0
+offset_right = 1225.0
+offset_bottom = 580.0
+
+[node name="ColorRect" type="ColorRect" parent="CallOptions"]
+layout_mode = 2
+color = Color(0.243137, 0.741176, 0.435294, 0.952941)
+
+[node name="ButtonContainer" type="VBoxContainer" parent="CallOptions"]
+layout_mode = 2
+alignment = 1
+
+[node name="Chi" type="Button" parent="CallOptions/ButtonContainer"]
+layout_mode = 2
+theme = ExtResource("3_1sy23")
+theme_override_font_sizes/font_size = 50
+text = "Chi"
+
+[node name="Pon" type="Button" parent="CallOptions/ButtonContainer"]
+layout_mode = 2
+theme = ExtResource("3_1sy23")
+theme_override_font_sizes/font_size = 50
+text = "Pon
+"
+
+[node name="Kan" type="Button" parent="CallOptions/ButtonContainer"]
+layout_mode = 2
+theme = ExtResource("3_1sy23")
+theme_override_font_sizes/font_size = 50
+text = "Kan
+"
+
+[node name="Riichi" type="Button" parent="CallOptions/ButtonContainer"]
+layout_mode = 2
+theme = ExtResource("3_1sy23")
+theme_override_font_sizes/font_size = 50
+text = "Riichi
+"
+
+[node name="Tsumo" type="Button" parent="CallOptions/ButtonContainer"]
+layout_mode = 2
+theme = ExtResource("3_1sy23")
+theme_override_font_sizes/font_size = 50
+text = "Tsumo
+"
+
+[node name="Ron" type="Button" parent="CallOptions/ButtonContainer"]
+layout_mode = 2
+theme = ExtResource("3_1sy23")
+theme_override_font_sizes/font_size = 50
+text = "Ron
+"
+
+[node name="Cancel" type="Button" parent="CallOptions/ButtonContainer"]
+layout_mode = 2
+theme = ExtResource("3_1sy23")
+theme_override_font_sizes/font_size = 50
+text = "Cancel
+"
+
+[connection signal="pressed" from="CallOptions/ButtonContainer/Chi" to="." method="_on_chi_pressed"]
+[connection signal="pressed" from="CallOptions/ButtonContainer/Cancel" to="." method="_on_cancel_pressed"]

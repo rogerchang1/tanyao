@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://c764eye1j7tfq"]
+
+[ext_resource type="Script" path="res://Tanyao/scenes/UI/ChiTileOptions.cs" id="1_2v2d4"]
+[ext_resource type="PackedScene" uid="uid://ds7tbtsw45uvc" path="res://Tanyao/scenes/UI/ChiTileButton.tscn" id="2_aofmw"]
+
+[node name="ChiTileOptions" type="HBoxContainer"]
+offset_right = 412.0
+offset_bottom = 80.0
+theme_override_constants/separation = 20
+script = ExtResource("1_2v2d4")
+
+[node name="ChiTileButton" parent="." instance=ExtResource("2_aofmw")]
+layout_mode = 2
+
+[node name="ChiTileButton2" parent="." instance=ExtResource("2_aofmw")]
+layout_mode = 2
+
+[node name="ChiTileButton3" parent="." instance=ExtResource("2_aofmw")]
+layout_mode = 2
