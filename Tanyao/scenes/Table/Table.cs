@@ -42,6 +42,40 @@ public partial class Table : Godot.Node2D
 	public void InitializeTable()
 	{
 		_TableManager.InitializeTable(_TableModel);
+		
+		_TableModel.Wall[0] = new Mahjong.Model.Tile("6s");
+		_TableModel.Wall[1] = new Mahjong.Model.Tile("2p");
+		_TableModel.Wall[2] = new Mahjong.Model.Tile("3p");
+		_TableModel.Wall[3] = new Mahjong.Model.Tile("4p");
+		_TableModel.Wall[4] = new Mahjong.Model.Tile("6s");
+		_TableModel.Wall[5] = new Mahjong.Model.Tile("2p");
+		_TableModel.Wall[6] = new Mahjong.Model.Tile("3p");
+		_TableModel.Wall[7] = new Mahjong.Model.Tile("4p");
+		_TableModel.Wall[8] = new Mahjong.Model.Tile("5p");
+		_TableModel.Wall[9] = new Mahjong.Model.Tile("6p");
+		_TableModel.Wall[10] = new Mahjong.Model.Tile("7p");
+		_TableModel.Wall[11] = new Mahjong.Model.Tile("8p");
+		_TableModel.Wall[12] = new Mahjong.Model.Tile("5p");
+		_TableModel.Wall[13] = new Mahjong.Model.Tile("6p");
+		_TableModel.Wall[14] = new Mahjong.Model.Tile("7p");
+		_TableModel.Wall[15] = new Mahjong.Model.Tile("8p");
+		_TableModel.Wall[16] = new Mahjong.Model.Tile("2s");
+		_TableModel.Wall[17] = new Mahjong.Model.Tile("3s");
+		_TableModel.Wall[18] = new Mahjong.Model.Tile("4s");
+		_TableModel.Wall[19] = new Mahjong.Model.Tile("5s");
+		_TableModel.Wall[20] = new Mahjong.Model.Tile("2s");
+		_TableModel.Wall[21] = new Mahjong.Model.Tile("3s");
+		_TableModel.Wall[22] = new Mahjong.Model.Tile("4s");
+		_TableModel.Wall[23] = new Mahjong.Model.Tile("5s");
+		_TableModel.Wall[24] = new Mahjong.Model.Tile("1m");
+		_TableModel.Wall[25] = new Mahjong.Model.Tile("1m");
+		
+		_TableModel.Wall[26] = new Mahjong.Model.Tile("4s");
+		_TableModel.Wall[27] = new Mahjong.Model.Tile("4s");
+		_TableModel.Wall[26] = new Mahjong.Model.Tile("4p");
+		_TableModel.Wall[27] = new Mahjong.Model.Tile("4p");
+		
+		
 		//TODO: randomize who draws first
 		InitializeHands(true);
 		UpdateTilesLeftLabel();

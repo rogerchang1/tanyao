@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using Mahjong.Model;
 
 public partial class CallOptionsUI : Node2D
 {
@@ -11,43 +12,66 @@ public partial class CallOptionsUI : Node2D
 	public Button _Tsumo;
 	public Button _Ron;
 	public Button _Cancel;
-	public List<List<Mahjong.Model.Tile>> _ChiTileOptions = new List<List<Mahjong.Model.Tile>>();
 	
 	[Export]
 	public ChiTileOptions _ChiTileOptionsUI;
+	
+	public Events _Events;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		_Chi = GetNode<Button>("CallOptions/ButtonContainer/Chi");
-		_Pon = GetNode<Button>("CallOptions/ButtonContainer/Pon");
-		_Kan = GetNode<Button>("CallOptions/ButtonContainer/Kan");
-		_Riichi = GetNode<Button>("CallOptions/ButtonContainer/Riichi");
-		_Tsumo = GetNode<Button>("CallOptions/ButtonContainer/Tsumo");
-		_Ron = GetNode<Button>("CallOptions/ButtonContainer/Ron");
-		_Cancel = GetNode<Button>("CallOptions/ButtonContainer/Cancel");
+		_Events = GetNode<Events>("/root/Events");
+		_Chi = GetNode<Button>("ButtonContainer/Chi");
+		_Pon = GetNode<Button>("ButtonContainer/Pon");
+		_Kan = GetNode<Button>("ButtonContainer/Kan");
+		_Riichi = GetNode<Button>("ButtonContainer/Riichi");
+		_Tsumo = GetNode<Button>("ButtonContainer/Tsumo");
+		_Ron = GetNode<Button>("ButtonContainer/Ron");
+		_Cancel = GetNode<Button>("ButtonContainer/Cancel");
 		_Chi.Hide();
 		_Pon.Hide();
 		_Kan.Hide();
 		_Riichi.Hide();
 		_Tsumo.Hide();
 		_Ron.Hide();
+		_ChiTileOptionsUI.Hide();
+	}
+	
+	public void SetChiTileOptions(List<List<Mahjong.Model.Tile>> poChiTileOptions)
+	{
+		_ChiTileOptionsUI.ClearButtons();
+		foreach(List<Mahjong.Model.Tile> oChiTileOption in poChiTileOptions)
+		{
+			//Expect each oChiTileOption to have 2 tiles
+			_ChiTileOptionsUI.AddChiTileOption(oChiTileOption[0],oChiTileOption[1]);
+			//_ChiTileOptionsUI.Show();
+		}
 	}
 	
 	private void _on_chi_pressed()
 	{
 		// Replace with function body.
+		GD.Print("hi");
+		_ChiTileOptionsUI.Show();
 	}
 	
 	private void _on_cancel_pressed()
 	{
-		this.Hide();
+		HideAll();
+		_Events.EmitSignal(Events.SignalName.CallOptionsCancelPressed);
+	}
+	
+	public void HideAll()
+	{
+		_ChiTileOptionsUI.Hide();
 		_Chi.Hide();
 		_Pon.Hide();
 		_Kan.Hide();
 		_Riichi.Hide();
 		_Tsumo.Hide();
 		_Ron.Hide();
+		this.Hide();
 	}
 	
 }

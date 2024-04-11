@@ -59,6 +59,7 @@ vertical_alignment = 1
 
 [node name="CallOptionsUI" parent="." instance=ExtResource("2_whmu8")]
 visible = false
+z_index = 1
 
 [node name="TileDropArea" type="Area2D" parent="."]
 collision_layer = 2
@@ -74,12 +75,13 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PlayerHandler" type="Node" parent="." node_paths=PackedStringArray("_PlayerHand", "_ShantenLabel", "_CallOptionsUI", "_WinLabel")]
+[node name="PlayerHandler" type="Node" parent="." node_paths=PackedStringArray("_PlayerHand", "_ShantenLabel", "_CallOptionsUI", "_WinLabel", "_CalledHand")]
 script = ExtResource("2_8xuov")
 _PlayerHand = NodePath("../TableUI/Hand")
 _ShantenLabel = NodePath("../ShantenLabel")
 _CallOptionsUI = NodePath("../CallOptionsUI")
 _WinLabel = NodePath("../WinLabel")
+_CalledHand = NodePath("../TableUI/CalledHand")
 
 [node name="EnemyHandler" type="Node" parent="." node_paths=PackedStringArray("_EnemyHand")]
 script = ExtResource("3_hftm0")
@@ -140,6 +142,14 @@ layout_mode = 2
 
 [node name="HandTsumo" type="HBoxContainer" parent="TableUI/Hand"]
 layout_mode = 2
+
+[node name="CalledHand" type="HBoxContainer" parent="TableUI"]
+offset_left = 624.0
+offset_top = 640.0
+offset_right = 1280.0
+offset_bottom = 720.0
+mouse_filter = 2
+alignment = 2
 
 [node name="EnemyHand" type="HBoxContainer" parent="TableUI"]
 anchors_preset = 1

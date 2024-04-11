@@ -18,6 +18,9 @@ public partial class PlayerHandler : BaseHandler
 	[Export]
 	Label _WinLabel;
 	
+	[Export]
+	HBoxContainer _CalledHand;
+	
 	//Events _Events;
 	
 	Mahjong.Model.Hand _Hand;
@@ -28,6 +31,8 @@ public partial class PlayerHandler : BaseHandler
 		_Events = GetNode<Events>("/root/Events");
 		//_Events.PlayerTileDiscarded += OnPlayerTileDiscarded;
 		_Events.TileDiscarded += OnTileDiscarded;
+		_Events.ChiButtonPressed += OnChiButtonPressed;
+		_Events.CallOptionsCancelPressed += OnCallCancelButtonPressed;
 		_Hand = new Mahjong.Model.Hand();
 	}
 
@@ -46,12 +51,21 @@ public partial class PlayerHandler : BaseHandler
 			{
 				_CallOptionsUI.Show();
 				_CallOptionsUI._Chi.Show();
-				_CallOptionsUI._ChiTileOptions = oChiAbleTiles;
+				_CallOptionsUI.SetChiTileOptions(oChiAbleTiles);
+			}
+			else
+			{
+				_PlayerHand.EnableAllTilesInteractability();
+				_Events.EmitSignal(Events.SignalName.DrawTileRequested, this);
 			}
 			
 		}
-		_PlayerHand.EnableAllTilesInteractability();
-		_Events.EmitSignal(Events.SignalName.DrawTileRequested, this);
+		else
+		{
+			_PlayerHand.EnableAllTilesInteractability();
+			_Events.EmitSignal(Events.SignalName.DrawTileRequested, this);
+		}
+		
 	}
 	
 	public void EndTurn(Mahjong.Model.Tile oTile)
@@ -184,5 +198,38 @@ public partial class PlayerHandler : BaseHandler
 			}
 		}
 		return TilesCanChiWith;
+	}
+	
+	public void OnChiButtonPressed(string psTile1, string psTile2)
+	{
+		GD.Print("PlayerHandler: OnChiButtonPressed");
+		GridContainer EnemyDiscardsGroup = (GridContainer) GetTree().GetFirstNodeInGroup("EnemyDiscardsGroup");
+		TileUI oEnemyTileUI = (TileUI) EnemyDiscardsGroup.GetChild(EnemyDiscardsGroup.GetChildren().Count - 1);
+		oEnemyTileUI.Reparent(_CalledHand);
+		
+		bool bTile1Found = false;
+		bool bTile2Found = false;
+		
+		foreach(TileUI oTileUI in _PlayerHand._HandClosed.GetChildren())
+		{
+			if(oTileUI._TileModel.ToString() == psTile1 && !bTile1Found)
+			{
+				oTileUI.Reparent(_CalledHand);
+				bTile1Found = true;
+			}
+			if(oTileUI._TileModel.ToString() == psTile2 && !bTile2Found)
+			{
+				oTileUI.Reparent(_CalledHand);
+				bTile2Found = true;
+			}
+		}
+		_CallOptionsUI.HideAll();
+		_PlayerHand.EnableAllTilesInteractability();
+	}
+	
+	public void OnCallCancelButtonPressed()
+	{
+		_PlayerHand.EnableAllTilesInteractability();
+		_Events.EmitSignal(Events.SignalName.DrawTileRequested, this);
 	}
 }

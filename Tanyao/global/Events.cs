@@ -24,4 +24,10 @@ public partial class Events : Node
 	public delegate void EnemyTurnStartedEventHandler(string psTile);
 	[Signal]
 	public delegate void EnemyTurnEndedEventHandler(string psTile);
+	
+	[Signal]
+	public delegate void CallOptionsCancelPressedEventHandler();
+	[Signal]
+	public delegate void ChiButtonPressedEventHandler(string psTile1, string psTile2);
+	
 }
