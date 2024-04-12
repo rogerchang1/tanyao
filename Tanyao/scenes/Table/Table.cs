@@ -102,6 +102,7 @@ public partial class Table : Godot.Node2D
 				}
 			}
 			pbShouldAddTilesToPlayerFirst = !pbShouldAddTilesToPlayerFirst;
+			//await ToSignal(GetTree().CreateTimer(.25), "timeout");
 		}
 		if(pbShouldAddTilesToPlayerFirst)
 		{
@@ -111,6 +112,8 @@ public partial class Table : Godot.Node2D
 			_EnemyHandler.AddTileToHandClosed(_TableManager.DrawNextTileFromWall(_TableModel));
 			_PlayerHandler.AddTileToHandClosed(_TableManager.DrawNextTileFromWall(_TableModel));
 		}
+		_PlayerHandler.SortTilesUI();
+		_EnemyHandler.SortTilesUI();
 	}
 	
 	public void StartRound()

@@ -51,8 +51,12 @@ public partial class CallOptionsUI : Node2D
 	
 	private void _on_chi_pressed()
 	{
-		// Replace with function body.
 		_ChiTileOptionsUI.Show();
+	}
+	
+	private void _on_pon_pressed()
+	{
+		_Events.EmitSignal(Events.SignalName.PonButtonPressed);
 	}
 	
 	private void _on_cancel_pressed()

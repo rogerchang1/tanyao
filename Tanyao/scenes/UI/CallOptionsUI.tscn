@@ -80,4 +80,5 @@ layout_mode = 2
 color = Color(0.243137, 0.741176, 0.435294, 0.952941)
 
 [connection signal="pressed" from="ButtonContainer/Chi" to="." method="_on_chi_pressed"]
+[connection signal="pressed" from="ButtonContainer/Pon" to="." method="_on_pon_pressed"]
 [connection signal="pressed" from="ButtonContainer/Cancel" to="." method="_on_cancel_pressed"]

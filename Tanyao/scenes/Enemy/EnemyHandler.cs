@@ -23,6 +23,16 @@ public partial class EnemyHandler : BaseHandler
 	{
 	}
 	
+	public override void StartTurn(string psDiscardedTile = "")
+	{
+		_Events.EmitSignal(Events.SignalName.DrawTileRequested, this);
+	}
+	
+	public void SortTilesUI()
+	{
+		_EnemyHand.SortTiles();
+	}
+	
 	public void AddTileToHandClosed(Mahjong.Model.Tile poNewTileModel)
 	{
 		TileUIConfiguration oTileUIConfiguration = new TileUIConfiguration();

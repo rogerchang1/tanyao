@@ -23,8 +23,8 @@ public partial class PlayerHandler : BaseHandler
 	
 	[Export]
 	public PackedScene ChiScene;
-	//[Export]
-	//public PackedScene PonScene;
+	[Export]
+	public PackedScene PonScene;
 	//[Export]
 	//public PackedScene KanScene;
 	//[Export]
@@ -41,6 +41,7 @@ public partial class PlayerHandler : BaseHandler
 		//_Events.PlayerTileDiscarded += OnPlayerTileDiscarded;
 		_Events.TileDiscarded += OnTileDiscarded;
 		_Events.ChiButtonPressed += OnChiButtonPressed;
+		_Events.PonButtonPressed += OnPonButtonPressed;
 		_Events.CallOptionsCancelPressed += OnCallCancelButtonPressed;
 		_Hand = new Mahjong.Model.Hand();
 	}
@@ -50,19 +51,33 @@ public partial class PlayerHandler : BaseHandler
 	{
 	}
 	
+	public void SortTilesUI()
+	{
+		_PlayerHand.SortTiles();
+	}
+	
 	public override void StartTurn(string psDiscardedTile = "")
 	{
 		if(psDiscardedTile != "")
 		{
 			GD.Print("Enemy discarded " + psDiscardedTile);
 			List<List<Mahjong.Model.Tile>> oChiAbleTiles = IsChi(new Mahjong.Model.Tile(psDiscardedTile));
+			bool bShowCallOptions = false;
 			if(oChiAbleTiles.Count > 0)
 			{
 				_CallOptionsUI.Show();
 				_CallOptionsUI._Chi.Show();
 				_CallOptionsUI.SetChiTileOptions(oChiAbleTiles);
+				bShowCallOptions = true;
 			}
-			else
+			Mahjong.CTilesManager oTilesManager = new Mahjong.CTilesManager();
+			if(oTilesManager.CountNumberOfTilesOf(_Hand.Tiles, new Mahjong.Model.Tile(psDiscardedTile)) == 2)
+			{
+				_CallOptionsUI.Show();
+				_CallOptionsUI._Pon.Show();
+				bShowCallOptions = true;
+			}
+			if(!bShowCallOptions)
 			{
 				_PlayerHand.EnableAllTilesInteractability();
 				_Events.EmitSignal(Events.SignalName.DrawTileRequested, this);
@@ -230,7 +245,8 @@ public partial class PlayerHandler : BaseHandler
 		TileUI oTileUI2 = null;
 		
 		LockedBlock ChiBlock = (LockedBlock) ChiScene.Instantiate();
-		
+		_CalledHand.AddChild(ChiBlock);
+		_CalledHand.MoveChild(ChiBlock, 0);
 		//oEnemyTileUI.Reparent(_CalledHand);
 		
 		foreach(TileUI oTileUI in _PlayerHand._HandClosed.GetChildren())
@@ -249,7 +265,7 @@ public partial class PlayerHandler : BaseHandler
 			}
 		}
 		
-		_CalledHand.AddChild(ChiBlock);
+		
 		ChiBlock.SetUp(oEnemyTileUI._TileModel, oTileUI1._TileModel, oTileUI2._TileModel);
 		
 		Mahjong.CTilesManager oTilesManager = new Mahjong.CTilesManager();
@@ -265,6 +281,51 @@ public partial class PlayerHandler : BaseHandler
 		oEnemyTileUI.QueueFree();
 		oTileUI1.QueueFree();
 		oTileUI2.QueueFree();
+		
+		_CallOptionsUI.HideAll();
+		_PlayerHand.EnableAllTilesInteractability();
+	}
+	
+	public void OnPonButtonPressed()
+	{
+		GD.Print("PlayerHandler: OnPonButtonPressed");
+		GridContainer EnemyDiscardsGroup = (GridContainer) GetTree().GetFirstNodeInGroup("EnemyDiscardsGroup");
+		TileUI oEnemyTileUI = (TileUI) EnemyDiscardsGroup.GetChild(EnemyDiscardsGroup.GetChildren().Count - 1);
+		
+		_Hand.Tiles.Add(oEnemyTileUI._TileModel);
+		
+		int nCount = 0;
+		
+		LockedBlock PonBlock = (LockedBlock) PonScene.Instantiate();
+		_CalledHand.AddChild(PonBlock);
+		_CalledHand.MoveChild(PonBlock, 0);
+		
+		foreach(TileUI oTileUI in _PlayerHand._HandClosed.GetChildren())
+		{
+			if(nCount >= 2)
+			{
+				break;
+			}
+			if(oTileUI._TileModel.ToString() == oEnemyTileUI._TileModel.ToString() && nCount < 2)
+			{
+				oTileUI.QueueFree();
+				nCount++;
+			}
+		}
+		
+		PonBlock.SetUp(oEnemyTileUI._TileModel, oEnemyTileUI._TileModel, oEnemyTileUI._TileModel);
+		
+		Mahjong.CTilesManager oTilesManager = new Mahjong.CTilesManager();
+		Mahjong.Model.Block oBlock = new Mahjong.Model.Block();
+		oBlock.Tiles.Add(oEnemyTileUI._TileModel);
+		oBlock.Tiles.Add(oEnemyTileUI._TileModel);
+		oBlock.Tiles.Add(oEnemyTileUI._TileModel);
+		oTilesManager.SortTiles(oBlock.Tiles);
+		oBlock.IsOpen = true;
+		oBlock.Type = Enums.Mentsu.Koutsu;
+		_Hand.LockedBlocks.Add(oBlock);
+		
+		oEnemyTileUI.QueueFree();
 		
 		_CallOptionsUI.HideAll();
 		_PlayerHand.EnableAllTilesInteractability();
