@@ -72,8 +72,10 @@ public partial class Table : Godot.Node2D
 		
 		_TableModel.Wall[26] = new Mahjong.Model.Tile("4s");
 		_TableModel.Wall[27] = new Mahjong.Model.Tile("4s");
-		_TableModel.Wall[26] = new Mahjong.Model.Tile("4p");
-		_TableModel.Wall[27] = new Mahjong.Model.Tile("4p");
+		_TableModel.Wall[28] = new Mahjong.Model.Tile("4p");
+		_TableModel.Wall[29] = new Mahjong.Model.Tile("4p");
+		_TableModel.Wall[30] = new Mahjong.Model.Tile("4p");
+		_TableModel.Wall[31] = new Mahjong.Model.Tile("4p");
 		
 		
 		//TODO: randomize who draws first

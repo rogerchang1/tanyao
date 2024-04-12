@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://dvpig2rtau57s"]
+[gd_scene load_steps=9 format=3 uid="uid://dvpig2rtau57s"]
 
 [ext_resource type="Script" path="res://Tanyao/scenes/Table/Table.cs" id="1_kw13y"]
 [ext_resource type="Script" path="res://Tanyao/scenes/Table/Hand.cs" id="2_3n81g"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://wasyrhuimo5i" path="res://Tanyao/scenes/UI/CallOptionsUI.tscn" id="2_whmu8"]
 [ext_resource type="PackedScene" uid="uid://5643582tkyan" path="res://Tanyao/scenes/TileUI/TileUI.tscn" id="2_wqckx"]
 [ext_resource type="Script" path="res://Tanyao/scenes/Enemy/EnemyHandler.cs" id="3_hftm0"]
+[ext_resource type="PackedScene" uid="uid://dfkae4wigcd01" path="res://Tanyao/scenes/UI/LockedBlockChi.tscn" id="4_nugy6"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5qduj"]
 size = Vector2(1280, 512)
@@ -82,6 +83,7 @@ _ShantenLabel = NodePath("../ShantenLabel")
 _CallOptionsUI = NodePath("../CallOptionsUI")
 _WinLabel = NodePath("../WinLabel")
 _CalledHand = NodePath("../TableUI/CalledHand")
+ChiScene = ExtResource("4_nugy6")
 
 [node name="EnemyHandler" type="Node" parent="." node_paths=PackedStringArray("_EnemyHand")]
 script = ExtResource("3_hftm0")

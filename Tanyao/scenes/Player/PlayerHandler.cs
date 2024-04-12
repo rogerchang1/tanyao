@@ -21,6 +21,15 @@ public partial class PlayerHandler : BaseHandler
 	[Export]
 	HBoxContainer _CalledHand;
 	
+	[Export]
+	public PackedScene ChiScene;
+	//[Export]
+	//public PackedScene PonScene;
+	//[Export]
+	//public PackedScene KanScene;
+	//[Export]
+	//public PackedScene OpenKanScene;
+	
 	//Events _Events;
 	
 	Mahjong.Model.Hand _Hand;
@@ -188,10 +197,12 @@ public partial class PlayerHandler : BaseHandler
 			TilesToSearchFor.Add(new Mahjong.Model.Tile((poTile.num + 2) + poTile.suit));	
 		}
 		
+		List<Mahjong.Model.Tile> oTempList = oTilesManager.GetTileListWithBlocksRemoved(_Hand.Tiles,_Hand.LockedBlocks);
+		
 		for(int i = 0;i < TilesToSearchFor.Count - 1;i++)
 		{
-			if(oTilesManager.ContainsTileOf(_Hand.Tiles,TilesToSearchFor[i]) && 
-			oTilesManager.ContainsTileOf(_Hand.Tiles,TilesToSearchFor[i+1]))
+			if(oTilesManager.ContainsTileOf(oTempList,TilesToSearchFor[i]) && 
+			oTilesManager.ContainsTileOf(oTempList,TilesToSearchFor[i+1]))
 			{
 				List<Mahjong.Model.Tile> oChiTileBlock = new List<Mahjong.Model.Tile>(){TilesToSearchFor[i], TilesToSearchFor[i+1]};
 				TilesCanChiWith.Add(oChiTileBlock);
@@ -205,24 +216,49 @@ public partial class PlayerHandler : BaseHandler
 		GD.Print("PlayerHandler: OnChiButtonPressed");
 		GridContainer EnemyDiscardsGroup = (GridContainer) GetTree().GetFirstNodeInGroup("EnemyDiscardsGroup");
 		TileUI oEnemyTileUI = (TileUI) EnemyDiscardsGroup.GetChild(EnemyDiscardsGroup.GetChildren().Count - 1);
-		oEnemyTileUI.Reparent(_CalledHand);
 		
 		bool bTile1Found = false;
 		bool bTile2Found = false;
+		TileUI oTileUI1 = null;
+		TileUI oTileUI2 = null;
+		
+		LockedBlock ChiBlock = (LockedBlock) ChiScene.Instantiate();
+		
+		//oEnemyTileUI.Reparent(_CalledHand);
 		
 		foreach(TileUI oTileUI in _PlayerHand._HandClosed.GetChildren())
 		{
 			if(oTileUI._TileModel.ToString() == psTile1 && !bTile1Found)
 			{
-				oTileUI.Reparent(_CalledHand);
+				//oTileUI.Reparent(_CalledHand);
+				oTileUI1 = oTileUI;
 				bTile1Found = true;
 			}
 			if(oTileUI._TileModel.ToString() == psTile2 && !bTile2Found)
 			{
-				oTileUI.Reparent(_CalledHand);
+				//oTileUI.Reparent(_CalledHand);
+				oTileUI2 = oTileUI;
 				bTile2Found = true;
 			}
 		}
+		
+		_CalledHand.AddChild(ChiBlock);
+		ChiBlock.SetUp(oEnemyTileUI._TileModel, oTileUI1._TileModel, oTileUI2._TileModel);
+		
+		Mahjong.CTilesManager oTilesManager = new Mahjong.CTilesManager();
+		Mahjong.Model.Block oBlock = new Mahjong.Model.Block();
+		oBlock.Tiles.Add(oEnemyTileUI._TileModel);
+		oBlock.Tiles.Add(oTileUI1._TileModel);
+		oBlock.Tiles.Add(oTileUI2._TileModel);
+		oTilesManager.SortTiles(oBlock.Tiles);
+		oBlock.IsOpen = true;
+		oBlock.Type = Enums.Mentsu.Shuntsu;
+		_Hand.LockedBlocks.Add(oBlock);
+		
+		oEnemyTileUI.QueueFree();
+		oTileUI1.QueueFree();
+		oTileUI2.QueueFree();
+		
 		_CallOptionsUI.HideAll();
 		_PlayerHand.EnableAllTilesInteractability();
 	}

@@ -52,7 +52,6 @@ public partial class CallOptionsUI : Node2D
 	private void _on_chi_pressed()
 	{
 		// Replace with function body.
-		GD.Print("hi");
 		_ChiTileOptionsUI.Show();
 	}
 	
