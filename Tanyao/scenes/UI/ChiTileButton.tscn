@@ -3,13 +3,12 @@
 [ext_resource type="Script" path="res://Tanyao/scenes/UI/ChiTileButton.cs" id="1_ijx7q"]
 [ext_resource type="PackedScene" uid="uid://5643582tkyan" path="res://Tanyao/scenes/TileUI/TileUI.tscn" id="1_jdr8k"]
 
-[node name="ChiTileButton" type="Button" node_paths=PackedStringArray("_HBoxContainer")]
+[node name="ChiTileButton" type="Button"]
 custom_minimum_size = Vector2(124, 80)
 offset_right = 124.0
 offset_bottom = 80.0
 script = ExtResource("1_ijx7q")
 TileUIScene = ExtResource("1_jdr8k")
-_HBoxContainer = NodePath("HBoxContainer")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 0

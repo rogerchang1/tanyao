@@ -77,15 +77,18 @@ public partial class Hand : HBoxContainer
 		{
 			case "CLOSED":
 				NewTileUI._ParentContainer = _HandClosed;
-				_HandClosed.AddChild(NewTileUI);
+				NewTileUI.Reparent(_HandClosed);
+				//_HandClosed.AddChild(NewTileUI);
 				break;
 			case "TSUMO":
 				NewTileUI._ParentContainer = _HandTsumo;
-				_HandTsumo.AddChild(NewTileUI);
+				NewTileUI.Reparent(_HandTsumo);
+				//_HandTsumo.AddChild(NewTileUI);
 				break;
 			default:
 				NewTileUI._ParentContainer = _HandClosed;
-				_HandClosed.AddChild(NewTileUI);
+				NewTileUI.Reparent(_HandClosed);
+				//_HandClosed.AddChild(NewTileUI);
 				break;
 		}
 	}
@@ -93,6 +96,7 @@ public partial class Hand : HBoxContainer
 	private TileUI CreateNewTileUI(Mahjong.Model.Tile poNewTileModel, TileUIConfiguration poTileUIConfiguration)
 	{
 		TileUI NewTileUI = (TileUI) TileUIScene.Instantiate();
+		AddChild(NewTileUI);
 		NewTileUI.SetTile(poNewTileModel);
 		NewTileUI.ReparentRequested += OnTileUIReparentRequested;
 		//NewTileUI.TileDiscarded += OnTileDiscarded;

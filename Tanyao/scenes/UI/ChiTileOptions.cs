@@ -7,11 +7,11 @@ public partial class ChiTileOptions : Node2D
 	[Export]
 	public PackedScene ChiTileButton;
 	
-	[Export]
 	public HBoxContainer _HBoxContainer;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		_HBoxContainer = GetNode<HBoxContainer>("HBoxContainer");
 		//ClearButtons();
 		//AddChiTileOption(new Mahjong.Model.Tile("3p"), new Mahjong.Model.Tile("6s"));
 		//AddChiTileOption(new Mahjong.Model.Tile("3p"), new Mahjong.Model.Tile("6s"));
@@ -21,8 +21,8 @@ public partial class ChiTileOptions : Node2D
 	public void AddChiTileOption(Mahjong.Model.Tile poTile1, Mahjong.Model.Tile poTile2)
 	{
 		ChiTileButton NewChiTileButton = (ChiTileButton) ChiTileButton.Instantiate();
-		NewChiTileButton.CreateChiTileButton(poTile1, poTile2);
 		_HBoxContainer.AddChild(NewChiTileButton);
+		NewChiTileButton.SetUpWithTiles(poTile1, poTile2);
 	}
 	
 	public void ClearButtons()

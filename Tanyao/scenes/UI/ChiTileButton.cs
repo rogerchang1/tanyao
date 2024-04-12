@@ -7,7 +7,6 @@ public partial class ChiTileButton : Button
 	[Export]
 	public PackedScene TileUIScene;
 	
-	[Export]
 	public HBoxContainer _HBoxContainer;
 	
 	Events _Events;
@@ -18,28 +17,27 @@ public partial class ChiTileButton : Button
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		//_HBoxContainer = GetNode<HBoxContainer>("HBoxContainer");
-		//CreateChiTileButton(new Mahjong.Model.Tile("3p"), new Mahjong.Model.Tile("6s"));
+		_HBoxContainer = GetNode<HBoxContainer>("HBoxContainer");
 		_Events = GetNode<Events>("/root/Events");
+		//CreateChiTileButton(new Mahjong.Model.Tile("3p"), new Mahjong.Model.Tile("6s"));
 	}
 	
-	public void CreateChiTileButton(Mahjong.Model.Tile poTile1, Mahjong.Model.Tile poTile2)
+	public void SetUpWithTiles(Mahjong.Model.Tile poTile1, Mahjong.Model.Tile poTile2)
 	{
 		ClearTiles();
 		TileUI NewTileUI1 = (TileUI) TileUIScene.Instantiate();
+		_HBoxContainer.AddChild(NewTileUI1);
 		NewTileUI1.SetTile(poTile1);
 		NewTileUI1._IsInteractable = false;
 		_Tile1 = poTile1;
 		NewTileUI1.MouseFilter = MouseFilterEnum.Ignore;
 		
 		TileUI NewTileUI2 = (TileUI) TileUIScene.Instantiate();
+		_HBoxContainer.AddChild(NewTileUI2);
 		NewTileUI2.SetTile(poTile2);
 		NewTileUI2._IsInteractable = false;
 		_Tile2 = poTile2;
 		NewTileUI2.MouseFilter = MouseFilterEnum.Ignore;
-		
-		_HBoxContainer.AddChild(NewTileUI1);
-		_HBoxContainer.AddChild(NewTileUI2);
 	}
 	
 	public void ClearTiles()

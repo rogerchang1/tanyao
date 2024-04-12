@@ -52,10 +52,10 @@ public partial class TileUI : Control
 	public override void _Process(double delta)
 	{
 		//TODO: this is a hack... I should figure out the right way to instantiate things...
-		if(_TileLabel.Text != _Tile)
-		{
-			_TileLabel.Text = _TileModel.ToString();
-		}
+		//if(_TileLabel.Text != _Tile)
+		//{
+			//_TileLabel.Text = _TileModel.ToString();
+		//}
 		
 	}
 	
@@ -63,12 +63,14 @@ public partial class TileUI : Control
 	{
 		_TileModel = poTile;
 		_Tile = poTile.ToString();
+		_TileLabel.Text = _TileModel.ToString();
 	}
 	
 	public void SetTile(string psTile)
 	{
 		_TileModel = new Mahjong.Model.Tile(psTile);
 		_Tile = psTile;
+		_TileLabel.Text = _TileModel.ToString();
 	}
 	
 	public override void _Input(InputEvent @event)

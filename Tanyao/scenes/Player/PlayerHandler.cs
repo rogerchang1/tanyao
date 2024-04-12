@@ -32,7 +32,7 @@ public partial class PlayerHandler : BaseHandler
 	
 	//Events _Events;
 	
-	Mahjong.Model.Hand _Hand;
+	public Mahjong.Model.Hand _Hand;
 	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -164,6 +164,11 @@ public partial class PlayerHandler : BaseHandler
 		Mahjong.CTilesManager oTilesManager = new Mahjong.CTilesManager();
 		oTilesManager.RemoveSingleTileOf(_Hand.Tiles, oTileUI._TileModel);
 		_Hand.DiscardedTiles.Add(oTileUI._TileModel);
+		
+		Mahjong.CShantenEvaluator oShantenEvaluator = new Mahjong.CShantenEvaluator();
+		int nShanten = oShantenEvaluator.EvaluateShanten(_Hand);
+		_ShantenLabel.Text = "Shanten: " + nShanten;
+		
 		EndTurn(oTileUI._TileModel);
 	}
 	
@@ -216,6 +221,8 @@ public partial class PlayerHandler : BaseHandler
 		GD.Print("PlayerHandler: OnChiButtonPressed");
 		GridContainer EnemyDiscardsGroup = (GridContainer) GetTree().GetFirstNodeInGroup("EnemyDiscardsGroup");
 		TileUI oEnemyTileUI = (TileUI) EnemyDiscardsGroup.GetChild(EnemyDiscardsGroup.GetChildren().Count - 1);
+		
+		_Hand.Tiles.Add(oEnemyTileUI._TileModel);
 		
 		bool bTile1Found = false;
 		bool bTile2Found = false;
