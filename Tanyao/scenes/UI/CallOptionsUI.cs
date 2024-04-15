@@ -59,6 +59,11 @@ public partial class CallOptionsUI : Node2D
 		_Events.EmitSignal(Events.SignalName.PonButtonPressed);
 	}
 	
+	private void _on_ron_pressed()
+	{
+		_Events.EmitSignal(Events.SignalName.RonButtonPressed);
+	}
+	
 	private void _on_cancel_pressed()
 	{
 		HideAll();

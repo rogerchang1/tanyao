@@ -42,6 +42,7 @@ public partial class PlayerHandler : BaseHandler
 		_Events.TileDiscarded += OnTileDiscarded;
 		_Events.ChiButtonPressed += OnChiButtonPressed;
 		_Events.PonButtonPressed += OnPonButtonPressed;
+		_Events.RonButtonPressed += OnRonButtonPressed;
 		_Events.CallOptionsCancelPressed += OnCallCancelButtonPressed;
 		_Hand = new Mahjong.Model.Hand();
 	}
@@ -61,7 +62,8 @@ public partial class PlayerHandler : BaseHandler
 		if(psDiscardedTile != "")
 		{
 			GD.Print("Enemy discarded " + psDiscardedTile);
-			List<List<Mahjong.Model.Tile>> oChiAbleTiles = IsChi(new Mahjong.Model.Tile(psDiscardedTile));
+			Mahjong.Model.Tile oDiscardedTile = new Mahjong.Model.Tile(psDiscardedTile);
+			List<List<Mahjong.Model.Tile>> oChiAbleTiles = IsChi(oDiscardedTile);
 			bool bShowCallOptions = false;
 			if(oChiAbleTiles.Count > 0)
 			{
@@ -71,12 +73,23 @@ public partial class PlayerHandler : BaseHandler
 				bShowCallOptions = true;
 			}
 			Mahjong.CTilesManager oTilesManager = new Mahjong.CTilesManager();
-			if(oTilesManager.CountNumberOfTilesOf(_Hand.Tiles, new Mahjong.Model.Tile(psDiscardedTile)) == 2)
+			if(oTilesManager.CountNumberOfTilesOf(_Hand.Tiles, oDiscardedTile) == 2)
 			{
 				_CallOptionsUI.Show();
 				_CallOptionsUI._Pon.Show();
 				bShowCallOptions = true;
 			}
+			
+			_Hand.Tiles.Add(oDiscardedTile);
+			Mahjong.Model.Score oScore = IsValidHand(oDiscardedTile, Enums.Agari.Ron);
+			oTilesManager.RemoveSingleTileOf(_Hand.Tiles, oDiscardedTile);
+			if(oScore != null && oScore.YakuList.Count > 0)
+			{
+				_CallOptionsUI.Show();
+				_CallOptionsUI._Ron.Show();
+				bShowCallOptions = true;
+			}
+			
 			if(!bShowCallOptions)
 			{
 				_PlayerHand.EnableAllTilesInteractability();
@@ -89,7 +102,6 @@ public partial class PlayerHandler : BaseHandler
 			_PlayerHand.EnableAllTilesInteractability();
 			_Events.EmitSignal(Events.SignalName.DrawTileRequested, this);
 		}
-		
 	}
 	
 	public void EndTurn(Mahjong.Model.Tile oTile)
@@ -111,37 +123,45 @@ public partial class PlayerHandler : BaseHandler
 		TileUIConfiguration oTileUIConfiguration = new TileUIConfiguration();
 		oTileUIConfiguration.InitialHandAreaToAppendTo = "TSUMO";
 		_PlayerHand.AddTileToHand(poNewTileModel, oTileUIConfiguration);
+		
 		_Hand.Tiles.Add(poNewTileModel);
-		IsValidHand(poNewTileModel);
-	}
-	
-	public bool IsValidHand(Mahjong.Model.Tile poWinTile)
-	{
+		
 		Mahjong.CShantenEvaluator oShantenEvaluator = new Mahjong.CShantenEvaluator();
 		int nShanten = oShantenEvaluator.EvaluateShanten(_Hand);
 		_ShantenLabel.Text = "Shanten: " + nShanten;
-		if(nShanten == -1)
-		{
-			//TODO evaluate the type of hand here.
-			_Hand.Agari = Enums.Agari.Tsumo;
-			_Hand.SeatWind = Enums.Wind.East;
-			_Hand.RoundWind = Enums.Wind.East;
-			_Hand.WinTile = poWinTile;
-			
-			Mahjong.CScoreEvaluator oScoreEvaluator = new Mahjong.CScoreEvaluator();
-			Mahjong.Model.Score oScore = oScoreEvaluator.EvaluateScore(_Hand);
-			string sWinLabelText = "";
-			
-			foreach(Enums.Yaku yaku in oScore.YakuList)
-			{
-				sWinLabelText += yaku + "\n";
-				GD.Print(yaku);
-			}
-			sWinLabelText += oScore.Han + " Han " + oScore.Fu + " Fu";
-			UpdateWinLabel(sWinLabelText);
-		}
 		
-		return false;
+		Mahjong.Model.Score oScore = IsValidHand(poNewTileModel, Enums.Agari.Tsumo);
+		if(oScore != null && oScore.YakuList.Count > 0)
+		{
+			Win(oScore);
+		}
+	}
+	
+	public void Win(Mahjong.Model.Score poScore)
+	{
+		string sWinLabelText = "";
+			
+		foreach(Enums.Yaku yaku in poScore.YakuList)
+		{
+			sWinLabelText += yaku + "\n";
+			GD.Print(yaku);
+		}
+		sWinLabelText += poScore.Han + " Han " + poScore.Fu + " Fu";
+		UpdateWinLabel(sWinLabelText);
+	}
+	
+	public Mahjong.Model.Score IsValidHand(Mahjong.Model.Tile poWinTile, Enums.Agari peAgari)
+	{
+		//TODO evaluate the type of hand here.
+		_Hand.Agari = peAgari;
+		_Hand.SeatWind = Enums.Wind.East;
+		_Hand.RoundWind = Enums.Wind.East;
+		_Hand.WinTile = poWinTile;
+		
+		Mahjong.CScoreEvaluator oScoreEvaluator = new Mahjong.CScoreEvaluator();
+		Mahjong.Model.Score oScore = oScoreEvaluator.EvaluateScore(_Hand);
+		return oScore;
+		
 	}
 	
 	public async void UpdateWinLabel(string psWinLabelText)
@@ -331,9 +351,35 @@ public partial class PlayerHandler : BaseHandler
 		_PlayerHand.EnableAllTilesInteractability();
 	}
 	
+	public void OnRonButtonPressed()
+	{
+		GD.Print("PlayerHandler: OnRonButtonPressed");
+		GridContainer EnemyDiscardsGroup = (GridContainer) GetTree().GetFirstNodeInGroup("EnemyDiscardsGroup");
+		TileUI oEnemyTileUI = (TileUI) EnemyDiscardsGroup.GetChild(EnemyDiscardsGroup.GetChildren().Count - 1);
+		
+		_Hand.Tiles.Add(oEnemyTileUI._TileModel);
+		Mahjong.CScoreEvaluator oScoreEvaluator = new Mahjong.CScoreEvaluator();
+		Mahjong.Model.Score oScore = oScoreEvaluator.EvaluateScore(_Hand);
+		if(oScore != null && oScore.YakuList.Count > 0)
+		{
+			Win(oScore);
+		}
+		_CallOptionsUI.HideAll();
+	}
+	
 	public void OnCallCancelButtonPressed()
 	{
 		_PlayerHand.EnableAllTilesInteractability();
 		_Events.EmitSignal(Events.SignalName.DrawTileRequested, this);
+	}
+	
+	public void PrintHandForDebugging()
+	{
+		string s = "";
+		for(int i = 0;i<_Hand.Tiles.Count;i++)
+		{
+			s += _Hand.Tiles[i].ToString();
+		}
+		GD.Print(s);
 	}
 }

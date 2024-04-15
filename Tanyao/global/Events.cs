@@ -31,5 +31,7 @@ public partial class Events : Node
 	public delegate void ChiButtonPressedEventHandler(string psTile1, string psTile2);
 	[Signal]
 	public delegate void PonButtonPressedEventHandler();
+	[Signal]
+	public delegate void RonButtonPressedEventHandler();
 	
 }
