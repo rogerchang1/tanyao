@@ -34,6 +34,8 @@ public partial class PlayerHandler : BaseHandler
 	
 	public Mahjong.Model.Hand _Hand;
 	
+	public bool IsRiichi = false;
+	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -43,6 +45,9 @@ public partial class PlayerHandler : BaseHandler
 		_Events.ChiButtonPressed += OnChiButtonPressed;
 		_Events.PonButtonPressed += OnPonButtonPressed;
 		_Events.RonButtonPressed += OnRonButtonPressed;
+		_Events.TsumoButtonPressed += OnTsumoButtonPressed;
+		_Events.RiichiButtonPressed += OnRiichiButtonPressed;
+		_Events.KanButtonPressed += OnKanButtonPressed;
 		_Events.CallOptionsCancelPressed += OnCallCancelButtonPressed;
 		_Hand = new Mahjong.Model.Hand();
 	}
@@ -65,7 +70,7 @@ public partial class PlayerHandler : BaseHandler
 			Mahjong.Model.Tile oDiscardedTile = new Mahjong.Model.Tile(psDiscardedTile);
 			List<List<Mahjong.Model.Tile>> oChiAbleTiles = IsChi(oDiscardedTile);
 			bool bShowCallOptions = false;
-			if(oChiAbleTiles.Count > 0)
+			if(oChiAbleTiles.Count > 0 && IsRiichi == false)
 			{
 				_CallOptionsUI.Show();
 				_CallOptionsUI._Chi.Show();
@@ -73,7 +78,7 @@ public partial class PlayerHandler : BaseHandler
 				bShowCallOptions = true;
 			}
 			Mahjong.CTilesManager oTilesManager = new Mahjong.CTilesManager();
-			if(oTilesManager.CountNumberOfTilesOf(_Hand.Tiles, oDiscardedTile) == 2)
+			if(oTilesManager.CountNumberOfTilesOf(_Hand.Tiles, oDiscardedTile) == 2 && IsRiichi == false)
 			{
 				_CallOptionsUI.Show();
 				_CallOptionsUI._Pon.Show();
@@ -92,14 +97,12 @@ public partial class PlayerHandler : BaseHandler
 			
 			if(!bShowCallOptions)
 			{
-				_PlayerHand.EnableAllTilesInteractability();
 				_Events.EmitSignal(Events.SignalName.DrawTileRequested, this);
 			}
 			
 		}
 		else
 		{
-			_PlayerHand.EnableAllTilesInteractability();
 			_Events.EmitSignal(Events.SignalName.DrawTileRequested, this);
 		}
 	}
@@ -107,6 +110,7 @@ public partial class PlayerHandler : BaseHandler
 	public void EndTurn(Mahjong.Model.Tile oTile)
 	{
 		_PlayerHand.DisableAllTilesInteractability();
+		_CallOptionsUI.HideAll();
 		_Events.EmitSignal(Events.SignalName.PlayerTurnEnded, oTile.ToString());
 	}
 	
@@ -126,14 +130,27 @@ public partial class PlayerHandler : BaseHandler
 		
 		_Hand.Tiles.Add(poNewTileModel);
 		
+		TriggerCallOptionsAtTsumo(poNewTileModel);
+		
+		
+		_PlayerHand.EnableAllTilesInteractability();	
+
+	}
+	
+	public void TriggerCallOptionsAtTsumo(Mahjong.Model.Tile poNewTileModel)
+	{
 		Mahjong.CShantenEvaluator oShantenEvaluator = new Mahjong.CShantenEvaluator();
 		int nShanten = oShantenEvaluator.EvaluateShanten(_Hand);
 		_ShantenLabel.Text = "Shanten: " + nShanten;
 		
-		Mahjong.Model.Score oScore = IsValidHand(poNewTileModel, Enums.Agari.Tsumo);
-		if(oScore != null && oScore.YakuList.Count > 0)
+		if(nShanten == -1)
 		{
-			Win(oScore);
+			Mahjong.Model.Score oScore = IsValidHand(poNewTileModel, Enums.Agari.Tsumo);
+			if(oScore != null && oScore.YakuList.Count > 0)
+			{
+				_CallOptionsUI.Show();
+				_CallOptionsUI._Tsumo.Show();
+			}
 		}
 	}
 	
@@ -367,6 +384,30 @@ public partial class PlayerHandler : BaseHandler
 		_CallOptionsUI.HideAll();
 	}
 	
+	public void OnTsumoButtonPressed()
+	{
+		GD.Print("PlayerHandler: OnTsumoButtonPressed");
+		Mahjong.CScoreEvaluator oScoreEvaluator = new Mahjong.CScoreEvaluator();
+		Mahjong.Model.Score oScore = oScoreEvaluator.EvaluateScore(_Hand);
+		if(oScore != null && oScore.YakuList.Count > 0)
+		{
+			Win(oScore);
+		}
+		_CallOptionsUI.HideAll();
+	}
+	
+	
+	public void OnRiichiButtonPressed()
+	{
+		//TODO: Implement this
+	}
+	
+	public void OnKanButtonPressed()
+	{
+		//TODO: Implement this
+	}
+	
+	//TODO: Need to think about cancelling before and after drawn tile
 	public void OnCallCancelButtonPressed()
 	{
 		_PlayerHand.EnableAllTilesInteractability();

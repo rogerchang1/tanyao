@@ -61,7 +61,7 @@ vertical_alignment = 1
 
 [node name="CallOptionsUI" parent="." instance=ExtResource("2_whmu8")]
 visible = false
-z_index = 1
+position = Vector2(-72, -16)
 
 [node name="TileDropArea" type="Area2D" parent="."]
 collision_layer = 2

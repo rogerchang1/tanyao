@@ -10,13 +10,13 @@ _ChiTileOptionsUI = NodePath("ChiTileOptions")
 
 [node name="ChiTileOptions" parent="." instance=ExtResource("2_q3jvt")]
 visible = false
-position = Vector2(441, 472)
+position = Vector2(200, 454)
 
-[node name="ButtonContainer" type="VBoxContainer" parent="."]
-offset_left = 1039.0
-offset_top = 73.0
-offset_right = 1225.0
-offset_bottom = 580.0
+[node name="ButtonContainer" type="HBoxContainer" parent="."]
+offset_left = 200.0
+offset_top = 552.0
+offset_right = 1170.0
+offset_bottom = 621.0
 alignment = 1
 
 [node name="Chi" type="Button" parent="ButtonContainer"]
@@ -81,5 +81,8 @@ color = Color(0.243137, 0.741176, 0.435294, 0.952941)
 
 [connection signal="pressed" from="ButtonContainer/Chi" to="." method="_on_chi_pressed"]
 [connection signal="pressed" from="ButtonContainer/Pon" to="." method="_on_pon_pressed"]
+[connection signal="pressed" from="ButtonContainer/Kan" to="." method="_on_kan_pressed"]
+[connection signal="pressed" from="ButtonContainer/Riichi" to="." method="_on_riichi_pressed"]
+[connection signal="pressed" from="ButtonContainer/Tsumo" to="." method="_on_tsumo_pressed"]
 [connection signal="pressed" from="ButtonContainer/Ron" to="." method="_on_ron_pressed"]
 [connection signal="pressed" from="ButtonContainer/Cancel" to="." method="_on_cancel_pressed"]
