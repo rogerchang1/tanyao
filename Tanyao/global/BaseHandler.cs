@@ -17,7 +17,7 @@ public partial class BaseHandler : Node
 	{
 	}
 	
-	public virtual void StartTurn()
+	public virtual void StartTurn(string psDiscardedTile = "")
 	{
 		_Events.EmitSignal(Events.SignalName.DrawTileRequested, this);
 	}

@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=3 uid="uid://ds7tbtsw45uvc"]
+
+[ext_resource type="Script" path="res://Tanyao/scenes/UI/ChiTileButton.cs" id="1_ijx7q"]
+[ext_resource type="PackedScene" uid="uid://5643582tkyan" path="res://Tanyao/scenes/TileUI/TileUI.tscn" id="1_jdr8k"]
+
+[node name="ChiTileButton" type="Button"]
+custom_minimum_size = Vector2(124, 80)
+offset_right = 124.0
+offset_bottom = 80.0
+script = ExtResource("1_ijx7q")
+TileUIScene = ExtResource("1_jdr8k")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+
+[node name="TileUI" parent="HBoxContainer" instance=ExtResource("1_jdr8k")]
+layout_mode = 2
+mouse_filter = 2
+_IsInteractable = false
+
+[node name="TileUI2" parent="HBoxContainer" instance=ExtResource("1_jdr8k")]
+layout_mode = 2
+mouse_filter = 2
+_IsInteractable = false
+
+[connection signal="pressed" from="." to="." method="_on_pressed"]

@@ -23,6 +23,16 @@ public partial class EnemyHandler : BaseHandler
 	{
 	}
 	
+	public override void StartTurn(string psDiscardedTile = "")
+	{
+		_Events.EmitSignal(Events.SignalName.DrawTileRequested, this);
+	}
+	
+	public void SortTilesUI()
+	{
+		_EnemyHand.SortTiles();
+	}
+	
 	public void AddTileToHandClosed(Mahjong.Model.Tile poNewTileModel)
 	{
 		TileUIConfiguration oTileUIConfiguration = new TileUIConfiguration();
@@ -57,16 +67,16 @@ public partial class EnemyHandler : BaseHandler
 		var Discards = GetTree().GetFirstNodeInGroup("EnemyDiscardsGroup");
 		poTileUIToDiscard.Reparent(Discards);
 		//Discards.AddChild(poTileUIToDiscard);
-		OnEnemyTileDiscarded();
+		OnEnemyTileDiscarded(poTileUIToDiscard._TileModel);
 	}
 	
-	public void OnEnemyTileDiscarded()
+	public void OnEnemyTileDiscarded(Mahjong.Model.Tile oTile)
 	{
-		EndTurn();
+		EndTurn(oTile);
 	}
 	
-	public void EndTurn()
+	public void EndTurn(Mahjong.Model.Tile oTile)
 	{
-		_Events.EmitSignal(Events.SignalName.EnemyTurnEnded);
+		_Events.EmitSignal(Events.SignalName.EnemyTurnEnded, oTile.ToString());
 	}
 }

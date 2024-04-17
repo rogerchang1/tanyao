@@ -10,11 +10,15 @@ public partial class Hand : HBoxContainer
 	public HBoxContainer _HandClosed;
 	public HBoxContainer _HandTsumo;
 	
+	Events _Events;
+	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{		
 		_HandClosed = GetNode<HBoxContainer>("HandClosed");
 		_HandTsumo = GetNode<HBoxContainer>("HandTsumo");
+		_Events = GetNode<Events>("/root/Events");
+		_Events.TileDiscarded += OnTileDiscarded;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -73,15 +77,18 @@ public partial class Hand : HBoxContainer
 		{
 			case "CLOSED":
 				NewTileUI._ParentContainer = _HandClosed;
-				_HandClosed.AddChild(NewTileUI);
+				NewTileUI.Reparent(_HandClosed);
+				//_HandClosed.AddChild(NewTileUI);
 				break;
 			case "TSUMO":
 				NewTileUI._ParentContainer = _HandTsumo;
-				_HandTsumo.AddChild(NewTileUI);
+				NewTileUI.Reparent(_HandTsumo);
+				//_HandTsumo.AddChild(NewTileUI);
 				break;
 			default:
 				NewTileUI._ParentContainer = _HandClosed;
-				_HandClosed.AddChild(NewTileUI);
+				NewTileUI.Reparent(_HandClosed);
+				//_HandClosed.AddChild(NewTileUI);
 				break;
 		}
 	}
@@ -89,9 +96,10 @@ public partial class Hand : HBoxContainer
 	private TileUI CreateNewTileUI(Mahjong.Model.Tile poNewTileModel, TileUIConfiguration poTileUIConfiguration)
 	{
 		TileUI NewTileUI = (TileUI) TileUIScene.Instantiate();
+		AddChild(NewTileUI);
 		NewTileUI.SetTile(poNewTileModel);
 		NewTileUI.ReparentRequested += OnTileUIReparentRequested;
-		NewTileUI.TileDiscarded += OnTileDiscarded;
+		//NewTileUI.TileDiscarded += OnTileDiscarded;
 		NewTileUI._IsInteractable = poTileUIConfiguration.IsInteractable;
 		return NewTileUI;
 	}
@@ -106,7 +114,7 @@ public partial class Hand : HBoxContainer
 	}
 	
 	//TODO: Remove async if you remove await later.
-	public void OnTileDiscarded()
+	public void OnTileDiscarded(TileUI poTileUI)
 	{
 		if(_HandTsumo.GetChildren().Count > 0)
 		{
@@ -121,8 +129,8 @@ public partial class Hand : HBoxContainer
 		//await ToSignal(GetTree().CreateTimer(.5), "timeout");
 
 		//TODO: This should later go in the StartTurn phase.
-		var events = GetNode<Events>("/root/Events");
-		events.EmitSignal(Events.SignalName.PlayerTileDiscarded);
+		//var events = GetNode<Events>("/root/Events");
+		//events.EmitSignal(Events.SignalName.PlayerTileDiscarded, poTileUI);
 	}
 	
 	public void OnSortHandRequested()
@@ -136,11 +144,19 @@ public partial class Hand : HBoxContainer
 		{
 			oTileUI._IsInteractable = false;
 		}
+		foreach(TileUI oTileUI in _HandTsumo.GetChildren())
+		{
+			oTileUI._IsInteractable = false;
+		}
 	}
 	
 	public void EnableAllTilesInteractability()
 	{
 		foreach(TileUI oTileUI in _HandClosed.GetChildren())
+		{
+			oTileUI._IsInteractable = true;
+		}
+		foreach(TileUI oTileUI in _HandTsumo.GetChildren())
 		{
 			oTileUI._IsInteractable = true;
 		}

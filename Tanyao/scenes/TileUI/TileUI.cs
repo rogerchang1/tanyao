@@ -8,7 +8,7 @@ public partial class TileUI : Control
 	public delegate void ReparentRequestedEventHandler(TileUI poTile, HBoxContainer poParent);
 	
 	[Signal]
-	public delegate void TileDiscardedEventHandler();
+	public delegate void TileDiscardedEventHandler(TileUI poTileUI);
 	
 	public ColorRect _Color;
 	public Label _StateLabel;
@@ -17,6 +17,8 @@ public partial class TileUI : Control
 	public Area2D _DropPointDetector;
 	public bool _CanBeDiscarded;
 	public Node _ParentContainer;
+	
+	[Export]
 	public bool _IsInteractable = true;
 	
 	[Export]
@@ -46,22 +48,29 @@ public partial class TileUI : Control
 		_ParentContainer = GetParent();
 	}
 	
+	// Called every frame. 'delta' is the elapsed time since the previous frame.
+	public override void _Process(double delta)
+	{
+		//TODO: this is a hack... I should figure out the right way to instantiate things...
+		//if(_TileLabel.Text != _Tile)
+		//{
+			//_TileLabel.Text = _TileModel.ToString();
+		//}
+		
+	}
+	
 	public void SetTile(Mahjong.Model.Tile poTile)
 	{
 		_TileModel = poTile;
 		_Tile = poTile.ToString();
+		_TileLabel.Text = _TileModel.ToString();
 	}
 	
 	public void SetTile(string psTile)
 	{
 		_TileModel = new Mahjong.Model.Tile(psTile);
 		_Tile = psTile;
-	}
-
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
-		
+		_TileLabel.Text = _TileModel.ToString();
 	}
 	
 	public override void _Input(InputEvent @event)

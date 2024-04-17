@@ -1,0 +1,50 @@
+[gd_scene load_steps=3 format=3 uid="uid://dfkae4wigcd01"]
+
+[ext_resource type="Script" path="res://Tanyao/scenes/UI/LockedBlock.cs" id="1_d1awu"]
+[ext_resource type="PackedScene" uid="uid://5643582tkyan" path="res://Tanyao/scenes/TileUI/TileUI.tscn" id="2_4w6hq"]
+
+[node name="LockedBlock" type="Control"]
+custom_minimum_size = Vector2(206, 80)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 206.0
+offset_bottom = 80.0
+script = ExtResource("1_d1awu")
+
+[node name="TileUI" parent="." instance=ExtResource("2_4w6hq")]
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 80.0
+offset_top = 20.0
+offset_right = 140.0
+offset_bottom = 100.0
+grow_horizontal = 1
+grow_vertical = 1
+rotation = 1.5708
+_IsInteractable = false
+_Tile = "1p"
+
+[node name="TileUI2" parent="." instance=ExtResource("2_4w6hq")]
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 83.0
+offset_right = 143.0
+offset_bottom = 80.0
+grow_horizontal = 1
+grow_vertical = 1
+_IsInteractable = false
+_Tile = "1p"
+
+[node name="TileUI3" parent="." instance=ExtResource("2_4w6hq")]
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 146.0
+offset_right = 206.0
+offset_bottom = 80.0
+grow_horizontal = 1
+grow_vertical = 1
+_IsInteractable = false
+_Tile = "1p"

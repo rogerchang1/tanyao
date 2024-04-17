@@ -1,10 +1,13 @@
-[gd_scene load_steps=7 format=3 uid="uid://dvpig2rtau57s"]
+[gd_scene load_steps=10 format=3 uid="uid://dvpig2rtau57s"]
 
 [ext_resource type="Script" path="res://Tanyao/scenes/Table/Table.cs" id="1_kw13y"]
 [ext_resource type="Script" path="res://Tanyao/scenes/Table/Hand.cs" id="2_3n81g"]
 [ext_resource type="Script" path="res://Tanyao/scenes/Player/PlayerHandler.cs" id="2_8xuov"]
+[ext_resource type="PackedScene" uid="uid://wasyrhuimo5i" path="res://Tanyao/scenes/UI/CallOptionsUI.tscn" id="2_whmu8"]
 [ext_resource type="PackedScene" uid="uid://5643582tkyan" path="res://Tanyao/scenes/TileUI/TileUI.tscn" id="2_wqckx"]
 [ext_resource type="Script" path="res://Tanyao/scenes/Enemy/EnemyHandler.cs" id="3_hftm0"]
+[ext_resource type="PackedScene" uid="uid://dfkae4wigcd01" path="res://Tanyao/scenes/UI/LockedBlockChi.tscn" id="4_nugy6"]
+[ext_resource type="PackedScene" uid="uid://co16r34821rvf" path="res://Tanyao/scenes/UI/LockedBlockPon.tscn" id="5_n7xeo"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5qduj"]
 size = Vector2(1280, 512)
@@ -56,6 +59,10 @@ size_flags_horizontal = 4
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="CallOptionsUI" parent="." instance=ExtResource("2_whmu8")]
+visible = false
+position = Vector2(-72, -16)
+
 [node name="TileDropArea" type="Area2D" parent="."]
 collision_layer = 2
 
@@ -70,11 +77,15 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PlayerHandler" type="Node" parent="." node_paths=PackedStringArray("_PlayerHand", "_ShantenLabel", "_WinLabel")]
+[node name="PlayerHandler" type="Node" parent="." node_paths=PackedStringArray("_PlayerHand", "_ShantenLabel", "_CallOptionsUI", "_WinLabel", "_CalledHand")]
 script = ExtResource("2_8xuov")
 _PlayerHand = NodePath("../TableUI/Hand")
 _ShantenLabel = NodePath("../ShantenLabel")
+_CallOptionsUI = NodePath("../CallOptionsUI")
 _WinLabel = NodePath("../WinLabel")
+_CalledHand = NodePath("../TableUI/CalledHand")
+ChiScene = ExtResource("4_nugy6")
+PonScene = ExtResource("5_n7xeo")
 
 [node name="EnemyHandler" type="Node" parent="." node_paths=PackedStringArray("_EnemyHand")]
 script = ExtResource("3_hftm0")
@@ -135,6 +146,15 @@ layout_mode = 2
 
 [node name="HandTsumo" type="HBoxContainer" parent="TableUI/Hand"]
 layout_mode = 2
+
+[node name="CalledHand" type="HBoxContainer" parent="TableUI"]
+offset_left = 624.0
+offset_top = 640.0
+offset_right = 1280.0
+offset_bottom = 720.0
+mouse_filter = 2
+theme_override_constants/separation = 8
+alignment = 2
 
 [node name="EnemyHand" type="HBoxContainer" parent="TableUI"]
 anchors_preset = 1
