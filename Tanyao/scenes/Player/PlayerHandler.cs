@@ -36,6 +36,10 @@ public partial class PlayerHandler : BaseHandler
 	
 	public bool IsRiichi = false;
 	
+	//TODO: change this to an enum
+	//Values are: START, BEFOREDRAW, AFTERDRAW, END
+	public string TurnState = "START";
+	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -51,11 +55,6 @@ public partial class PlayerHandler : BaseHandler
 		_Events.CallOptionsCancelPressed += OnCallCancelButtonPressed;
 		_Hand = new Mahjong.Model.Hand();
 	}
-
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
-	}
 	
 	public void SortTilesUI()
 	{
@@ -64,6 +63,7 @@ public partial class PlayerHandler : BaseHandler
 	
 	public override void StartTurn(string psDiscardedTile = "")
 	{
+		TurnState = "BEFOREDRAW";
 		if(psDiscardedTile != "")
 		{
 			GD.Print("Enemy discarded " + psDiscardedTile);
@@ -109,6 +109,7 @@ public partial class PlayerHandler : BaseHandler
 	
 	public void EndTurn(Mahjong.Model.Tile oTile)
 	{
+		TurnState = "END";
 		_PlayerHand.DisableAllTilesInteractability();
 		_CallOptionsUI.HideAll();
 		_Events.EmitSignal(Events.SignalName.PlayerTurnEnded, oTile.ToString());
@@ -124,6 +125,7 @@ public partial class PlayerHandler : BaseHandler
 	
 	public void AddTileToHandTsumo(Mahjong.Model.Tile poNewTileModel)
 	{
+		TurnState = "AFTERDRAW";
 		TileUIConfiguration oTileUIConfiguration = new TileUIConfiguration();
 		oTileUIConfiguration.InitialHandAreaToAppendTo = "TSUMO";
 		_PlayerHand.AddTileToHand(poNewTileModel, oTileUIConfiguration);
@@ -132,17 +134,18 @@ public partial class PlayerHandler : BaseHandler
 		
 		TriggerCallOptionsAtTsumo(poNewTileModel);
 		
-		
-		_PlayerHand.EnableAllTilesInteractability();	
-
+		if(!IsRiichi)
+		{
+			_PlayerHand.EnableAllTilesInteractability();	
+		}
 	}
 	
-	public void TriggerCallOptionsAtTsumo(Mahjong.Model.Tile poNewTileModel)
+	public async void TriggerCallOptionsAtTsumo(Mahjong.Model.Tile poNewTileModel)
 	{
 		Mahjong.CShantenEvaluator oShantenEvaluator = new Mahjong.CShantenEvaluator();
 		int nShanten = oShantenEvaluator.EvaluateShanten(_Hand);
 		_ShantenLabel.Text = "Shanten: " + nShanten;
-		
+		PrintHandForDebugging();
 		if(nShanten == -1)
 		{
 			Mahjong.Model.Score oScore = IsValidHand(poNewTileModel, Enums.Agari.Tsumo);
@@ -150,6 +153,28 @@ public partial class PlayerHandler : BaseHandler
 			{
 				_CallOptionsUI.Show();
 				_CallOptionsUI._Tsumo.Show();
+			}
+			if(IsRiichi)
+			{
+				return;
+			}
+		}
+		if(nShanten == 0 && IsRiichi == false && _CalledHand.GetChildren().Count == 0)
+		{
+			_CallOptionsUI.Show();
+			_CallOptionsUI._Riichi.Show();
+		}else if(IsRiichi)
+		{
+			//TODO: Ideally not sure about this timer if needed.
+			await ToSignal(GetTree().CreateTimer(.25), "timeout");
+			foreach(TileUI oTsumoTile in _PlayerHand._HandTsumo.GetChildren())
+			{
+				var Discards = GetTree().GetFirstNodeInGroup("DiscardsGroup");
+				if(Discards != null)
+				{
+					oTsumoTile.Reparent(Discards);
+				}
+				OnTileDiscarded(oTsumoTile);
 			}
 		}
 	}
@@ -399,7 +424,9 @@ public partial class PlayerHandler : BaseHandler
 	
 	public void OnRiichiButtonPressed()
 	{
-		//TODO: Implement this
+		GD.Print("PlayerHandler: OnRiichiButtonPressed");
+		IsRiichi = true;
+		_CallOptionsUI.HideAll();
 	}
 	
 	public void OnKanButtonPressed()
@@ -410,8 +437,23 @@ public partial class PlayerHandler : BaseHandler
 	//TODO: Need to think about cancelling before and after drawn tile
 	public void OnCallCancelButtonPressed()
 	{
-		_PlayerHand.EnableAllTilesInteractability();
-		_Events.EmitSignal(Events.SignalName.DrawTileRequested, this);
+		if(TurnState == "BEFOREDRAW")
+		{
+			_PlayerHand.EnableAllTilesInteractability();
+			_Events.EmitSignal(Events.SignalName.DrawTileRequested, this);
+		}else if(TurnState == "AFTERDRAW" && IsRiichi)
+		{
+			foreach(TileUI oTsumoTile in _PlayerHand._HandTsumo.GetChildren())
+			{
+				var Discards = GetTree().GetFirstNodeInGroup("DiscardsGroup");
+				if(Discards != null)
+				{
+					oTsumoTile.Reparent(Discards);
+				}
+				OnTileDiscarded(oTsumoTile);
+			}
+
+		}
 	}
 	
 	public void PrintHandForDebugging()

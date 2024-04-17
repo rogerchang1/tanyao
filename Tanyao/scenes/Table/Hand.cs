@@ -144,11 +144,19 @@ public partial class Hand : HBoxContainer
 		{
 			oTileUI._IsInteractable = false;
 		}
+		foreach(TileUI oTileUI in _HandTsumo.GetChildren())
+		{
+			oTileUI._IsInteractable = false;
+		}
 	}
 	
 	public void EnableAllTilesInteractability()
 	{
 		foreach(TileUI oTileUI in _HandClosed.GetChildren())
+		{
+			oTileUI._IsInteractable = true;
+		}
+		foreach(TileUI oTileUI in _HandTsumo.GetChildren())
 		{
 			oTileUI._IsInteractable = true;
 		}
