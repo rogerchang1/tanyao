@@ -78,7 +78,8 @@ public partial class PlayerHandler : BaseHandler
 				bShowCallOptions = true;
 			}
 			Mahjong.CTilesManager oTilesManager = new Mahjong.CTilesManager();
-			if(oTilesManager.CountNumberOfTilesOf(_Hand.Tiles, oDiscardedTile) == 2 && IsRiichi == false)
+			List<Mahjong.Model.Tile> oTempList = oTilesManager.GetTileListWithBlocksRemoved(_Hand.Tiles,_Hand.LockedBlocks);
+			if(oTilesManager.CountNumberOfTilesOf(oTempList, oDiscardedTile) == 2 && IsRiichi == false)
 			{
 				_CallOptionsUI.Show();
 				_CallOptionsUI._Pon.Show();
