@@ -162,4 +162,16 @@ public partial class Hand : HBoxContainer
 		}
 	}
 	
+	public void Clear()
+	{
+		foreach(TileUI oTileUI in _HandClosed.GetChildren())
+		{
+			oTileUI.QueueFree();
+		}
+		foreach(TileUI oTileUI in _HandTsumo.GetChildren())
+		{
+			oTileUI.QueueFree();
+		}
+	}
+	
 }

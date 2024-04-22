@@ -39,4 +39,9 @@ public partial class Events : Node
 	public delegate void RiichiButtonPressedEventHandler();
 	[Signal]
 	public delegate void KanButtonPressedEventHandler();
+	
+	[Signal]
+	public delegate void WinDeclaredEventHandler();
+	[Signal]
+	public delegate void RoundEndedEventHandler();
 }

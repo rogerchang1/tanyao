@@ -191,6 +191,8 @@ public partial class PlayerHandler : BaseHandler
 		}
 		sWinLabelText += poScore.Han + " Han " + poScore.Fu + " Fu";
 		UpdateWinLabel(sWinLabelText);
+		_Events.EmitSignal(Events.SignalName.WinDeclared);
+		_Events.EmitSignal(Events.SignalName.RoundEnded);
 	}
 	
 	public Mahjong.Model.Score IsValidHand(Mahjong.Model.Tile poWinTile, Enums.Agari peAgari)
@@ -427,6 +429,8 @@ public partial class PlayerHandler : BaseHandler
 	{
 		GD.Print("PlayerHandler: OnRiichiButtonPressed");
 		IsRiichi = true;
+		//TODO: double riichi?
+		_Hand.IsRiichi = true;
 		_CallOptionsUI.HideAll();
 	}
 	
@@ -455,6 +459,26 @@ public partial class PlayerHandler : BaseHandler
 			}
 
 		}
+	}
+	
+	public void CleanUp()
+	{
+		_PlayerHand.Clear();
+		
+		foreach(TileUI oTileUI in _CalledHand.GetChildren())
+		{
+			oTileUI.QueueFree();
+		}
+		
+		var Discards = GetTree().GetFirstNodeInGroup("DiscardsGroup");
+		foreach(TileUI oTileUI in Discards.GetChildren())
+		{
+			oTileUI.QueueFree();
+		}
+		
+		//TODO: maybe make an init function for this.
+		_Hand = new Mahjong.Model.Hand();
+		IsRiichi = false;
 	}
 	
 	public void PrintHandForDebugging()

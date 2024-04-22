@@ -79,4 +79,17 @@ public partial class EnemyHandler : BaseHandler
 	{
 		_Events.EmitSignal(Events.SignalName.EnemyTurnEnded, oTile.ToString());
 	}
+	
+	public void CleanUp()
+	{
+		_EnemyHand.Clear();
+		
+		var Discards = GetTree().GetFirstNodeInGroup("EnemyDiscardsGroup");
+		foreach(TileUI oTileUI in Discards.GetChildren())
+		{
+			oTileUI.QueueFree();
+		}
+		
+		//_Hand = new Mahjong.Model.Hand();
+	}
 }

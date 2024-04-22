@@ -13,6 +13,12 @@ public partial class Table : Godot.Node2D
 	public EnemyHandler _EnemyHandler;
 	public Label _TilesLeftLabel;
 	
+	[Export]
+	public int _PlayerPoints;
+	
+	[Export]
+	public int _EnemyPoints;
+	
 	Events _Events;
 	
 	// Called when the node enters the scene tree for the first time.
@@ -30,6 +36,7 @@ public partial class Table : Godot.Node2D
 		_Events.DrawTileRequested += OnDrawTileRequested;
 		_Events.PlayerTurnEnded += OnPlayerTurnEnded;
 		_Events.EnemyTurnEnded += OnEnemyTurnEnded;
+		_Events.RoundEnded += OnRoundEnded;
 		
 		InitializeTable();
 	}
@@ -84,6 +91,12 @@ public partial class Table : Godot.Node2D
 		InitializeHands(true);
 		UpdateTilesLeftLabel();
 		StartRound();
+	}
+	
+	public void CleanUp()
+	{
+		_PlayerHandler.CleanUp();
+		_EnemyHandler.CleanUp();
 	}
 	
 	public void InitializeHands(bool pbShouldAddTilesToPlayerFirst)
@@ -169,6 +182,14 @@ public partial class Table : Godot.Node2D
 		await ToSignal(GetTree().CreateTimer(.5), "timeout");
 		_PlayerHandler.StartTurn(psTile);
 	}
+	
+	public async void OnRoundEnded()
+	{
+		CleanUp();
+		await ToSignal(GetTree().CreateTimer(2), "timeout");
+		InitializeTable();
+	}
+	
 	
 	private void UpdateTilesLeftLabel()
 	{
