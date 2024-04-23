@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using Mahjong;
 
 //TODO: not sure if inheritance is the right thing to do
 public partial class EnemyHandler : BaseHandler
@@ -11,6 +12,9 @@ public partial class EnemyHandler : BaseHandler
 	//TODO: remove this when we fully build out enemy hand in UI layer.
 	[Export]
 	public PackedScene TileUIScene;
+	
+	public bool IsRiichi = false;
+	public Enums.Wind _SeatWind;
 	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()

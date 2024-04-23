@@ -12,6 +12,8 @@ public partial class Table : Godot.Node2D
 	public PlayerHandler _PlayerHandler;
 	public EnemyHandler _EnemyHandler;
 	public Label _TilesLeftLabel;
+	public Label _EnemyPointsLabel;
+	public Label _PlayerPointsLabel;
 	
 	[Export]
 	public int _PlayerPoints;
@@ -31,13 +33,18 @@ public partial class Table : Godot.Node2D
 		_PlayerHandler = GetNode<PlayerHandler>("PlayerHandler");
 		_EnemyHandler = GetNode<EnemyHandler>("EnemyHandler");
 		_TilesLeftLabel = GetNode<Label>("TilesLeftLabel");
+		_EnemyPointsLabel = GetNode<Label>("EnemyPointsLabel");
+		_PlayerPointsLabel = GetNode<Label>("PlayerPointsLabel");
 		
 		_Events = GetNode<Events>("/root/Events");
 		_Events.DrawTileRequested += OnDrawTileRequested;
 		_Events.PlayerTurnEnded += OnPlayerTurnEnded;
 		_Events.EnemyTurnEnded += OnEnemyTurnEnded;
 		_Events.RoundEnded += OnRoundEnded;
+		_Events.PlayerWinDeclared += OnPlayerWinDeclared;
 		
+		_PlayerPoints = 25000;
+		_EnemyPoints = 25000;
 		InitializeTable();
 	}
 
@@ -50,44 +57,46 @@ public partial class Table : Godot.Node2D
 	{
 		_TableManager.InitializeTable(_TableModel);
 		
-		_TableModel.Wall[0] = new Mahjong.Model.Tile("6s");
-		_TableModel.Wall[1] = new Mahjong.Model.Tile("2p");
-		_TableModel.Wall[2] = new Mahjong.Model.Tile("3p");
-		_TableModel.Wall[3] = new Mahjong.Model.Tile("4p");
-		_TableModel.Wall[4] = new Mahjong.Model.Tile("6s");
-		_TableModel.Wall[5] = new Mahjong.Model.Tile("2p");
-		_TableModel.Wall[6] = new Mahjong.Model.Tile("3p");
-		_TableModel.Wall[7] = new Mahjong.Model.Tile("4p");
-		_TableModel.Wall[8] = new Mahjong.Model.Tile("5p");
-		_TableModel.Wall[9] = new Mahjong.Model.Tile("6p");
-		_TableModel.Wall[10] = new Mahjong.Model.Tile("7p");
-		_TableModel.Wall[11] = new Mahjong.Model.Tile("8p");
-		_TableModel.Wall[12] = new Mahjong.Model.Tile("5p");
-		_TableModel.Wall[13] = new Mahjong.Model.Tile("6p");
-		_TableModel.Wall[14] = new Mahjong.Model.Tile("7p");
-		_TableModel.Wall[15] = new Mahjong.Model.Tile("8p");
-		_TableModel.Wall[16] = new Mahjong.Model.Tile("2s");
-		_TableModel.Wall[17] = new Mahjong.Model.Tile("3s");
-		_TableModel.Wall[18] = new Mahjong.Model.Tile("4s");
-		_TableModel.Wall[19] = new Mahjong.Model.Tile("5s");
-		_TableModel.Wall[20] = new Mahjong.Model.Tile("2s");
-		_TableModel.Wall[21] = new Mahjong.Model.Tile("3s");
-		_TableModel.Wall[22] = new Mahjong.Model.Tile("4s");
-		_TableModel.Wall[23] = new Mahjong.Model.Tile("5s");
-		_TableModel.Wall[24] = new Mahjong.Model.Tile("1m");
-		_TableModel.Wall[25] = new Mahjong.Model.Tile("1m");
-		
-		_TableModel.Wall[26] = new Mahjong.Model.Tile("4s");
-		_TableModel.Wall[27] = new Mahjong.Model.Tile("4s");
-		_TableModel.Wall[28] = new Mahjong.Model.Tile("4p");
-		_TableModel.Wall[29] = new Mahjong.Model.Tile("4p");
-		_TableModel.Wall[30] = new Mahjong.Model.Tile("4p");
-		_TableModel.Wall[31] = new Mahjong.Model.Tile("4p");
-		_TableModel.Wall[32] = new Mahjong.Model.Tile("8p");
-		_TableModel.Wall[33] = new Mahjong.Model.Tile("8p");
+		//_TableModel.Wall[0] = new Mahjong.Model.Tile("6s");
+		//_TableModel.Wall[1] = new Mahjong.Model.Tile("2p");
+		//_TableModel.Wall[2] = new Mahjong.Model.Tile("3p");
+		//_TableModel.Wall[3] = new Mahjong.Model.Tile("4p");
+		//_TableModel.Wall[4] = new Mahjong.Model.Tile("6s");
+		//_TableModel.Wall[5] = new Mahjong.Model.Tile("2p");
+		//_TableModel.Wall[6] = new Mahjong.Model.Tile("3p");
+		//_TableModel.Wall[7] = new Mahjong.Model.Tile("4p");
+		//_TableModel.Wall[8] = new Mahjong.Model.Tile("5p");
+		//_TableModel.Wall[9] = new Mahjong.Model.Tile("6p");
+		//_TableModel.Wall[10] = new Mahjong.Model.Tile("7p");
+		//_TableModel.Wall[11] = new Mahjong.Model.Tile("8p");
+		//_TableModel.Wall[12] = new Mahjong.Model.Tile("5p");
+		//_TableModel.Wall[13] = new Mahjong.Model.Tile("6p");
+		//_TableModel.Wall[14] = new Mahjong.Model.Tile("7p");
+		//_TableModel.Wall[15] = new Mahjong.Model.Tile("8p");
+		//_TableModel.Wall[16] = new Mahjong.Model.Tile("2s");
+		//_TableModel.Wall[17] = new Mahjong.Model.Tile("3s");
+		//_TableModel.Wall[18] = new Mahjong.Model.Tile("4s");
+		//_TableModel.Wall[19] = new Mahjong.Model.Tile("5s");
+		//_TableModel.Wall[20] = new Mahjong.Model.Tile("2s");
+		//_TableModel.Wall[21] = new Mahjong.Model.Tile("3s");
+		//_TableModel.Wall[22] = new Mahjong.Model.Tile("4s");
+		//_TableModel.Wall[23] = new Mahjong.Model.Tile("5s");
+		//_TableModel.Wall[24] = new Mahjong.Model.Tile("1m");
+		//_TableModel.Wall[25] = new Mahjong.Model.Tile("1m");
+		//
+		//_TableModel.Wall[26] = new Mahjong.Model.Tile("4s");
+		//_TableModel.Wall[27] = new Mahjong.Model.Tile("4s");
+		//_TableModel.Wall[28] = new Mahjong.Model.Tile("4p");
+		//_TableModel.Wall[29] = new Mahjong.Model.Tile("4p");
+		//_TableModel.Wall[30] = new Mahjong.Model.Tile("4p");
+		//_TableModel.Wall[31] = new Mahjong.Model.Tile("4p");
+		//_TableModel.Wall[32] = new Mahjong.Model.Tile("8p");
+		//_TableModel.Wall[33] = new Mahjong.Model.Tile("8p");
 		
 		
 		//TODO: randomize who draws first
+		_PlayerHandler._SeatWind = Enums.Wind.East;
+		_EnemyHandler._SeatWind = Enums.Wind.South;
 		InitializeHands(true);
 		UpdateTilesLeftLabel();
 		StartRound();
@@ -190,6 +199,13 @@ public partial class Table : Godot.Node2D
 		InitializeTable();
 	}
 	
+	public void OnPlayerWinDeclared(int pnPayment)
+	{
+		_EnemyPoints -= pnPayment;
+		_PlayerPoints += pnPayment;
+		_EnemyPointsLabel.Text = _EnemyPoints.ToString();
+		_PlayerPointsLabel.Text = _PlayerPoints.ToString();
+	}
 	
 	private void UpdateTilesLeftLabel()
 	{

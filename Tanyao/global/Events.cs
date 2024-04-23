@@ -41,7 +41,9 @@ public partial class Events : Node
 	public delegate void KanButtonPressedEventHandler();
 	
 	[Signal]
-	public delegate void WinDeclaredEventHandler();
+	public delegate void PlayerWinDeclaredEventHandler(int pnPayment);
+	[Signal]
+	public delegate void EnemyWinDeclaredEventHandler(int pnPayment);
 	[Signal]
 	public delegate void RoundEndedEventHandler();
 }

@@ -35,6 +35,7 @@ public partial class PlayerHandler : BaseHandler
 	public Mahjong.Model.Hand _Hand;
 	
 	public bool IsRiichi = false;
+	public Enums.Wind _SeatWind;
 	
 	//TODO: change this to an enum
 	//Values are: START, BEFOREDRAW, AFTERDRAW, END
@@ -189,9 +190,34 @@ public partial class PlayerHandler : BaseHandler
 			sWinLabelText += yaku + "\n";
 			GD.Print(yaku);
 		}
-		sWinLabelText += poScore.Han + " Han " + poScore.Fu + " Fu";
+		sWinLabelText += poScore.Han + " Han " + poScore.Fu + " Fu\n";
+		if(poScore.SinglePayment != 0){
+			sWinLabelText += poScore.SinglePayment;
+		}else{
+			if(poScore.AllPayment["Dealer"] != 0)
+			{
+				sWinLabelText += poScore.AllPayment["Regular"] + " - " + poScore.AllPayment["Dealer"];
+			}else{
+				sWinLabelText += poScore.AllPayment["Regular"] + " All";
+			}
+			
+		}
+		
 		UpdateWinLabel(sWinLabelText);
-		_Events.EmitSignal(Events.SignalName.WinDeclared);
+		
+		int nPayment = poScore.SinglePayment;
+		if(nPayment == 0)
+		{
+			if(_SeatWind == Enums.Wind.East)
+			{
+				nPayment = poScore.AllPayment["Regular"];
+			}else{
+				nPayment = poScore.AllPayment["Dealer"];
+			}
+			
+		}
+		
+		_Events.EmitSignal(Events.SignalName.PlayerWinDeclared, nPayment);
 		_Events.EmitSignal(Events.SignalName.RoundEnded);
 	}
 	
@@ -199,7 +225,7 @@ public partial class PlayerHandler : BaseHandler
 	{
 		//TODO evaluate the type of hand here.
 		_Hand.Agari = peAgari;
-		_Hand.SeatWind = Enums.Wind.East;
+		_Hand.SeatWind = _SeatWind;
 		_Hand.RoundWind = Enums.Wind.East;
 		_Hand.WinTile = poWinTile;
 		
