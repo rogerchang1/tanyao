@@ -16,57 +16,51 @@ size = Vector2(1280, 512)
 script = ExtResource("1_kw13y")
 metadata/_edit_lock_ = true
 
-[node name="TilesLeftLabel" type="Label" parent="."]
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = 1152.0
-offset_top = 16.0
-offset_right = 1230.0
-offset_bottom = 39.0
-grow_horizontal = 0
+[node name="DebugInfoContainer" type="VBoxContainer" parent="."]
+offset_left = 1120.0
+offset_top = 152.0
+offset_right = 1236.0
+offset_bottom = 283.0
+
+[node name="TilesLeftLabel" type="Label" parent="DebugInfoContainer"]
+layout_mode = 2
 text = "Tiles Left: "
-horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="EnemyPointsLabel" type="Label" parent="."]
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = 1135.0
-offset_top = 48.0
-offset_right = 1213.0
-offset_bottom = 71.0
-grow_horizontal = 0
+[node name="RoundWindLabel" type="Label" parent="DebugInfoContainer"]
+layout_mode = 2
+text = "RoundWind:"
+vertical_alignment = 1
+
+[node name="SeatWindLabel" type="Label" parent="DebugInfoContainer"]
+layout_mode = 2
+text = "SeatWind:"
+vertical_alignment = 1
+
+[node name="DoraIndicatorLabel" type="Label" parent="DebugInfoContainer"]
+layout_mode = 2
+text = "Dora Indicator:"
+vertical_alignment = 1
+
+[node name="EnemyPointsLabel" type="Label" parent="DebugInfoContainer"]
+layout_mode = 2
 text = "25000"
-horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PlayerPointsLabel" type="Label" parent="."]
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = 1136.0
-offset_top = 81.0
-offset_right = 1214.0
-offset_bottom = 104.0
-grow_horizontal = 0
+[node name="PlayerPointsLabel" type="Label" parent="DebugInfoContainer"]
+layout_mode = 2
 text = "25000"
-horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ShantenLabel" type="Label" parent="."]
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = 1152.0
-offset_top = 576.0
-offset_right = 1217.0
-offset_bottom = 599.0
-grow_horizontal = 0
+[node name="PotLabel" type="Label" parent="DebugInfoContainer"]
+layout_mode = 2
+text = "25000"
+vertical_alignment = 1
+
+[node name="ShantenLabel" type="Label" parent="DebugInfoContainer"]
+layout_mode = 2
 text = "
 "
-horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="WinLabel" type="Label" parent="."]
@@ -106,7 +100,7 @@ grow_vertical = 2
 [node name="PlayerHandler" type="Node" parent="." node_paths=PackedStringArray("_PlayerHand", "_ShantenLabel", "_CallOptionsUI", "_WinLabel", "_CalledHand")]
 script = ExtResource("2_8xuov")
 _PlayerHand = NodePath("../TableUI/Hand")
-_ShantenLabel = NodePath("../ShantenLabel")
+_ShantenLabel = NodePath("../DebugInfoContainer/ShantenLabel")
 _CallOptionsUI = NodePath("../CallOptionsUI")
 _WinLabel = NodePath("../WinLabel")
 _CalledHand = NodePath("../TableUI/CalledHand")

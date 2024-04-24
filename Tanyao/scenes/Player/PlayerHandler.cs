@@ -34,8 +34,12 @@ public partial class PlayerHandler : BaseHandler
 	
 	public Mahjong.Model.Hand _Hand;
 	
+	public int _PlayerPoints = 0;
+	
 	public bool IsRiichi = false;
 	public Enums.Wind _SeatWind;
+	public Enums.Wind _RoundWind;
+	public Mahjong.Model.Tile _DoraTile;
 	
 	//TODO: change this to an enum
 	//Values are: START, BEFOREDRAW, AFTERDRAW, END
@@ -190,6 +194,7 @@ public partial class PlayerHandler : BaseHandler
 			sWinLabelText += yaku + "\n";
 			GD.Print(yaku);
 		}
+		sWinLabelText += "Dora " + _Hand.DoraCount + "\n";
 		sWinLabelText += poScore.Han + " Han " + poScore.Fu + " Fu\n";
 		if(poScore.SinglePayment != 0){
 			sWinLabelText += poScore.SinglePayment;
@@ -226,8 +231,17 @@ public partial class PlayerHandler : BaseHandler
 		//TODO evaluate the type of hand here.
 		_Hand.Agari = peAgari;
 		_Hand.SeatWind = _SeatWind;
-		_Hand.RoundWind = Enums.Wind.East;
+		_Hand.RoundWind = _RoundWind;
 		_Hand.WinTile = poWinTile;
+		_Hand.DoraCount = 0;
+		foreach(Mahjong.Model.Tile oTile in _Hand.Tiles)
+		{
+			if(oTile.CompareTo(_DoraTile) == 0)
+			{
+				_Hand.DoraCount++;
+			}
+		}
+		
 		
 		Mahjong.CScoreEvaluator oScoreEvaluator = new Mahjong.CScoreEvaluator();
 		Mahjong.Model.Score oScore = oScoreEvaluator.EvaluateScore(_Hand);
@@ -457,7 +471,9 @@ public partial class PlayerHandler : BaseHandler
 		IsRiichi = true;
 		//TODO: double riichi?
 		_Hand.IsRiichi = true;
+		_PlayerPoints = _PlayerPoints - 1000;
 		_CallOptionsUI.HideAll();
+		_Events.EmitSignal(Events.SignalName.RiichiDeclared);
 	}
 	
 	public void OnKanButtonPressed()

@@ -14,12 +14,19 @@ public partial class Table : Godot.Node2D
 	public Label _TilesLeftLabel;
 	public Label _EnemyPointsLabel;
 	public Label _PlayerPointsLabel;
+	public Label _PotLabel;
+	public Label _DoraIndicatorLabel;
+	public Label _RoundWindLabel;
+	public Label _SeatWindLabel;
 	
-	[Export]
 	public int _PlayerPoints;
-	
-	[Export]
 	public int _EnemyPoints;
+	public int _Pot;
+	
+	//TODO: Think about additional dora tiles when kan 
+	public Mahjong.Model.Tile _DoraIndicator;
+	public Mahjong.Model.Tile _DoraTile;
+	public Enums.Wind _RoundWind;
 	
 	Events _Events;
 	
@@ -32,9 +39,13 @@ public partial class Table : Godot.Node2D
 		_PlayerHand = GetNode<Hand>("TableUI/Hand");
 		_PlayerHandler = GetNode<PlayerHandler>("PlayerHandler");
 		_EnemyHandler = GetNode<EnemyHandler>("EnemyHandler");
-		_TilesLeftLabel = GetNode<Label>("TilesLeftLabel");
-		_EnemyPointsLabel = GetNode<Label>("EnemyPointsLabel");
-		_PlayerPointsLabel = GetNode<Label>("PlayerPointsLabel");
+		_TilesLeftLabel = GetNode<Label>("DebugInfoContainer/TilesLeftLabel");
+		_EnemyPointsLabel = GetNode<Label>("DebugInfoContainer/EnemyPointsLabel");
+		_PlayerPointsLabel = GetNode<Label>("DebugInfoContainer/PlayerPointsLabel");
+		_PotLabel = GetNode<Label>("DebugInfoContainer/PotLabel");
+		_DoraIndicatorLabel = GetNode<Label>("DebugInfoContainer/DoraIndicatorLabel");
+		_RoundWindLabel = GetNode<Label>("DebugInfoContainer/RoundWindLabel");
+		_SeatWindLabel = GetNode<Label>("DebugInfoContainer/SeatWindLabel");
 		
 		_Events = GetNode<Events>("/root/Events");
 		_Events.DrawTileRequested += OnDrawTileRequested;
@@ -42,9 +53,13 @@ public partial class Table : Godot.Node2D
 		_Events.EnemyTurnEnded += OnEnemyTurnEnded;
 		_Events.RoundEnded += OnRoundEnded;
 		_Events.PlayerWinDeclared += OnPlayerWinDeclared;
+		_Events.RiichiDeclared += OnRiichiDeclared;
 		
-		_PlayerPoints = 25000;
+		_PlayerHandler._PlayerPoints = 25000;
 		_EnemyPoints = 25000;
+		_EnemyPointsLabel.Text = "EnemyPoints: " + _EnemyPoints.ToString();
+		_PlayerPointsLabel.Text = "PlayerPoints: " + _PlayerHandler._PlayerPoints.ToString();
+		_PotLabel.Text = "Pot: " + _Pot.ToString();
 		InitializeTable();
 	}
 
@@ -56,6 +71,14 @@ public partial class Table : Godot.Node2D
 	public void InitializeTable()
 	{
 		_TableManager.InitializeTable(_TableModel);
+		_DoraIndicator = _TableModel.Wall[_TableModel.Wall.Count - 5];
+		SetDora();
+		_DoraIndicatorLabel.Text = "DoraIndicator: " + _DoraIndicator.ToString() + "\nDora: " + _DoraTile.ToString();
+		_RoundWind = Enums.Wind.East;
+		_PlayerHandler._SeatWind = Enums.Wind.East;
+		_PlayerHandler._DoraTile = _DoraTile;
+		_RoundWindLabel.Text = "RoundWind: " + _RoundWind.ToString();
+		_SeatWindLabel.Text = "SeatWind: " + _PlayerHandler._SeatWind.ToString();
 		
 		//_TableModel.Wall[0] = new Mahjong.Model.Tile("6s");
 		//_TableModel.Wall[1] = new Mahjong.Model.Tile("2p");
@@ -135,7 +158,34 @@ public partial class Table : Godot.Node2D
 			_PlayerHandler.AddTileToHandClosed(_TableManager.DrawNextTileFromWall(_TableModel));
 		}
 		_PlayerHandler.SortTilesUI();
+		_PlayerHandler._RoundWind = _RoundWind;
+		_PlayerHandler._DoraTile = _DoraTile;
 		_EnemyHandler.SortTilesUI();
+	}
+	
+	public void SetDora()
+	{
+		int num = 0;
+		string suit = "";
+		suit = _DoraIndicator.suit;
+		if(suit == "z")
+		{
+			if(_DoraIndicator.num != 4 && _DoraIndicator.num != 7)
+			{
+				num = _DoraIndicator.num + 1;
+			}else if(_DoraIndicator.num == 4){
+				num =  1;
+			}else if(_DoraIndicator.num == 7){
+				num =  5;
+			}
+		}else{
+			if(_DoraIndicator.num == 9){
+				num =  1;
+			}else{
+				num = _DoraIndicator.num + 1;
+			}
+		}
+		_DoraTile = new Mahjong.Model.Tile(num+suit);
 	}
 	
 	public void StartRound()
@@ -202,9 +252,19 @@ public partial class Table : Godot.Node2D
 	public void OnPlayerWinDeclared(int pnPayment)
 	{
 		_EnemyPoints -= pnPayment;
-		_PlayerPoints += pnPayment;
-		_EnemyPointsLabel.Text = _EnemyPoints.ToString();
-		_PlayerPointsLabel.Text = _PlayerPoints.ToString();
+		_PlayerHandler._PlayerPoints += (pnPayment + _Pot);
+		_Pot = 0;
+		_EnemyPointsLabel.Text = "EnemyPoints: " + _EnemyPoints.ToString();
+		_PlayerPointsLabel.Text = "PlayerPoints: " + _PlayerHandler._PlayerPoints.ToString();
+		_PotLabel.Text = "Pot: " + _Pot.ToString();
+	}
+	
+	public void OnRiichiDeclared()
+	{
+		_Pot += 1000;
+		_EnemyPointsLabel.Text = "EnemyPoints: " + _EnemyPoints.ToString();
+		_PlayerPointsLabel.Text = "PlayerPoints: " + _PlayerHandler._PlayerPoints.ToString();
+		_PotLabel.Text = "Pot: " + _Pot.ToString();
 	}
 	
 	private void UpdateTilesLeftLabel()
