@@ -507,9 +507,9 @@ public partial class PlayerHandler : BaseHandler
 	{
 		_PlayerHand.Clear();
 		
-		foreach(TileUI oTileUI in _CalledHand.GetChildren())
+		foreach(LockedBlock oLockedBlock in _CalledHand.GetChildren())
 		{
-			oTileUI.QueueFree();
+			oLockedBlock.QueueFree();
 		}
 		
 		var Discards = GetTree().GetFirstNodeInGroup("DiscardsGroup");
