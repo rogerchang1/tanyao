@@ -15,6 +15,7 @@ public partial class Table : Godot.Node2D
 	public Label _EnemyPointsLabel;
 	public Label _PlayerPointsLabel;
 	public Label _PotLabel;
+	public Label _HonbaLabel;
 	public Label _DoraIndicatorLabel;
 	public Label _RoundWindLabel;
 	public Label _SeatWindLabel;
@@ -22,6 +23,7 @@ public partial class Table : Godot.Node2D
 	public int _PlayerPoints;
 	public int _EnemyPoints;
 	public int _Pot;
+	public int _Honba;
 	
 	//TODO: Think about additional dora tiles when kan 
 	public Mahjong.Model.Tile _DoraIndicator;
@@ -43,6 +45,7 @@ public partial class Table : Godot.Node2D
 		_EnemyPointsLabel = GetNode<Label>("DebugInfoContainer/EnemyPointsLabel");
 		_PlayerPointsLabel = GetNode<Label>("DebugInfoContainer/PlayerPointsLabel");
 		_PotLabel = GetNode<Label>("DebugInfoContainer/PotLabel");
+		_HonbaLabel = GetNode<Label>("DebugInfoContainer/HonbaLabel");
 		_DoraIndicatorLabel = GetNode<Label>("DebugInfoContainer/DoraIndicatorLabel");
 		_RoundWindLabel = GetNode<Label>("DebugInfoContainer/RoundWindLabel");
 		_SeatWindLabel = GetNode<Label>("DebugInfoContainer/SeatWindLabel");
@@ -57,9 +60,11 @@ public partial class Table : Godot.Node2D
 		
 		_PlayerHandler._PlayerPoints = 25000;
 		_EnemyPoints = 25000;
+		_Honba = 0;
 		_EnemyPointsLabel.Text = "EnemyPoints: " + _EnemyPoints.ToString();
 		_PlayerPointsLabel.Text = "PlayerPoints: " + _PlayerHandler._PlayerPoints.ToString();
 		_PotLabel.Text = "Pot: " + _Pot.ToString();
+		_HonbaLabel.Text = "Honba: " + _Honba.ToString();
 		InitializeTable();
 	}
 
@@ -70,7 +75,12 @@ public partial class Table : Godot.Node2D
 	
 	public void InitializeTable()
 	{
-		_TableManager.InitializeTable(_TableModel);
+		//_TableManager.InitializeTable(_TableModel);
+		Mahjong.Model.WallConfiguration oWallConfig = new Mahjong.Model.WallConfiguration();
+		oWallConfig.LoadManzu = false;
+		oWallConfig.LoadWest = false;
+		oWallConfig.LoadNorth = false;
+		_TableManager.InitializeTableWithWallConfiguration(_TableModel,oWallConfig);
 		_DoraIndicator = _TableModel.Wall[_TableModel.Wall.Count - 5];
 		SetDora();
 		_DoraIndicatorLabel.Text = "DoraIndicator: " + _DoraIndicator.ToString() + "\nDora: " + _DoraTile.ToString();
@@ -170,6 +180,7 @@ public partial class Table : Godot.Node2D
 		suit = _DoraIndicator.suit;
 		if(suit == "z")
 		{
+			//TODO: Becareful of the wall configurations
 			if(_DoraIndicator.num != 4 && _DoraIndicator.num != 7)
 			{
 				num = _DoraIndicator.num + 1;
@@ -254,9 +265,18 @@ public partial class Table : Godot.Node2D
 		_EnemyPoints -= pnPayment;
 		_PlayerHandler._PlayerPoints += (pnPayment + _Pot);
 		_Pot = 0;
+		
+		if(_PlayerHandler._SeatWind == Enums.Wind.East)
+		{
+			_Honba += 1;
+		}else{
+			_Honba = 0;
+		}
+		
 		_EnemyPointsLabel.Text = "EnemyPoints: " + _EnemyPoints.ToString();
 		_PlayerPointsLabel.Text = "PlayerPoints: " + _PlayerHandler._PlayerPoints.ToString();
 		_PotLabel.Text = "Pot: " + _Pot.ToString();
+		_HonbaLabel.Text = "Honba: " + _Honba.ToString();
 	}
 	
 	public void OnRiichiDeclared()

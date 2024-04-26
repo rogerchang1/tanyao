@@ -35,6 +35,7 @@ public partial class PlayerHandler : BaseHandler
 	public Mahjong.Model.Hand _Hand;
 	
 	public int _PlayerPoints = 0;
+	public int _Honba = 0;
 	
 	public bool IsRiichi = false;
 	public Enums.Wind _SeatWind;
@@ -210,7 +211,7 @@ public partial class PlayerHandler : BaseHandler
 		
 		UpdateWinLabel(sWinLabelText);
 		
-		int nPayment = poScore.SinglePayment;
+		int nPayment = poScore.SinglePayment + _Honba;
 		if(nPayment == 0)
 		{
 			if(_SeatWind == Enums.Wind.East)
@@ -219,7 +220,9 @@ public partial class PlayerHandler : BaseHandler
 			}else{
 				nPayment = poScore.AllPayment["Dealer"];
 			}
-			
+			nPayment += (_Honba * 100);
+		}else{
+			nPayment += (_Honba * 300);
 		}
 		
 		_Events.EmitSignal(Events.SignalName.PlayerWinDeclared, nPayment);

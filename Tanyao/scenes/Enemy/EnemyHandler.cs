@@ -15,6 +15,7 @@ public partial class EnemyHandler : BaseHandler
 	
 	public bool IsRiichi = false;
 	public Enums.Wind _SeatWind;
+	public int _Honba = 0;
 	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
