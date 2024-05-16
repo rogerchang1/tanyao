@@ -80,6 +80,10 @@ public partial class Table : Godot.Node2D
 		oWallConfig.LoadManzu = false;
 		oWallConfig.LoadWest = false;
 		oWallConfig.LoadNorth = false;
+		//oWallConfig.LoadEast = false;
+		//oWallConfig.LoadSouth = false;
+		oWallConfig.LoadDragons = false;
+		oWallConfig.LoadPinzu = false;
 		_TableManager.InitializeTableWithWallConfiguration(_TableModel,oWallConfig);
 		_DoraIndicator = _TableModel.Wall[_TableModel.Wall.Count - 5];
 		SetDora();

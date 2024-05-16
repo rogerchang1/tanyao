@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://5643582tkyan"]
+[gd_scene load_steps=10 format=3 uid="uid://5643582tkyan"]
 
 [ext_resource type="Theme" uid="uid://lq7ql6qc76jt" path="res://main_theme.tres" id="1_ywr73"]
 [ext_resource type="Script" path="res://Tanyao/scenes/TileUI/TileUI.cs" id="2_ox5kw"]
+[ext_resource type="Texture2D" uid="uid://bgdymsmfd3elk" path="res://Tanyao/assets/Sprite-0001.png" id="3_571k1"]
 [ext_resource type="Script" path="res://Tanyao/scenes/TileUI/TileStateMachine.cs" id="3_o0tp8"]
 [ext_resource type="Script" path="res://Tanyao/scenes/TileUI/TileStates/TileBaseState.cs" id="4_8h7u6"]
 [ext_resource type="Script" path="res://Tanyao/scenes/TileUI/TileStates/TileClickedState.cs" id="5_clgtg"]
@@ -46,17 +47,6 @@ text = "state"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TileLabel" type="Label" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_font_sizes/font_size = 32
-horizontal_alignment = 1
-vertical_alignment = 1
-
 [node name="DropPointDetector" type="Area2D" parent="."]
 collision_mask = 2
 monitorable = false
@@ -83,6 +73,25 @@ _State = 2
 [node name="TileReleasedState" type="Node" parent="TileStateMachine"]
 script = ExtResource("7_0j3nj")
 _State = 3
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(30, 40)
+scale = Vector2(0.952381, 0.963855)
+texture = ExtResource("3_571k1")
+region_enabled = true
+region_rect = Rect2(10, 10, 63, 83)
+
+[node name="TileLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 32
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]

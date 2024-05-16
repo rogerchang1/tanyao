@@ -17,6 +17,7 @@ public partial class TileUI : Control
 	public Area2D _DropPointDetector;
 	public bool _CanBeDiscarded;
 	public Node _ParentContainer;
+	public Sprite2D _Sprite;
 	
 	[Export]
 	public bool _IsInteractable = true;
@@ -35,6 +36,7 @@ public partial class TileUI : Control
 		_DropPointDetector = GetNode<Area2D>("DropPointDetector");
 		_TileStateMachine = GetNode<TileStateMachine>("TileStateMachine");
 		_TileStateMachine.init(this);
+		_Sprite = GetNode<Sprite2D>("Sprite2D");
 		_CanBeDiscarded = false;
 		
 		if(_Tile == null || _Tile == ""){
@@ -42,6 +44,17 @@ public partial class TileUI : Control
 		}else{
 			_TileModel = new Mahjong.Model.Tile(_Tile);
 		}
+		
+		if(_TileModel.suit == "z")
+		{
+			//_Sprite.SetRegionRect(new Rect2(80, 10, 63, 83));
+			//AtlasTexture oAtlasTexture = new AtlasTexture();
+			_Sprite.RegionRect = new Rect2(80, 10, 63, 83);
+			//_Sprite.Texture = 
+		}
+		GD.Print(_TileModel.num + " " + _TileModel.suit);
+		GD.Print(_Sprite.GetRect());
+		
 		_TileLabel.Text = _TileModel.ToString();
 		//Might not need this after experimentation.
 		//Might be best to assign the Parent during AddTile to Hand.
@@ -64,6 +77,11 @@ public partial class TileUI : Control
 		_TileModel = poTile;
 		_Tile = poTile.ToString();
 		_TileLabel.Text = _TileModel.ToString();
+		
+		//if(_TileModel.suit == "z")
+		//{
+			//_Sprite.RegionRect = new Rect2(80, 10, 63, 83);
+		//}
 	}
 	
 	public void SetTile(string psTile)
@@ -71,6 +89,11 @@ public partial class TileUI : Control
 		_TileModel = new Mahjong.Model.Tile(psTile);
 		_Tile = psTile;
 		_TileLabel.Text = _TileModel.ToString();
+		
+		//if(_TileModel.suit == "z")
+		//{
+			//_Sprite.RegionRect = new Rect2(80, 10, 63, 83);
+		//}
 	}
 	
 	public override void _Input(InputEvent @event)
