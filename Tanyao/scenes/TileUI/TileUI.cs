@@ -77,7 +77,7 @@ public partial class TileUI : Control
 		_TileModel = poTile;
 		_Tile = poTile.ToString();
 		_TileLabel.Text = _TileModel.ToString();
-		
+		SetSprite();
 		//if(_TileModel.suit == "z")
 		//{
 			//_Sprite.RegionRect = new Rect2(80, 10, 63, 83);
@@ -89,7 +89,7 @@ public partial class TileUI : Control
 		_TileModel = new Mahjong.Model.Tile(psTile);
 		_Tile = psTile;
 		_TileLabel.Text = _TileModel.ToString();
-		
+		SetSprite();
 		//if(_TileModel.suit == "z")
 		//{
 			//_Sprite.RegionRect = new Rect2(80, 10, 63, 83);
@@ -144,6 +144,26 @@ public partial class TileUI : Control
 	private void _on_drop_point_detector_area_exited(Area2D area)
 	{
 		_CanBeDiscarded = false;
+	}
+	
+	public void SetSprite()
+	{
+		int nTileSetX = 10;
+		int nTileSetY = 10;
+		if(_TileModel.suit == "p")
+		{
+			nTileSetY += 90;
+		}
+		if(_TileModel.suit == "s")
+		{
+			nTileSetY += 180;
+		}
+		if(_TileModel.suit == "m")
+		{
+			nTileSetY += 270;
+		}
+		nTileSetX += ((_TileModel.num - 1) * 70);
+		_Sprite.RegionRect = new Rect2(nTileSetX, nTileSetY, 63, 83);
 	}
 }
 
