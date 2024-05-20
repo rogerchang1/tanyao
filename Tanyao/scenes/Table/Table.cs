@@ -61,10 +61,7 @@ public partial class Table : Godot.Node2D
 		_PlayerHandler._PlayerPoints = 25000;
 		_EnemyPoints = 25000;
 		_Honba = 0;
-		_EnemyPointsLabel.Text = "EnemyPoints: " + _EnemyPoints.ToString();
-		_PlayerPointsLabel.Text = "PlayerPoints: " + _PlayerHandler._PlayerPoints.ToString();
-		_PotLabel.Text = "Pot: " + _Pot.ToString();
-		_HonbaLabel.Text = "Honba: " + _Honba.ToString();
+		UpdateDebugInfoLabel();
 		InitializeTable();
 	}
 
@@ -87,10 +84,10 @@ public partial class Table : Godot.Node2D
 		_TableManager.InitializeTableWithWallConfiguration(_TableModel,oWallConfig);
 		_DoraIndicator = _TableModel.Wall[_TableModel.Wall.Count - 5];
 		SetDora();
-		_DoraIndicatorLabel.Text = "DoraIndicator: " + _DoraIndicator.ToString() + "\nDora: " + _DoraTile.ToString();
 		_RoundWind = Enums.Wind.East;
 		_PlayerHandler._SeatWind = Enums.Wind.East;
 		_PlayerHandler._DoraTile = _DoraTile;
+		_DoraIndicatorLabel.Text = "DoraIndicator: " + _DoraIndicator.ToString() + "\nDora: " + _DoraTile.ToString();
 		_RoundWindLabel.Text = "RoundWind: " + _RoundWind.ToString();
 		_SeatWindLabel.Text = "SeatWind: " + _PlayerHandler._SeatWind.ToString();
 		
@@ -215,6 +212,7 @@ public partial class Table : Godot.Node2D
 	{
 		if(!_TableManager.CanDrawFromWall(_TableModel))
 		{
+			Ryuukyoku();
 			return;
 		}
 		Mahjong.Model.Tile DrawnTile = _TableManager.DrawNextTileFromWall(_TableModel);
@@ -229,6 +227,24 @@ public partial class Table : Godot.Node2D
 			((EnemyHandler) oBaseHandler).AddTileToHandTsumo(DrawnTile);
 		}
 		UpdateTilesLeftLabel();
+	}
+	
+	public void Ryuukyoku()
+	{
+		int nPlayerShanten = _PlayerHandler.GetShanten();
+		int nEnemyShanten = _EnemyHandler.GetShanten();
+		if(nPlayerShanten == 0 && nEnemyShanten != 0)
+		{
+			_EnemyPoints -= 1000;
+			_PlayerHandler._PlayerPoints += 1000;
+		}else if(nPlayerShanten != 0 && nEnemyShanten == 0)
+		{
+			_EnemyPoints += 1000;
+			_PlayerHandler._PlayerPoints -= 1000;
+		}
+		_Honba += 1;
+		UpdateDebugInfoLabel();
+		OnRoundEnded();
 	}
 	
 	public void OnPlayerTurnStarted(string psTile)
@@ -277,6 +293,11 @@ public partial class Table : Godot.Node2D
 			_Honba = 0;
 		}
 		
+		UpdateDebugInfoLabel();
+	}
+	
+	public void UpdateDebugInfoLabel()
+	{
 		_EnemyPointsLabel.Text = "EnemyPoints: " + _EnemyPoints.ToString();
 		_PlayerPointsLabel.Text = "PlayerPoints: " + _PlayerHandler._PlayerPoints.ToString();
 		_PotLabel.Text = "Pot: " + _Pot.ToString();
@@ -286,9 +307,7 @@ public partial class Table : Godot.Node2D
 	public void OnRiichiDeclared()
 	{
 		_Pot += 1000;
-		_EnemyPointsLabel.Text = "EnemyPoints: " + _EnemyPoints.ToString();
-		_PlayerPointsLabel.Text = "PlayerPoints: " + _PlayerHandler._PlayerPoints.ToString();
-		_PotLabel.Text = "Pot: " + _Pot.ToString();
+		UpdateDebugInfoLabel();
 	}
 	
 	private void UpdateTilesLeftLabel()

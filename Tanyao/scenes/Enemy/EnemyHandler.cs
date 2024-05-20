@@ -85,6 +85,12 @@ public partial class EnemyHandler : BaseHandler
 		_Events.EmitSignal(Events.SignalName.EnemyTurnEnded, oTile.ToString());
 	}
 	
+	//TODO: Implement this.
+	public int GetShanten()
+	{
+		return 2;
+	}
+	
 	public void CleanUp()
 	{
 		_EnemyHand.Clear();

@@ -526,6 +526,12 @@ public partial class PlayerHandler : BaseHandler
 		IsRiichi = false;
 	}
 	
+	public int GetShanten()
+	{
+		Mahjong.CShantenEvaluator oShantenEvaluator = new Mahjong.CShantenEvaluator();
+		return oShantenEvaluator.EvaluateShanten(_Hand);
+	}
+	
 	public void PrintHandForDebugging()
 	{
 		string s = "";
