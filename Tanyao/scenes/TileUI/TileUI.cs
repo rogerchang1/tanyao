@@ -52,8 +52,6 @@ public partial class TileUI : Control
 			_Sprite.RegionRect = new Rect2(80, 10, 63, 83);
 			//_Sprite.Texture = 
 		}
-		GD.Print(_TileModel.num + " " + _TileModel.suit);
-		GD.Print(_Sprite.GetRect());
 		
 		_TileLabel.Text = _TileModel.ToString();
 		//Might not need this after experimentation.
