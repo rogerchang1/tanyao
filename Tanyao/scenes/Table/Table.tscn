@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dvpig2rtau57s"]
+[gd_scene load_steps=11 format=3 uid="uid://dvpig2rtau57s"]
 
 [ext_resource type="Script" path="res://Tanyao/scenes/Table/Table.cs" id="1_kw13y"]
 [ext_resource type="Script" path="res://Tanyao/scenes/Table/Hand.cs" id="2_3n81g"]
@@ -8,12 +8,14 @@
 [ext_resource type="Script" path="res://Tanyao/scenes/Enemy/EnemyHandler.cs" id="3_hftm0"]
 [ext_resource type="PackedScene" uid="uid://dfkae4wigcd01" path="res://Tanyao/scenes/UI/LockedBlockChi.tscn" id="4_nugy6"]
 [ext_resource type="PackedScene" uid="uid://co16r34821rvf" path="res://Tanyao/scenes/UI/LockedBlockPon.tscn" id="5_n7xeo"]
+[ext_resource type="PackedScene" uid="uid://di1esy8a6t51g" path="res://Tanyao/scenes/Table/HandScore.tscn" id="8_eyxk5"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5qduj"]
 size = Vector2(1280, 512)
 
 [node name="Table" type="Node2D"]
 script = ExtResource("1_kw13y")
+_HandScoreScene = ExtResource("8_eyxk5")
 metadata/_edit_lock_ = true
 
 [node name="DebugInfoContainer" type="VBoxContainer" parent="."]

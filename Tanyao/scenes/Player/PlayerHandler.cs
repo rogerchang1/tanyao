@@ -70,6 +70,7 @@ public partial class PlayerHandler : BaseHandler
 	public override void StartTurn(string psDiscardedTile = "")
 	{
 		TurnState = "BEFOREDRAW";
+		_PlayerHand.DisableAllTilesInteractability();
 		if(psDiscardedTile != "")
 		{
 			GD.Print("Enemy discarded " + psDiscardedTile);
@@ -225,7 +226,12 @@ public partial class PlayerHandler : BaseHandler
 			nPayment += (_Honba * 300);
 		}
 		
-		_Events.EmitSignal(Events.SignalName.PlayerWinDeclared, nPayment);
+		ScoreGodotWrapper gScore = new ScoreGodotWrapper();
+		gScore._Score = poScore;
+		HandGodotWrapper gHand = new HandGodotWrapper();
+		gHand._Hand = _Hand;
+		
+		_Events.EmitSignal(Events.SignalName.PlayerWinDeclared, nPayment, gHand, gScore);
 		_Events.EmitSignal(Events.SignalName.RoundEnded);
 	}
 	

@@ -41,11 +41,14 @@ public partial class Events : Node
 	public delegate void KanButtonPressedEventHandler();
 	
 	[Signal]
-	public delegate void PlayerWinDeclaredEventHandler(int pnPayment);
+	public delegate void PlayerWinDeclaredEventHandler(int pnPayment, HandGodotWrapper poHand, ScoreGodotWrapper poScore);
 	[Signal]
 	public delegate void EnemyWinDeclaredEventHandler(int pnPayment);
 	[Signal]
 	public delegate void RoundEndedEventHandler();
 	[Signal]
 	public delegate void RiichiDeclaredEventHandler();
+	
+	[Signal]
+	public delegate void HandScoreConfirmButtonPressedEventHandler();
 }

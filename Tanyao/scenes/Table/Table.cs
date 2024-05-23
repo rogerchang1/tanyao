@@ -35,6 +35,9 @@ public partial class Table : Godot.Node2D
 	public Mahjong.Model.Tile _DoraTile;
 	public Enums.Wind _RoundWind;
 	
+	[Export]
+	public PackedScene _HandScoreScene;
+	
 	Events _Events;
 	
 	// Called when the node enters the scene tree for the first time.
@@ -62,6 +65,7 @@ public partial class Table : Godot.Node2D
 		_Events.RoundEnded += OnRoundEnded;
 		_Events.PlayerWinDeclared += OnPlayerWinDeclared;
 		_Events.RiichiDeclared += OnRiichiDeclared;
+		_Events.HandScoreConfirmButtonPressed += OnHandScoreConfirmButtonPressed;
 		
 		
 		InitializeTableValues();
@@ -102,8 +106,8 @@ public partial class Table : Godot.Node2D
 		oWallConfig.LoadManzu = false;
 		oWallConfig.LoadWest = false;
 		oWallConfig.LoadNorth = false;
-		//oWallConfig.LoadEast = false;
-		//oWallConfig.LoadSouth = false;
+		////oWallConfig.LoadEast = false;
+		////oWallConfig.LoadSouth = false;
 		//oWallConfig.LoadDragons = false;
 		//oWallConfig.LoadPinzu = false;
 		_TableManager.InitializeTableWithWallConfiguration(_TableModel,oWallConfig);
@@ -297,7 +301,8 @@ public partial class Table : Godot.Node2D
 		UpdateTilesLeftLabel();
 	}
 	
-	public void Ryuukyoku()
+	//Remove async if you don't need the timer
+	public async void Ryuukyoku()
 	{
 		int nPlayerShanten = _PlayerHandler.GetShanten();
 		int nEnemyShanten = _EnemyHandler.GetShanten();
@@ -319,6 +324,8 @@ public partial class Table : Godot.Node2D
 		_Honba += 1;
 		UpdateDebugInfoLabel();
 		OnRoundEnded();
+		await ToSignal(GetTree().CreateTimer(2), "timeout");
+		InitializeTable();
 	}
 	
 	public void SwitchWinds()
@@ -367,11 +374,13 @@ public partial class Table : Godot.Node2D
 	public async void OnRoundEnded()
 	{
 		CleanUp();
-		await ToSignal(GetTree().CreateTimer(2), "timeout");
-		InitializeTable();
+		
+		//Move this to OnHandScoreConfirmButtonPressed
+		//await ToSignal(GetTree().CreateTimer(2), "timeout");
+		//InitializeTable();
 	}
 	
-	public void OnPlayerWinDeclared(int pnPayment)
+	public void OnPlayerWinDeclared(int pnPayment, HandGodotWrapper poHand, ScoreGodotWrapper poScore)
 	{
 		_EnemyPoints -= pnPayment;
 		_PlayerHandler._PlayerPoints += (pnPayment + _Pot);
@@ -386,6 +395,13 @@ public partial class Table : Godot.Node2D
 		}
 		
 		UpdateDebugInfoLabel();
+		
+		HandScore oHandScore = (HandScore) _HandScoreScene.Instantiate();
+		AddChild(oHandScore);
+		oHandScore._Score = poScore._Score;
+		oHandScore._Hand = poHand._Hand;
+		oHandScore.SetLabels();
+		
 	}
 	
 	public void UpdateDebugInfoLabel()
@@ -396,6 +412,14 @@ public partial class Table : Godot.Node2D
 		_HonbaLabel.Text = "Honba: " + _Honba.ToString();
 		_RoundWindLabel.Text = "RoundWind: " + _RoundWind.ToString();
 		_SeatWindLabel.Text = "SeatWind: " + _PlayerHandler._SeatWind.ToString();
+	}
+	
+	public void OnHandScoreConfirmButtonPressed()
+	{
+		HandScore oHandScore = GetNode<HandScore>("HandScore");
+		oHandScore.QueueFree();
+		//Begin new round
+		InitializeTable();
 	}
 	
 	public void OnRiichiDeclared()
