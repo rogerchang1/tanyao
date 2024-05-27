@@ -19,6 +19,7 @@ public partial class Table : Godot.Node2D
 	public Label _DoraIndicatorLabel;
 	public Label _RoundWindLabel;
 	public Label _SeatWindLabel;
+	public Label _RoundNumberLabel;
 	
 	public int _PlayerPoints;
 	public int _EnemyPoints;
@@ -39,7 +40,7 @@ public partial class Table : Godot.Node2D
 	public PackedScene _HandScoreScene;
 	
 	Events _Events;
-	
+	GameController _GC;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -57,8 +58,10 @@ public partial class Table : Godot.Node2D
 		_DoraIndicatorLabel = GetNode<Label>("DebugInfoContainer/DoraIndicatorLabel");
 		_RoundWindLabel = GetNode<Label>("DebugInfoContainer/RoundWindLabel");
 		_SeatWindLabel = GetNode<Label>("DebugInfoContainer/SeatWindLabel");
+		_RoundNumberLabel = GetNode<Label>("DebugInfoContainer/RoundNumberLabel");
 		
 		_Events = GetNode<Events>("/root/Events");
+		_GC = GetNode<GameController>("/root/GameController");
 		_Events.DrawTileRequested += OnDrawTileRequested;
 		_Events.PlayerTurnEnded += OnPlayerTurnEnded;
 		_Events.EnemyTurnEnded += OnEnemyTurnEnded;
@@ -108,8 +111,8 @@ public partial class Table : Godot.Node2D
 		oWallConfig.LoadNorth = false;
 		////oWallConfig.LoadEast = false;
 		////oWallConfig.LoadSouth = false;
-		//oWallConfig.LoadDragons = false;
-		//oWallConfig.LoadPinzu = false;
+		oWallConfig.LoadDragons = false;
+		oWallConfig.LoadPinzu = false;
 		_TableManager.InitializeTableWithWallConfiguration(_TableModel,oWallConfig);
 		_TileDrawCounter = 0;
 		_DoraIndicator = _TableModel.Wall[_TableModel.Wall.Count - 5];
@@ -285,20 +288,21 @@ public partial class Table : Godot.Node2D
 		{
 			Ryuukyoku();
 			return;
+		}else{
+			Mahjong.Model.Tile DrawnTile = _TableManager.DrawNextTileFromWall(_TableModel);
+			if(oBaseHandler.GetType() == typeof(PlayerHandler))
+			{
+				((PlayerHandler) oBaseHandler).AddTileToHandTsumo(DrawnTile);
+				
+			}
+			if(oBaseHandler.GetType() == typeof(EnemyHandler))
+			{
+				//TODO: change this later
+				((EnemyHandler) oBaseHandler).AddTileToHandTsumo(DrawnTile);
+			}
+			_TileDrawCounter++;
+			UpdateTilesLeftLabel();
 		}
-		Mahjong.Model.Tile DrawnTile = _TableManager.DrawNextTileFromWall(_TableModel);
-		if(oBaseHandler.GetType() == typeof(PlayerHandler))
-		{
-			((PlayerHandler) oBaseHandler).AddTileToHandTsumo(DrawnTile);
-			
-		}
-		if(oBaseHandler.GetType() == typeof(EnemyHandler))
-		{
-			//TODO: change this later
-			((EnemyHandler) oBaseHandler).AddTileToHandTsumo(DrawnTile);
-		}
-		_TileDrawCounter++;
-		UpdateTilesLeftLabel();
 	}
 	
 	//Remove async if you don't need the timer
@@ -345,16 +349,6 @@ public partial class Table : Godot.Node2D
 		_RoundNumber++;
 	}
 	
-	public void OnPlayerTurnStarted(string psTile)
-	{
-		_PlayerHandler.StartTurn(psTile);
-	}
-	
-	public void OnEnemyTurnStarted(string psTile)
-	{
-		_EnemyHandler.StartTurn(psTile);
-	}
-	
 	//TODO: Switch to EnemyHandler Turn when you implement EnemyHandler
 	//TODO: Remove async when you don't need it anymore
 	public async void OnPlayerTurnEnded(string psTile)
@@ -374,7 +368,14 @@ public partial class Table : Godot.Node2D
 	public async void OnRoundEnded()
 	{
 		CleanUp();
-		
+		if(_RoundNumber > 4)
+		{
+			EndGame oEndGame = (EndGame) ResourceLoader.Load<PackedScene>("res://Tanyao/scenes/EndGame.tscn").Instantiate();
+			GetTree().Root.AddChild(oEndGame);
+			oEndGame.SetEndScoresLabel(_PlayerHandler._PlayerPoints.ToString(), _EnemyPoints.ToString());
+			DisconnectSignals();
+			GetNode("/root/Table").QueueFree();
+		}
 		//Move this to OnHandScoreConfirmButtonPressed
 		//await ToSignal(GetTree().CreateTimer(2), "timeout");
 		//InitializeTable();
@@ -382,6 +383,7 @@ public partial class Table : Godot.Node2D
 	
 	public void OnPlayerWinDeclared(int pnPayment, HandGodotWrapper poHand, ScoreGodotWrapper poScore)
 	{
+		CleanUp();
 		_EnemyPoints -= pnPayment;
 		_PlayerHandler._PlayerPoints += (pnPayment + _Pot);
 		_Pot = 0;
@@ -412,14 +414,25 @@ public partial class Table : Godot.Node2D
 		_HonbaLabel.Text = "Honba: " + _Honba.ToString();
 		_RoundWindLabel.Text = "RoundWind: " + _RoundWind.ToString();
 		_SeatWindLabel.Text = "SeatWind: " + _PlayerHandler._SeatWind.ToString();
+		_RoundNumberLabel.Text = "RoundNumber: " + _RoundNumber.ToString();
 	}
 	
 	public void OnHandScoreConfirmButtonPressed()
 	{
 		HandScore oHandScore = GetNode<HandScore>("HandScore");
 		oHandScore.QueueFree();
-		//Begin new round
-		InitializeTable();
+		
+		if(_RoundNumber > 4)
+		{
+			EndGame oEndGame = (EndGame) ResourceLoader.Load<PackedScene>("res://Tanyao/scenes/EndGame.tscn").Instantiate();
+			GetTree().Root.AddChild(oEndGame);
+			oEndGame.SetEndScoresLabel(_PlayerHandler._PlayerPoints.ToString(), _EnemyPoints.ToString());
+			DisconnectSignals();
+			GetNode("/root/Table").QueueFree();
+		}else{
+			//Begin new round
+			InitializeTable();
+		}
 	}
 	
 	public void OnRiichiDeclared()
@@ -432,5 +445,18 @@ public partial class Table : Godot.Node2D
 	{
 		int count = Math.Min((_TileDrawLimit - _TileDrawCounter),(_TableModel.Wall.Count - 14)) ;
 		_TilesLeftLabel.Text = "Tiles Left: " + count;
+	}
+	
+	private void DisconnectSignals()
+	{
+		_Events.DrawTileRequested -= OnDrawTileRequested;
+		_Events.PlayerTurnEnded -= OnPlayerTurnEnded;
+		_Events.EnemyTurnEnded -= OnEnemyTurnEnded;
+		_Events.RoundEnded -= OnRoundEnded;
+		_Events.PlayerWinDeclared -= OnPlayerWinDeclared;
+		_Events.RiichiDeclared -= OnRiichiDeclared;
+		_Events.HandScoreConfirmButtonPressed -= OnHandScoreConfirmButtonPressed;
+		_PlayerHandler.DisconnectSignals();
+		_EnemyHandler.DisconnectSignals();
 	}
 }

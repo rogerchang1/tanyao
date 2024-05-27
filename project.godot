@@ -11,13 +11,14 @@ config_version=5
 [application]
 
 config/name="tanyao"
-run/main_scene="res://Tanyao/scenes/Table/Table.tscn"
+run/main_scene="res://Tanyao/scenes/StartGame.tscn"
 config/features=PackedStringArray("4.2", "C#")
 config/icon="res://icon.png"
 
 [autoload]
 
 Events="*res://Tanyao/global/Events.cs"
+GameController="*res://Tanyao/global/GameController.cs"
 
 [display]
 

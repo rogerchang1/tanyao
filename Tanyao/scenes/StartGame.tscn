@@ -1,0 +1,24 @@
+[gd_scene load_steps=2 format=3 uid="uid://bxdu6p6a7mwnl"]
+
+[ext_resource type="Script" path="res://Tanyao/scenes/StartGame.cs" id="1_d7fis"]
+
+[node name="StartGame" type="Node2D"]
+script = ExtResource("1_d7fis")
+
+[node name="StartGameButton" type="Button" parent="."]
+offset_left = 936.0
+offset_top = 488.0
+offset_right = 1248.0
+offset_bottom = 584.0
+text = "Start"
+
+[node name="ExitGameButton" type="Button" parent="."]
+offset_left = 936.0
+offset_top = 592.0
+offset_right = 1248.0
+offset_bottom = 688.0
+text = "Exit
+"
+
+[connection signal="pressed" from="StartGameButton" to="." method="_on_start_game_button_pressed"]
+[connection signal="pressed" from="ExitGameButton" to="." method="_on_exit_game_button_pressed"]

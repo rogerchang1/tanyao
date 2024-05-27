@@ -1,0 +1,22 @@
+[gd_scene load_steps=2 format=3 uid="uid://c5h4iejod78ok"]
+
+[ext_resource type="Script" path="res://Tanyao/scenes/EndGame.cs" id="1_torhj"]
+
+[node name="EndGame" type="Node2D"]
+script = ExtResource("1_torhj")
+
+[node name="EndGameConfirmButton" type="Button" parent="."]
+offset_left = 872.0
+offset_top = 584.0
+offset_right = 1264.0
+offset_bottom = 696.0
+text = "Confirm"
+
+[node name="EndScoresLabel" type="Label" parent="."]
+offset_left = 96.0
+offset_top = 88.0
+offset_right = 608.0
+offset_bottom = 328.0
+text = "test"
+
+[connection signal="pressed" from="EndGameConfirmButton" to="." method="_on_end_game_confirm_button_pressed"]

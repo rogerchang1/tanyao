@@ -194,7 +194,7 @@ public partial class PlayerHandler : BaseHandler
 		foreach(Enums.Yaku yaku in poScore.YakuList)
 		{
 			sWinLabelText += yaku + "\n";
-			GD.Print(yaku);
+			GD.Print("PlayerHandler Win(): " + yaku);
 		}
 		sWinLabelText += "Dora " + _Hand.DoraCount + "\n";
 		sWinLabelText += poScore.Han + " Han " + poScore.Fu + " Fu\n";
@@ -232,7 +232,7 @@ public partial class PlayerHandler : BaseHandler
 		gHand._Hand = _Hand;
 		
 		_Events.EmitSignal(Events.SignalName.PlayerWinDeclared, nPayment, gHand, gScore);
-		_Events.EmitSignal(Events.SignalName.RoundEnded);
+		//_Events.EmitSignal(Events.SignalName.RoundEnded);
 	}
 	
 	public Mahjong.Model.Score IsValidHand(Mahjong.Model.Tile poWinTile, Enums.Agari peAgari)
@@ -282,7 +282,7 @@ public partial class PlayerHandler : BaseHandler
 		foreach(Enums.Yaku yaku in oScore.YakuList)
 		{
 			sWinLabelText += yaku + "\n";
-			GD.Print(yaku);
+			GD.Print("PlayerHandler TestWinLabel(): " + yaku);
 		}
 		sWinLabelText += oScore.Han + " Han " + oScore.Fu + " Fu";
 		_WinLabel.Text = sWinLabelText;
@@ -545,6 +545,19 @@ public partial class PlayerHandler : BaseHandler
 		{
 			s += _Hand.Tiles[i].ToString();
 		}
-		GD.Print(s);
+		GD.Print("PlayerHandler PrintHandForDebugging(): " + s);
+	}
+	
+	public void DisconnectSignals()
+	{
+		_Events.TileDiscarded -= OnTileDiscarded;
+		_Events.ChiButtonPressed -= OnChiButtonPressed;
+		_Events.PonButtonPressed -= OnPonButtonPressed;
+		_Events.RonButtonPressed -= OnRonButtonPressed;
+		_Events.TsumoButtonPressed -= OnTsumoButtonPressed;
+		_Events.RiichiButtonPressed -= OnRiichiButtonPressed;
+		_Events.KanButtonPressed -= OnKanButtonPressed;
+		_Events.CallOptionsCancelPressed -= OnCallCancelButtonPressed;
+		_PlayerHand.DisconnectSignals();
 	}
 }

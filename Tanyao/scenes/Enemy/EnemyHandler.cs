@@ -103,4 +103,9 @@ public partial class EnemyHandler : BaseHandler
 		
 		//_Hand = new Mahjong.Model.Hand();
 	}
+	
+	public void DisconnectSignals()
+	{
+		_EnemyHand.DisconnectSignals();
+	}
 }

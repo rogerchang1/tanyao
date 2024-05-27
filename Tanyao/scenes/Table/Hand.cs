@@ -174,4 +174,8 @@ public partial class Hand : HBoxContainer
 		}
 	}
 	
+	public void DisconnectSignals()
+	{
+		_Events.TileDiscarded -= OnTileDiscarded;
+	}
 }

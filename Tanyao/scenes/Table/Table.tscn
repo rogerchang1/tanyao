@@ -70,6 +70,12 @@ text = "
 "
 vertical_alignment = 1
 
+[node name="RoundNumberLabel" type="Label" parent="DebugInfoContainer"]
+layout_mode = 2
+text = "
+"
+vertical_alignment = 1
+
 [node name="WinLabel" type="Label" parent="."]
 anchors_preset = 8
 anchor_left = 0.5
