@@ -11,6 +11,9 @@ public partial class Table : Godot.Node2D
 	public Hand _PlayerHand;
 	public PlayerHandler _PlayerHandler;
 	public EnemyHandler _EnemyHandler;
+	
+	public DeadWall _DeadWall;
+	
 	public Label _TilesLeftLabel;
 	public Label _EnemyPointsLabel;
 	public Label _PlayerPointsLabel;
@@ -50,6 +53,9 @@ public partial class Table : Godot.Node2D
 		_PlayerHand = GetNode<Hand>("TableUI/Hand");
 		_PlayerHandler = GetNode<PlayerHandler>("PlayerHandler");
 		_EnemyHandler = GetNode<EnemyHandler>("EnemyHandler");
+		
+		_DeadWall = GetNode<DeadWall>("TableUI/DeadWall");
+		
 		_TilesLeftLabel = GetNode<Label>("DebugInfoContainer/TilesLeftLabel");
 		_EnemyPointsLabel = GetNode<Label>("DebugInfoContainer/EnemyPointsLabel");
 		_PlayerPointsLabel = GetNode<Label>("DebugInfoContainer/PlayerPointsLabel");
@@ -111,12 +117,12 @@ public partial class Table : Godot.Node2D
 		oWallConfig.LoadNorth = false;
 		////oWallConfig.LoadEast = false;
 		////oWallConfig.LoadSouth = false;
-		oWallConfig.LoadDragons = false;
-		oWallConfig.LoadPinzu = false;
+		//oWallConfig.LoadDragons = false;
+		//oWallConfig.LoadPinzu = false;
 		_TableManager.InitializeTableWithWallConfiguration(_TableModel,oWallConfig);
 		_TileDrawCounter = 0;
-		_DoraIndicator = _TableModel.Wall[_TableModel.Wall.Count - 5];
-		SetDora();
+		SetDeadWall();
+		_DoraTile = GetDoraFromDoraIndicator(_DoraIndicator);
 		_PlayerHandler._DoraTile = _DoraTile;
 		_DoraIndicatorLabel.Text = "DoraIndicator: " + _DoraIndicator.ToString() + "\nDora: " + _DoraTile.ToString();
 		
@@ -209,6 +215,17 @@ public partial class Table : Godot.Node2D
 	{
 		_PlayerHandler.CleanUp();
 		_EnemyHandler.CleanUp();
+		_DeadWall.CleanUp();
+	}
+	
+	public void SetDeadWall()
+	{
+		Mahjong.Model.Tile oKanDora1 = _TableModel.Wall[_TableModel.Wall.Count - 8];
+		Mahjong.Model.Tile oKanDora2 = _TableModel.Wall[_TableModel.Wall.Count - 10];
+		Mahjong.Model.Tile oKanDora3 = _TableModel.Wall[_TableModel.Wall.Count - 12];
+		Mahjong.Model.Tile oKanDora4 = _TableModel.Wall[_TableModel.Wall.Count - 14];
+		_DoraIndicator = _TableModel.Wall[_TableModel.Wall.Count - 6];
+		_DeadWall.InitializeDeadWallUI(_DoraIndicator, oKanDora1, oKanDora2, oKanDora3, oKanDora4);
 	}
 	
 	public void InitializeHands(bool pbShouldAddTilesToPlayerFirst)
@@ -243,30 +260,30 @@ public partial class Table : Godot.Node2D
 		_EnemyHandler.SortTilesUI();
 	}
 	
-	public void SetDora()
+	public Mahjong.Model.Tile GetDoraFromDoraIndicator(Mahjong.Model.Tile poDoraIndicator)
 	{
 		int num = 0;
 		string suit = "";
-		suit = _DoraIndicator.suit;
+		suit = poDoraIndicator.suit;
 		if(suit == "z")
 		{
 			//TODO: Becareful of the wall configurations
-			if(_DoraIndicator.num != 4 && _DoraIndicator.num != 7)
+			if(poDoraIndicator.num != 4 && poDoraIndicator.num != 7)
 			{
-				num = _DoraIndicator.num + 1;
-			}else if(_DoraIndicator.num == 4){
+				num = poDoraIndicator.num + 1;
+			}else if(poDoraIndicator.num == 4){
 				num =  1;
-			}else if(_DoraIndicator.num == 7){
+			}else if(poDoraIndicator.num == 7){
 				num =  5;
 			}
 		}else{
-			if(_DoraIndicator.num == 9){
+			if(poDoraIndicator.num == 9){
 				num =  1;
 			}else{
-				num = _DoraIndicator.num + 1;
+				num = poDoraIndicator.num + 1;
 			}
 		}
-		_DoraTile = new Mahjong.Model.Tile(num+suit);
+		return new Mahjong.Model.Tile(num+suit);
 	}
 	
 	public void StartRound()
@@ -284,7 +301,7 @@ public partial class Table : Godot.Node2D
 	
 	public void OnDrawTileRequested(BaseHandler oBaseHandler)
 	{
-		if(!_TableManager.CanDrawFromWall(_TableModel) || _TileDrawCounter > _TileDrawLimit)
+		if(!_TableManager.CanDrawFromWall(_TableModel) || _TileDrawCounter >= _TileDrawLimit)
 		{
 			Ryuukyoku();
 			return;

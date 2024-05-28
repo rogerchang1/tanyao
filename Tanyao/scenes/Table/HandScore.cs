@@ -52,6 +52,10 @@ public partial class HandScore : Node2D
 				
 			}
 			sWinLabelText += "Dora " + _Hand.DoraCount + "\n";
+			if(_Hand.IsRiichi || _Hand.IsDoubleRiichi)
+			{
+				sWinLabelText += "UraDora " + _Hand.UraDoraCount + "\n";	
+			}
 			sWinLabelText += _Score.Han + " Han " + _Score.Fu + " Fu\n";
 			if(_Score.SinglePayment != 0){
 				sWinLabelText += _Score.SinglePayment;

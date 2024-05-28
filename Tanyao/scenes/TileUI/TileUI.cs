@@ -22,6 +22,8 @@ public partial class TileUI : Control
 	[Export]
 	public bool _IsInteractable = true;
 	
+	public bool _IsShown = true;
+	
 	[Export]
 	public string _Tile;
 	
@@ -148,19 +150,24 @@ public partial class TileUI : Control
 	{
 		int nTileSetX = 10;
 		int nTileSetY = 10;
-		if(_TileModel.suit == "p")
+		if(_IsShown == false)
 		{
-			nTileSetY += 90;
+			nTileSetX = 710;
+		}else{
+			if(_TileModel.suit == "p")
+			{
+				nTileSetY += 90;
+			}
+			if(_TileModel.suit == "s")
+			{
+				nTileSetY += 180;
+			}
+			if(_TileModel.suit == "m")
+			{
+				nTileSetY += 270;
+			}
+			nTileSetX += ((_TileModel.num - 1) * 70);
 		}
-		if(_TileModel.suit == "s")
-		{
-			nTileSetY += 180;
-		}
-		if(_TileModel.suit == "m")
-		{
-			nTileSetY += 270;
-		}
-		nTileSetX += ((_TileModel.num - 1) * 70);
 		_Sprite.RegionRect = new Rect2(nTileSetX, nTileSetY, 63, 83);
 	}
 }
