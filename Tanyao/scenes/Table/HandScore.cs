@@ -8,6 +8,8 @@ public partial class HandScore : Node2D
 	
 	public Mahjong.Model.Hand _Hand;
 	public Mahjong.Model.Score _Score;
+	public Mahjong.Model.Tile[] _DoraIndicatorArr;
+	public Mahjong.Model.Tile[] _UraDoraIndicatorArr;
 	
 	Events _Events;
 	
@@ -25,6 +27,10 @@ public partial class HandScore : Node2D
 	HBoxContainer _OpenHand;
 	HBoxContainer _WinTile;
 	
+	HBoxContainer _DoraIndicators;
+	HBoxContainer _UraDoraIndicators;
+	public int _NumKanDoraActive = 0;
+	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -32,6 +38,8 @@ public partial class HandScore : Node2D
 		_ClosedHand = GetNode<HBoxContainer>("ClosedHand");
 		_OpenHand = GetNode<HBoxContainer>("OpenHand");
 		_WinTile = GetNode<HBoxContainer>("WinTile");
+		_DoraIndicators = GetNode<HBoxContainer>("DoraIndicators");
+		_UraDoraIndicators = GetNode<HBoxContainer>("UraDoraIndicators");
 		_WinLabel = GetNode<Label>("WinLabel");
 		_AgariLabel = GetNode<Label>("AgariLabel");
 	}
@@ -41,10 +49,37 @@ public partial class HandScore : Node2D
 	{
 	}
 	
+	public void SetDoraIndicators()
+	{
+		for(int i = 0; i < 5; i++)
+		{
+			TileUI oDoraIndicatorTile = (TileUI) _TileUIScene.Instantiate();
+			_DoraIndicators.AddChild(oDoraIndicatorTile);
+			oDoraIndicatorTile._IsInteractable = false;
+			if(i > _NumKanDoraActive)
+			{
+				oDoraIndicatorTile._IsShown = false;
+			}
+			oDoraIndicatorTile.SetTile(_DoraIndicatorArr[i]);
+			if(_Hand.IsRiichi || _Hand.IsDoubleRiichi)
+			{
+				TileUI oUraDoraIndicatorTile = (TileUI) _TileUIScene.Instantiate();
+				_UraDoraIndicators.AddChild(oUraDoraIndicatorTile);
+				oUraDoraIndicatorTile._IsInteractable = false;
+				if(i > _NumKanDoraActive)
+				{
+					oUraDoraIndicatorTile._IsShown = false;
+				}
+				oUraDoraIndicatorTile.SetTile(_UraDoraIndicatorArr[i]);
+			}
+		}
+	}
+	
 	public void SetLabels()
 	{
 		if(_Score != null && _Hand != null)
 		{
+			SetDoraIndicators();
 			string sWinLabelText = "";
 			foreach(Enums.Yaku yaku in _Score.YakuList)
 			{

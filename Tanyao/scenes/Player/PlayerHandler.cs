@@ -40,7 +40,9 @@ public partial class PlayerHandler : BaseHandler
 	public bool IsRiichi = false;
 	public Enums.Wind _SeatWind;
 	public Enums.Wind _RoundWind;
-	public Mahjong.Model.Tile _DoraTile;
+	public Mahjong.Model.Tile[] _DoraTileArr;
+	public Mahjong.Model.Tile[] _UraDoraTileArr;
+	public int _NumKanDoraActive = 0;
 	
 	//TODO: change this to an enum
 	//Values are: START, BEFOREDRAW, AFTERDRAW, END
@@ -243,14 +245,24 @@ public partial class PlayerHandler : BaseHandler
 		_Hand.RoundWind = _RoundWind;
 		_Hand.WinTile = poWinTile;
 		_Hand.DoraCount = 0;
+		_Hand.UraDoraCount = 0;
 		foreach(Mahjong.Model.Tile oTile in _Hand.Tiles)
 		{
-			if(oTile.CompareTo(_DoraTile) == 0)
+			for(int i = 0; i <= _NumKanDoraActive; i++)
 			{
-				_Hand.DoraCount++;
+				Mahjong.Model.Tile oDoraTile = _DoraTileArr[i];
+				if(oTile.CompareTo(oDoraTile) == 0)
+				{
+					_Hand.DoraCount++;
+				}
+				
+				Mahjong.Model.Tile oUraDoraTile = _UraDoraTileArr[i];
+				if((_Hand.IsRiichi || _Hand.IsDoubleRiichi) && oTile.CompareTo(oUraDoraTile) == 0)
+				{
+					_Hand.UraDoraCount++;
+				}
 			}
-		}
-		
+		}		
 		
 		Mahjong.CScoreEvaluator oScoreEvaluator = new Mahjong.CScoreEvaluator();
 		Mahjong.Model.Score oScore = oScoreEvaluator.EvaluateScore(_Hand);

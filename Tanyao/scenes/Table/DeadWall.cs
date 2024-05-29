@@ -8,20 +8,16 @@ public partial class DeadWall : HBoxContainer
 	[Export]
 	PackedScene _TileUIScene;
 	
-	public void InitializeDeadWallUI(Mahjong.Model.Tile poDoraIndicator,
-								Mahjong.Model.Tile poKanDora1,
-								Mahjong.Model.Tile poKanDora2,
-								Mahjong.Model.Tile poKanDora3,
-								Mahjong.Model.Tile poKanDora4)
+	public void InitializeDeadWallUI(Mahjong.Model.Tile[] poDoraIndicatorArr)
 	{
 		TileUIConfiguration oTileUIConfiguration = new TileUIConfiguration();
 		oTileUIConfiguration.IsInteractable = false;
-		CreateNewTileUI(poDoraIndicator, oTileUIConfiguration);
+		CreateNewTileUI(poDoraIndicatorArr[0], oTileUIConfiguration);
 		oTileUIConfiguration.IsShown = false;
-		CreateNewTileUI(poKanDora1, oTileUIConfiguration);
-		CreateNewTileUI(poKanDora2, oTileUIConfiguration);
-		CreateNewTileUI(poKanDora3, oTileUIConfiguration);
-		CreateNewTileUI(poKanDora4, oTileUIConfiguration);
+		CreateNewTileUI(poDoraIndicatorArr[1], oTileUIConfiguration);
+		CreateNewTileUI(poDoraIndicatorArr[2], oTileUIConfiguration);
+		CreateNewTileUI(poDoraIndicatorArr[3], oTileUIConfiguration);
+		CreateNewTileUI(poDoraIndicatorArr[4], oTileUIConfiguration);
 	}
 	
 	private TileUI CreateNewTileUI(Mahjong.Model.Tile poNewTileModel, TileUIConfiguration poTileUIConfiguration)
