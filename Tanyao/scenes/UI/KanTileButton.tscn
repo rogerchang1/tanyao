@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://eg7w30gvledl"]
+
+[ext_resource type="Script" path="res://Tanyao/scenes/UI/KanTileButton.cs" id="1_7beuk"]
+[ext_resource type="PackedScene" uid="uid://5643582tkyan" path="res://Tanyao/scenes/TileUI/TileUI.tscn" id="2_g12mn"]
+
+[node name="KanTileButton" type="Button"]
+custom_minimum_size = Vector2(60, 80)
+offset_right = 60.0
+offset_bottom = 80.0
+script = ExtResource("1_7beuk")
+TileUIScene = ExtResource("2_g12mn")
+
+[node name="TileUI" parent="." instance=ExtResource("2_g12mn")]
+layout_mode = 2
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_right = 60.0
+offset_bottom = 80.0
+mouse_filter = 2
+_IsInteractable = false
+
+[connection signal="pressed" from="." to="." method="_on_pressed"]

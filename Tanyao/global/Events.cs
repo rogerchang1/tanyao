@@ -14,6 +14,8 @@ public partial class Events : Node
 	[Signal]
 	public delegate void DrawTileRequestedEventHandler(BaseHandler oBaseHandler);
 	[Signal]
+	public delegate void DrawKanTileRequestedEventHandler(BaseHandler oBaseHandler);
+	[Signal]
 	public delegate void PlayerTileDiscardedEventHandler(TileUI oTile);
 	[Signal]
 	public delegate void PlayerTurnStartedEventHandler(string psTile);
@@ -30,6 +32,8 @@ public partial class Events : Node
 	[Signal]
 	public delegate void ChiButtonPressedEventHandler(string psTile1, string psTile2);
 	[Signal]
+	public delegate void KanButtonPressedEventHandler(string psTile1);
+	[Signal]
 	public delegate void PonButtonPressedEventHandler();
 	[Signal]
 	public delegate void RonButtonPressedEventHandler();
@@ -37,8 +41,6 @@ public partial class Events : Node
 	public delegate void TsumoButtonPressedEventHandler();
 	[Signal]
 	public delegate void RiichiButtonPressedEventHandler();
-	[Signal]
-	public delegate void KanButtonPressedEventHandler();
 	
 	[Signal]
 	public delegate void PlayerWinDeclaredEventHandler(int pnPayment, HandGodotWrapper poHand, ScoreGodotWrapper poScore);

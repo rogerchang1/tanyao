@@ -20,6 +20,13 @@ public partial class DeadWall : HBoxContainer
 		CreateNewTileUI(poDoraIndicatorArr[4], oTileUIConfiguration);
 	}
 	
+	public void FlipKanDora(int nKanDoraTileIndex)
+	{
+		TileUI oTileUI = (TileUI) GetChild(nKanDoraTileIndex);
+		oTileUI._IsShown = true;
+		oTileUI.SetSprite();
+	}
+	
 	private TileUI CreateNewTileUI(Mahjong.Model.Tile poNewTileModel, TileUIConfiguration poTileUIConfiguration)
 	{
 		TileUI NewTileUI = (TileUI) _TileUIScene.Instantiate();

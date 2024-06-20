@@ -15,7 +15,9 @@ public partial class LockedBlock : Control
 		_TileUI1 = GetNode<TileUI>("TileUI");
 		_TileUI2 = GetNode<TileUI>("TileUI2");
 		_TileUI3 = GetNode<TileUI>("TileUI3");
-		//_TileUI4 = GetNode<TileUI>("TileUI4");
+		if(HasNode("TileUI4")){
+			_TileUI4 = GetNode<TileUI>("TileUI4");
+		}
 	}
 
 	public void SetUp(Mahjong.Model.Tile poTile1, Mahjong.Model.Tile poTile2, 

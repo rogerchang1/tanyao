@@ -22,6 +22,7 @@ public partial class TileUI : Control
 	[Export]
 	public bool _IsInteractable = true;
 	
+	[Export]
 	public bool _IsShown = true;
 	
 	[Export]

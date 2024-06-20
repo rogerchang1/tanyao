@@ -1,16 +1,24 @@
-[gd_scene load_steps=4 format=3 uid="uid://wasyrhuimo5i"]
+[gd_scene load_steps=6 format=3 uid="uid://wasyrhuimo5i"]
 
 [ext_resource type="Script" path="res://Tanyao/scenes/UI/CallOptionsUI.cs" id="1_4kebo"]
 [ext_resource type="PackedScene" uid="uid://c764eye1j7tfq" path="res://Tanyao/scenes/UI/ChiTileOptions.tscn" id="2_q3jvt"]
 [ext_resource type="Theme" uid="uid://lq7ql6qc76jt" path="res://main_theme.tres" id="3_1sy23"]
+[ext_resource type="PackedScene" uid="uid://7jkyc3kccy3t" path="res://Tanyao/scenes/UI/KanTileOptions.tscn" id="3_b3gcw"]
+[ext_resource type="PackedScene" uid="uid://eg7w30gvledl" path="res://Tanyao/scenes/UI/KanTileButton.tscn" id="4_315je"]
 
-[node name="CallOptionsUI" type="Node2D" node_paths=PackedStringArray("_ChiTileOptionsUI")]
+[node name="CallOptionsUI" type="Node2D" node_paths=PackedStringArray("_ChiTileOptionsUI", "_KanTileOptionsUI")]
 script = ExtResource("1_4kebo")
 _ChiTileOptionsUI = NodePath("ChiTileOptions")
+_KanTileOptionsUI = NodePath("KanTileOptions")
 
 [node name="ChiTileOptions" parent="." instance=ExtResource("2_q3jvt")]
 visible = false
 position = Vector2(200, 454)
+
+[node name="KanTileOptions" parent="." instance=ExtResource("3_b3gcw")]
+visible = false
+position = Vector2(200, 454)
+KanTileButton = ExtResource("4_315je")
 
 [node name="ButtonContainer" type="HBoxContainer" parent="."]
 offset_left = 200.0

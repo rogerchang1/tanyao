@@ -72,6 +72,7 @@ public partial class Table : Godot.Node2D
 		_Events = GetNode<Events>("/root/Events");
 		_GC = GetNode<GameController>("/root/GameController");
 		_Events.DrawTileRequested += OnDrawTileRequested;
+		_Events.DrawKanTileRequested += OnDrawKanTileRequested;
 		_Events.PlayerTurnEnded += OnPlayerTurnEnded;
 		_Events.EnemyTurnEnded += OnEnemyTurnEnded;
 		_Events.RoundEnded += OnRoundEnded;
@@ -133,6 +134,20 @@ public partial class Table : Godot.Node2D
 		_PlayerHandler._NumKanDoraActive = 0;
 		_PlayerHandler._RoundWind = _RoundWind;
 		_DoraIndicatorLabel.Text = "DoraIndicator: " + _DoraIndicatorArr[0].ToString() + "\nDora: " + _DoraTileArr[0].ToString();
+		
+		//Kan testing
+		_TableModel.Wall[0] = new Mahjong.Model.Tile("6s");
+		_TableModel.Wall[1] = new Mahjong.Model.Tile("6s");
+		_TableModel.Wall[2] = new Mahjong.Model.Tile("6s");
+		_TableModel.Wall[3] = new Mahjong.Model.Tile("6s");
+		_TableModel.Wall[4] = new Mahjong.Model.Tile("6s");
+		_TableModel.Wall[5] = new Mahjong.Model.Tile("6s");
+		_TableModel.Wall[6] = new Mahjong.Model.Tile("6s");
+		_TableModel.Wall[7] = new Mahjong.Model.Tile("6s");
+		
+		_TableModel.Wall[26] = new Mahjong.Model.Tile("6s");
+		_TableModel.Wall[27] = new Mahjong.Model.Tile("6s");
+		_TableModel.Wall[28] = new Mahjong.Model.Tile("6s");
 		
 		//call tiles debug
 		//_TableModel.Wall[0] = new Mahjong.Model.Tile("6s");
@@ -357,6 +372,33 @@ public partial class Table : Godot.Node2D
 		}
 	}
 	
+	//TODO: needs checks if the kan will abort the game
+	//Currently this is for closed kan only.
+	public void OnDrawKanTileRequested(BaseHandler oBaseHandler)
+	{
+		if(!_TableManager.CanDrawFromWall(_TableModel) || _TileDrawCounter >= _TileDrawLimit)
+		{
+			return;
+		}else{
+			GD.Print("Table.cs OnDrawKanTileRequested in here");
+			_DeadWall.FlipKanDora(_NumKanDoraActive + 1);
+			Mahjong.Model.Tile DrawnTile = _TableModel.Wall[_TableModel.Wall.Count - _NumKanDoraActive - 1];
+			if(oBaseHandler.GetType() == typeof(PlayerHandler))
+			{
+				((PlayerHandler) oBaseHandler).AddTileToHandTsumo(DrawnTile);
+				
+			}
+			if(oBaseHandler.GetType() == typeof(EnemyHandler))
+			{
+				//TODO: change this later
+				((EnemyHandler) oBaseHandler).AddTileToHandTsumo(DrawnTile);
+			}
+			_TileDrawCounter++;
+			_NumKanDoraActive++;
+			UpdateTilesLeftLabel();
+		}
+	}
+	
 	//Remove async if you don't need the timer
 	public async void Ryuukyoku()
 	{
@@ -505,6 +547,7 @@ public partial class Table : Godot.Node2D
 	private void DisconnectSignals()
 	{
 		_Events.DrawTileRequested -= OnDrawTileRequested;
+		_Events.DrawKanTileRequested -= OnDrawKanTileRequested;
 		_Events.PlayerTurnEnded -= OnPlayerTurnEnded;
 		_Events.EnemyTurnEnded -= OnEnemyTurnEnded;
 		_Events.RoundEnded -= OnRoundEnded;

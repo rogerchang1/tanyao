@@ -16,6 +16,9 @@ public partial class CallOptionsUI : Node2D
 	[Export]
 	public ChiTileOptions _ChiTileOptionsUI;
 	
+	[Export]
+	public KanTileOptions _KanTileOptionsUI;
+	
 	public Events _Events;
 
 	// Called when the node enters the scene tree for the first time.
@@ -36,6 +39,7 @@ public partial class CallOptionsUI : Node2D
 		_Tsumo.Hide();
 		_Ron.Hide();
 		_ChiTileOptionsUI.Hide();
+		_KanTileOptionsUI.Hide();
 	}
 	
 	public void SetChiTileOptions(List<List<Mahjong.Model.Tile>> poChiTileOptions)
@@ -46,6 +50,15 @@ public partial class CallOptionsUI : Node2D
 			//Expect each oChiTileOption to have 2 tiles
 			_ChiTileOptionsUI.AddChiTileOption(oChiTileOption[0],oChiTileOption[1]);
 			//_ChiTileOptionsUI.Show();
+		}
+	}
+	
+	public void SetKanTileOptions(List<Mahjong.Model.Tile> poKanTileOptions)
+	{
+		_KanTileOptionsUI.ClearButtons();
+		foreach(Mahjong.Model.Tile oKanTileOption in poKanTileOptions)
+		{
+			_KanTileOptionsUI.AddKanTileOption(oKanTileOption);
 		}
 	}
 	
@@ -67,7 +80,8 @@ public partial class CallOptionsUI : Node2D
 	
 	private void _on_kan_pressed()
 	{
-		_Events.EmitSignal(Events.SignalName.KanButtonPressed);
+		//_Events.EmitSignal(Events.SignalName.KanButtonPressed);
+		_KanTileOptionsUI.Show();
 	}
 
 	private void _on_riichi_pressed()
@@ -89,6 +103,7 @@ public partial class CallOptionsUI : Node2D
 	public void HideAll()
 	{
 		_ChiTileOptionsUI.Hide();
+		_KanTileOptionsUI.Hide();
 		_Chi.Hide();
 		_Pon.Hide();
 		_Kan.Hide();

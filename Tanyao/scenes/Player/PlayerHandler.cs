@@ -25,6 +25,8 @@ public partial class PlayerHandler : BaseHandler
 	public PackedScene ChiScene;
 	[Export]
 	public PackedScene PonScene;
+	[Export]
+	public PackedScene ClosedKanScene;
 	//[Export]
 	//public PackedScene KanScene;
 	//[Export]
@@ -88,7 +90,7 @@ public partial class PlayerHandler : BaseHandler
 			}
 			Mahjong.CTilesManager oTilesManager = new Mahjong.CTilesManager();
 			List<Mahjong.Model.Tile> oTempList = oTilesManager.GetTileListWithBlocksRemoved(_Hand.Tiles,_Hand.LockedBlocks);
-			if(oTilesManager.CountNumberOfTilesOf(oTempList, oDiscardedTile) == 2 && IsRiichi == false)
+			if(oTilesManager.CountNumberOfTilesOf(oTempList, oDiscardedTile) >= 2 && IsRiichi == false)
 			{
 				_CallOptionsUI.Show();
 				_CallOptionsUI._Pon.Show();
@@ -156,6 +158,7 @@ public partial class PlayerHandler : BaseHandler
 		int nShanten = oShantenEvaluator.EvaluateShanten(_Hand);
 		_ShantenLabel.Text = "Shanten: " + nShanten;
 		PrintHandForDebugging();
+		
 		if(nShanten == -1)
 		{
 			Mahjong.Model.Score oScore = IsValidHand(poNewTileModel, Enums.Agari.Tsumo);
@@ -169,6 +172,17 @@ public partial class PlayerHandler : BaseHandler
 				return;
 			}
 		}
+		
+		//TODO: Make sure kan while in riichi doesn't change waits.
+		//TODO: Needs checks if it's not the last tile in the wall 
+		List<Mahjong.Model.Tile> oKannableTiles = GetKannableTiles();
+		if(oKannableTiles.Count > 0)
+		{
+			_CallOptionsUI.Show();
+			_CallOptionsUI._Kan.Show();
+			_CallOptionsUI.SetKanTileOptions(oKannableTiles);
+		}
+		
 		if(nShanten == 0 && IsRiichi == false && _CalledHand.GetChildren().Count == 0)
 		{
 			_CallOptionsUI.Show();
@@ -311,6 +325,31 @@ public partial class PlayerHandler : BaseHandler
 		_ShantenLabel.Text = "Shanten: " + nShanten;
 		
 		EndTurn(oTileUI._TileModel);
+	}
+	
+	public List<Mahjong.Model.Tile> GetKannableTiles()
+	{
+		Mahjong.CTilesManager oTilesManager = new Mahjong.CTilesManager();
+		List<Mahjong.Model.Tile> oTempList = oTilesManager.GetTileListWithBlocksRemoved(_Hand.Tiles,_Hand.LockedBlocks);
+		oTilesManager.SortTiles(oTempList);
+		int cnt = 1;
+		Mahjong.Model.Tile oCurTile = oTempList[0];
+		List<Mahjong.Model.Tile> oKannableTiles = new List<Mahjong.Model.Tile>();
+		for(int i = 1;i < oTempList.Count;i++)
+		{
+			if(oTempList[i].CompareTo(oCurTile) == 0)
+			{
+				cnt++;
+			}else{
+				cnt = 1;
+				oCurTile = oTempList[i];
+			}
+			if(cnt == 4)
+			{
+				oKannableTiles.Add(oCurTile);
+			}
+		}
+		return oKannableTiles;
 	}
 	
 	public List<List<Mahjong.Model.Tile>> IsChi(Mahjong.Model.Tile poTile)
@@ -497,9 +536,48 @@ public partial class PlayerHandler : BaseHandler
 		_Events.EmitSignal(Events.SignalName.RiichiDeclared);
 	}
 	
-	public void OnKanButtonPressed()
+	//TODO: This is for closed kan
+	public void OnKanButtonPressed(string psTile)
 	{
-		//TODO: Implement this
+		GD.Print("PlayerHandler: OnKanButtonPressed");
+		
+		LockedBlock oClosedKanBlock = (LockedBlock) ClosedKanScene.Instantiate();
+		_CalledHand.AddChild(oClosedKanBlock);
+		_CalledHand.MoveChild(oClosedKanBlock, 0);
+		
+		int nCntKanTiles = 0;
+		foreach(TileUI oTileUI in _PlayerHand._HandClosed.GetChildren())
+		{
+			if(oTileUI._TileModel.ToString() == psTile && nCntKanTiles < 4)
+			{
+				oTileUI.QueueFree();
+				nCntKanTiles++;
+			}
+		}
+		
+		Mahjong.Model.Tile oTileModel = new Mahjong.Model.Tile(psTile);
+		
+		oClosedKanBlock.SetUp(oTileModel,oTileModel,oTileModel,oTileModel);
+		
+		Mahjong.CTilesManager oTilesManager = new Mahjong.CTilesManager();
+		Mahjong.Model.Block oBlock = new Mahjong.Model.Block();
+		oBlock.Tiles.Add(oTileModel);
+		oBlock.Tiles.Add(oTileModel);
+		oBlock.Tiles.Add(oTileModel);
+		oBlock.Tiles.Add(oTileModel);
+		oTilesManager.SortTiles(oBlock.Tiles);
+		oBlock.IsOpen = false;
+		oBlock.Type = Enums.Mentsu.Kantsu;
+		_Hand.LockedBlocks.Add(oBlock);
+		
+		foreach(TileUI oTsumoTile in _PlayerHand._HandTsumo.GetChildren())
+		{
+			oTsumoTile.Reparent(_PlayerHand._HandClosed);
+		}
+		
+		_CallOptionsUI.HideAll();
+		_Events.EmitSignal(Events.SignalName.DrawKanTileRequested, this);
+		_PlayerHand.EnableAllTilesInteractability();
 	}
 	
 	//TODO: Need to think about cancelling before and after drawn tile

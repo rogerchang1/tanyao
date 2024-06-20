@@ -20,6 +20,7 @@ offset_bottom = 80.0
 grow_horizontal = 1
 grow_vertical = 1
 _IsInteractable = false
+_IsShown = false
 _Tile = "1p"
 
 [node name="TileUI2" parent="." instance=ExtResource("2_n4g44")]
@@ -56,4 +57,5 @@ offset_bottom = 80.0
 grow_horizontal = 1
 grow_vertical = 1
 _IsInteractable = false
+_IsShown = false
 _Tile = "1p"
