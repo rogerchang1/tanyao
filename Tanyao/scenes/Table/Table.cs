@@ -132,22 +132,22 @@ public partial class Table : Godot.Node2D
 		_PlayerHandler._DoraTileArr = _DoraTileArr;
 		_PlayerHandler._UraDoraTileArr = _UraDoraTileArr;
 		_PlayerHandler._NumKanDoraActive = 0;
+		_EnemyHandler._NumKanDoraActive = 0;
 		_PlayerHandler._RoundWind = _RoundWind;
 		_DoraIndicatorLabel.Text = "DoraIndicator: " + _DoraIndicatorArr[0].ToString() + "\nDora: " + _DoraTileArr[0].ToString();
 		
 		//Kan testing
-		_TableModel.Wall[0] = new Mahjong.Model.Tile("6s");
-		_TableModel.Wall[1] = new Mahjong.Model.Tile("6s");
-		_TableModel.Wall[2] = new Mahjong.Model.Tile("6s");
-		_TableModel.Wall[3] = new Mahjong.Model.Tile("6s");
-		_TableModel.Wall[4] = new Mahjong.Model.Tile("6s");
-		_TableModel.Wall[5] = new Mahjong.Model.Tile("6s");
-		_TableModel.Wall[6] = new Mahjong.Model.Tile("6s");
-		_TableModel.Wall[7] = new Mahjong.Model.Tile("6s");
+		_TableModel.Wall[0] = new Mahjong.Model.Tile("1z");
+		_TableModel.Wall[1] = new Mahjong.Model.Tile("1z");
+		_TableModel.Wall[2] = new Mahjong.Model.Tile("1z");
+		_TableModel.Wall[3] = new Mahjong.Model.Tile("1z");
+		_TableModel.Wall[4] = new Mahjong.Model.Tile("1z");
+		_TableModel.Wall[5] = new Mahjong.Model.Tile("1z");
+		_TableModel.Wall[6] = new Mahjong.Model.Tile("1z");
+		_TableModel.Wall[7] = new Mahjong.Model.Tile("1z");
 		
-		_TableModel.Wall[26] = new Mahjong.Model.Tile("6s");
-		_TableModel.Wall[27] = new Mahjong.Model.Tile("6s");
-		_TableModel.Wall[28] = new Mahjong.Model.Tile("6s");
+		_TableModel.Wall[26] = new Mahjong.Model.Tile("1z");
+		_TableModel.Wall[27] = new Mahjong.Model.Tile("1z");
 		
 		//call tiles debug
 		//_TableModel.Wall[0] = new Mahjong.Model.Tile("6s");
@@ -395,6 +395,8 @@ public partial class Table : Godot.Node2D
 			}
 			_TileDrawCounter++;
 			_NumKanDoraActive++;
+			_PlayerHandler._NumKanDoraActive++;
+			_EnemyHandler._NumKanDoraActive++;
 			UpdateTilesLeftLabel();
 		}
 	}

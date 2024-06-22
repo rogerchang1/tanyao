@@ -183,7 +183,7 @@ public partial class PlayerHandler : BaseHandler
 			_CallOptionsUI.SetKanTileOptions(oKannableTiles);
 		}
 		
-		if(nShanten == 0 && IsRiichi == false && _CalledHand.GetChildren().Count == 0)
+		if(nShanten == 0 && IsRiichi == false && !HasOpenBlocks())
 		{
 			_CallOptionsUI.Show();
 			_CallOptionsUI._Riichi.Show();
@@ -201,6 +201,16 @@ public partial class PlayerHandler : BaseHandler
 				OnTileDiscarded(oTsumoTile);
 			}
 		}
+	}
+	
+	public bool HasOpenBlocks(){
+		for(int i = 0;i<_Hand.LockedBlocks.Count;i++){
+			Mahjong.Model.Block oBlock = _Hand.LockedBlocks[i];
+			if(oBlock.IsOpen == true){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public void Win(Mahjong.Model.Score poScore)

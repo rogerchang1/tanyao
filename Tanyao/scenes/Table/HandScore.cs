@@ -19,6 +19,10 @@ public partial class HandScore : Node2D
 	public PackedScene _ChiScene;
 	[Export]
 	public PackedScene _PonScene;
+	[Export]
+	public PackedScene _ClosedKanScene;
+	[Export]
+	public PackedScene _OpenKanScene;
 	
 	Label _WinLabel;
 	Label _AgariLabel;
@@ -146,6 +150,13 @@ public partial class HandScore : Node2D
 					_OpenHand.AddChild(PonBlock);
 					_OpenHand.MoveChild(PonBlock, 0);
 					PonBlock.SetUp(oBlock.Tiles[0], oBlock.Tiles[1], oBlock.Tiles[2]);
+				}
+				if(oBlock.Type == Enums.Mentsu.Kantsu && oBlock.IsOpen == false)
+				{
+					LockedBlock KanBlock = (LockedBlock) _ClosedKanScene.Instantiate();
+					_OpenHand.AddChild(KanBlock);
+					_OpenHand.MoveChild(KanBlock, 0);
+					KanBlock.SetUp(oBlock.Tiles[0], oBlock.Tiles[1], oBlock.Tiles[2],oBlock.Tiles[3]);
 				}
 			}
 		}
