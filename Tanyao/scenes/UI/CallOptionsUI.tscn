@@ -47,6 +47,20 @@ theme_override_font_sizes/font_size = 50
 text = "Kan
 "
 
+[node name="DaiminKan" type="Button" parent="ButtonContainer"]
+layout_mode = 2
+theme = ExtResource("3_1sy23")
+theme_override_font_sizes/font_size = 50
+text = "Kan
+"
+
+[node name="ShouminKan" type="Button" parent="ButtonContainer"]
+layout_mode = 2
+theme = ExtResource("3_1sy23")
+theme_override_font_sizes/font_size = 50
+text = "Kan
+"
+
 [node name="Riichi" type="Button" parent="ButtonContainer"]
 layout_mode = 2
 theme = ExtResource("3_1sy23")
@@ -90,6 +104,8 @@ color = Color(0.243137, 0.741176, 0.435294, 0.952941)
 [connection signal="pressed" from="ButtonContainer/Chi" to="." method="_on_chi_pressed"]
 [connection signal="pressed" from="ButtonContainer/Pon" to="." method="_on_pon_pressed"]
 [connection signal="pressed" from="ButtonContainer/Kan" to="." method="_on_kan_pressed"]
+[connection signal="pressed" from="ButtonContainer/DaiminKan" to="." method="_on_daiminkan_pressed"]
+[connection signal="pressed" from="ButtonContainer/ShouminKan" to="." method="_on_shouminkan_pressed"]
 [connection signal="pressed" from="ButtonContainer/Riichi" to="." method="_on_riichi_pressed"]
 [connection signal="pressed" from="ButtonContainer/Tsumo" to="." method="_on_tsumo_pressed"]
 [connection signal="pressed" from="ButtonContainer/Ron" to="." method="_on_ron_pressed"]

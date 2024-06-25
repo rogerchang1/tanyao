@@ -36,6 +36,10 @@ public partial class Events : Node
 	[Signal]
 	public delegate void PonButtonPressedEventHandler();
 	[Signal]
+	public delegate void DaiminKanButtonPressedEventHandler();
+	[Signal]
+	public delegate void ShouminKanButtonPressedEventHandler(string psTile1);
+	[Signal]
 	public delegate void RonButtonPressedEventHandler();
 	[Signal]
 	public delegate void TsumoButtonPressedEventHandler();
