@@ -14,7 +14,7 @@ public partial class Events : Node
 	[Signal]
 	public delegate void DrawTileRequestedEventHandler(BaseHandler oBaseHandler);
 	[Signal]
-	public delegate void DrawKanTileRequestedEventHandler(BaseHandler oBaseHandler);
+	public delegate void DrawKanTileRequestedEventHandler(BaseHandler oBaseHandler, bool pbFlipKanDora);
 	[Signal]
 	public delegate void PlayerTileDiscardedEventHandler(TileUI oTile);
 	[Signal]
@@ -54,6 +54,8 @@ public partial class Events : Node
 	public delegate void RoundEndedEventHandler();
 	[Signal]
 	public delegate void RiichiDeclaredEventHandler();
+	[Signal]
+	public delegate void FlipKanDoraDeclaredEventHandler();
 	
 	[Signal]
 	public delegate void HandScoreConfirmButtonPressedEventHandler();

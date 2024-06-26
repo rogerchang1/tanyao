@@ -45,6 +45,7 @@ public partial class PlayerHandler : BaseHandler
 	public Mahjong.Model.Tile[] _DoraTileArr;
 	public Mahjong.Model.Tile[] _UraDoraTileArr;
 	public int _NumKanDoraActive = 0;
+	public bool _RequestFlipKanDora = false;
 	
 	//TODO: change this to an enum
 	//Values are: START, BEFOREDRAW, AFTERDRAW, END
@@ -131,6 +132,10 @@ public partial class PlayerHandler : BaseHandler
 		_PlayerHand.DisableAllTilesInteractability();
 		_CallOptionsUI.HideAll();
 		_Events.EmitSignal(Events.SignalName.PlayerTurnEnded, oTile.ToString());
+		if(_RequestFlipKanDora){
+			_RequestFlipKanDora = false;
+			_Events.EmitSignal(Events.SignalName.FlipKanDoraDeclared);
+		}
 	}
 	
 	public void AddTileToHandClosed(Mahjong.Model.Tile poNewTileModel)
@@ -555,6 +560,8 @@ public partial class PlayerHandler : BaseHandler
 		oEnemyTileUI.QueueFree();
 		
 		_CallOptionsUI.HideAll();
+		_Events.EmitSignal(Events.SignalName.DrawKanTileRequested, this, false);
+		_RequestFlipKanDora = true;
 		_PlayerHand.EnableAllTilesInteractability();
 	}
 	
@@ -638,7 +645,7 @@ public partial class PlayerHandler : BaseHandler
 		}
 		
 		_CallOptionsUI.HideAll();
-		_Events.EmitSignal(Events.SignalName.DrawKanTileRequested, this);
+		_Events.EmitSignal(Events.SignalName.DrawKanTileRequested, this, true);
 		_PlayerHand.EnableAllTilesInteractability();
 	}
 	

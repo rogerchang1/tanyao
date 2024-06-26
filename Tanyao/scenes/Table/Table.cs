@@ -78,8 +78,8 @@ public partial class Table : Godot.Node2D
 		_Events.RoundEnded += OnRoundEnded;
 		_Events.PlayerWinDeclared += OnPlayerWinDeclared;
 		_Events.RiichiDeclared += OnRiichiDeclared;
+		_Events.FlipKanDoraDeclared += OnFlipKanDoraDeclared;
 		_Events.HandScoreConfirmButtonPressed += OnHandScoreConfirmButtonPressed;
-		
 		
 		InitializeTableValues();
 		UpdateDebugInfoLabel();
@@ -374,14 +374,13 @@ public partial class Table : Godot.Node2D
 	
 	//TODO: needs checks if the kan will abort the game
 	//Currently this is for closed kan only.
-	public void OnDrawKanTileRequested(BaseHandler oBaseHandler)
+	public void OnDrawKanTileRequested(BaseHandler oBaseHandler, bool pbFlipKandora)
 	{
 		if(!_TableManager.CanDrawFromWall(_TableModel) || _TileDrawCounter >= _TileDrawLimit)
 		{
 			return;
 		}else{
-			GD.Print("Table.cs OnDrawKanTileRequested in here");
-			_DeadWall.FlipKanDora(_NumKanDoraActive + 1);
+			
 			Mahjong.Model.Tile DrawnTile = _TableModel.Wall[_TableModel.Wall.Count - _NumKanDoraActive - 1];
 			if(oBaseHandler.GetType() == typeof(PlayerHandler))
 			{
@@ -394,9 +393,9 @@ public partial class Table : Godot.Node2D
 				((EnemyHandler) oBaseHandler).AddTileToHandTsumo(DrawnTile);
 			}
 			_TileDrawCounter++;
-			_NumKanDoraActive++;
-			_PlayerHandler._NumKanDoraActive++;
-			_EnemyHandler._NumKanDoraActive++;
+			if(pbFlipKandora){
+				FlipKanDora();
+			}
 			UpdateTilesLeftLabel();
 		}
 	}
@@ -538,6 +537,18 @@ public partial class Table : Godot.Node2D
 	{
 		_Pot += 1000;
 		UpdateDebugInfoLabel();
+	}
+	
+	public void OnFlipKanDoraDeclared()
+	{
+		FlipKanDora();
+	}
+	
+	public void FlipKanDora(){
+		_DeadWall.FlipKanDora(_NumKanDoraActive + 1);
+		_NumKanDoraActive++;
+		_PlayerHandler._NumKanDoraActive++;
+		_EnemyHandler._NumKanDoraActive++;
 	}
 	
 	private void UpdateTilesLeftLabel()
