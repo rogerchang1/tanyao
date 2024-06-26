@@ -21,21 +21,8 @@ public partial class KanTileButton : Button
 	
 	public void SetUpWithTile(Mahjong.Model.Tile poTile1)
 	{
-		//ClearTiles();
-		//TileUI NewTileUI1 = (TileUI) TileUIScene.Instantiate();
-		//AddChild(NewTileUI1);
-		//NewTileUI1._IsInteractable = false;
-		//NewTileUI1.MouseFilter = MouseFilterEnum.Ignore;
-		//NewTileUI1.SetTile(poTile1);
 		_TileUI.SetTile(poTile1);
 		_Tile1 = poTile1;
-	}
-	
-	public void ClearTiles()
-	{
-		//TileUI oTileUIToDelete = GetNode<TileUI>("TileUI");
-		//RemoveChild(oTileUIToDelete);
-		//oTileUIToDelete.QueueFree();
 	}
 	
 	public void _on_pressed()

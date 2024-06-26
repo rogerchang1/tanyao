@@ -27,10 +27,10 @@ public partial class PlayerHandler : BaseHandler
 	public PackedScene PonScene;
 	[Export]
 	public PackedScene ClosedKanScene;
-	//[Export]
-	//public PackedScene KanScene;
-	//[Export]
-	//public PackedScene OpenKanScene;
+	[Export]
+	public PackedScene DaiminKanScene;
+	[Export]
+	public PackedScene ShouminKanScene;
 	
 	//Events _Events;
 	
@@ -45,6 +45,7 @@ public partial class PlayerHandler : BaseHandler
 	public Mahjong.Model.Tile[] _DoraTileArr;
 	public Mahjong.Model.Tile[] _UraDoraTileArr;
 	public int _NumKanDoraActive = 0;
+	public bool _RequestFlipKanDora = false;
 	
 	//TODO: change this to an enum
 	//Values are: START, BEFOREDRAW, AFTERDRAW, END
@@ -58,6 +59,7 @@ public partial class PlayerHandler : BaseHandler
 		_Events.TileDiscarded += OnTileDiscarded;
 		_Events.ChiButtonPressed += OnChiButtonPressed;
 		_Events.PonButtonPressed += OnPonButtonPressed;
+		_Events.DaiminKanButtonPressed += OnDaiminKanButtonPressed;
 		_Events.RonButtonPressed += OnRonButtonPressed;
 		_Events.TsumoButtonPressed += OnTsumoButtonPressed;
 		_Events.RiichiButtonPressed += OnRiichiButtonPressed;
@@ -79,6 +81,7 @@ public partial class PlayerHandler : BaseHandler
 		{
 			GD.Print("Enemy discarded " + psDiscardedTile);
 			Mahjong.Model.Tile oDiscardedTile = new Mahjong.Model.Tile(psDiscardedTile);
+			
 			List<List<Mahjong.Model.Tile>> oChiAbleTiles = IsChi(oDiscardedTile);
 			bool bShowCallOptions = false;
 			if(oChiAbleTiles.Count > 0 && IsRiichi == false)
@@ -90,10 +93,14 @@ public partial class PlayerHandler : BaseHandler
 			}
 			Mahjong.CTilesManager oTilesManager = new Mahjong.CTilesManager();
 			List<Mahjong.Model.Tile> oTempList = oTilesManager.GetTileListWithBlocksRemoved(_Hand.Tiles,_Hand.LockedBlocks);
-			if(oTilesManager.CountNumberOfTilesOf(oTempList, oDiscardedTile) >= 2 && IsRiichi == false)
+			int nTileCount = oTilesManager.CountNumberOfTilesOf(oTempList, oDiscardedTile);
+			if(nTileCount >= 2 && IsRiichi == false)
 			{
 				_CallOptionsUI.Show();
 				_CallOptionsUI._Pon.Show();
+				if(nTileCount >= 3){
+					_CallOptionsUI._DaiminKan.Show();
+				}
 				bShowCallOptions = true;
 			}
 			
@@ -125,6 +132,10 @@ public partial class PlayerHandler : BaseHandler
 		_PlayerHand.DisableAllTilesInteractability();
 		_CallOptionsUI.HideAll();
 		_Events.EmitSignal(Events.SignalName.PlayerTurnEnded, oTile.ToString());
+		if(_RequestFlipKanDora){
+			_RequestFlipKanDora = false;
+			_Events.EmitSignal(Events.SignalName.FlipKanDoraDeclared);
+		}
 	}
 	
 	public void AddTileToHandClosed(Mahjong.Model.Tile poNewTileModel)
@@ -506,6 +517,54 @@ public partial class PlayerHandler : BaseHandler
 		_PlayerHand.EnableAllTilesInteractability();
 	}
 	
+	public void OnDaiminKanButtonPressed()
+	{
+		GD.Print("PlayerHandler: OnDaiminKanButtonPressed");
+		GridContainer EnemyDiscardsGroup = (GridContainer) GetTree().GetFirstNodeInGroup("EnemyDiscardsGroup");
+		TileUI oEnemyTileUI = (TileUI) EnemyDiscardsGroup.GetChild(EnemyDiscardsGroup.GetChildren().Count - 1);
+		
+		_Hand.Tiles.Add(oEnemyTileUI._TileModel);
+		
+		int nCount = 0;
+		
+		LockedBlock DaiminKanBlock = (LockedBlock) DaiminKanScene.Instantiate();
+		_CalledHand.AddChild(DaiminKanBlock);
+		_CalledHand.MoveChild(DaiminKanBlock, 0);
+		
+		foreach(TileUI oTileUI in _PlayerHand._HandClosed.GetChildren())
+		{
+			if(nCount >= 3)
+			{
+				break;
+			}
+			if(oTileUI._TileModel.ToString() == oEnemyTileUI._TileModel.ToString() && nCount < 3)
+			{
+				oTileUI.QueueFree();
+				nCount++;
+			}
+		}
+		
+		DaiminKanBlock.SetUp(oEnemyTileUI._TileModel, oEnemyTileUI._TileModel, oEnemyTileUI._TileModel, oEnemyTileUI._TileModel);
+		
+		Mahjong.CTilesManager oTilesManager = new Mahjong.CTilesManager();
+		Mahjong.Model.Block oBlock = new Mahjong.Model.Block();
+		oBlock.Tiles.Add(oEnemyTileUI._TileModel);
+		oBlock.Tiles.Add(oEnemyTileUI._TileModel);
+		oBlock.Tiles.Add(oEnemyTileUI._TileModel);
+		oBlock.Tiles.Add(oEnemyTileUI._TileModel);
+		oTilesManager.SortTiles(oBlock.Tiles);
+		oBlock.IsOpen = true;
+		oBlock.Type = Enums.Mentsu.Kantsu;
+		_Hand.LockedBlocks.Add(oBlock);
+		
+		oEnemyTileUI.QueueFree();
+		
+		_CallOptionsUI.HideAll();
+		_Events.EmitSignal(Events.SignalName.DrawKanTileRequested, this, false);
+		_RequestFlipKanDora = true;
+		_PlayerHand.EnableAllTilesInteractability();
+	}
+	
 	public void OnRonButtonPressed()
 	{
 		GD.Print("PlayerHandler: OnRonButtonPressed");
@@ -586,7 +645,7 @@ public partial class PlayerHandler : BaseHandler
 		}
 		
 		_CallOptionsUI.HideAll();
-		_Events.EmitSignal(Events.SignalName.DrawKanTileRequested, this);
+		_Events.EmitSignal(Events.SignalName.DrawKanTileRequested, this, true);
 		_PlayerHand.EnableAllTilesInteractability();
 	}
 	

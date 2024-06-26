@@ -8,6 +8,8 @@ public partial class CallOptionsUI : Node2D
 	public Button _Chi;
 	public Button _Pon;
 	public Button _Kan;
+	public Button _DaiminKan;
+	public Button _ShouminKan;
 	public Button _Riichi;
 	public Button _Tsumo;
 	public Button _Ron;
@@ -28,18 +30,12 @@ public partial class CallOptionsUI : Node2D
 		_Chi = GetNode<Button>("ButtonContainer/Chi");
 		_Pon = GetNode<Button>("ButtonContainer/Pon");
 		_Kan = GetNode<Button>("ButtonContainer/Kan");
+		_DaiminKan = GetNode<Button>("ButtonContainer/DaiminKan");
+		_ShouminKan = GetNode<Button>("ButtonContainer/ShouminKan");
 		_Riichi = GetNode<Button>("ButtonContainer/Riichi");
 		_Tsumo = GetNode<Button>("ButtonContainer/Tsumo");
 		_Ron = GetNode<Button>("ButtonContainer/Ron");
-		_Cancel = GetNode<Button>("ButtonContainer/Cancel");
-		_Chi.Hide();
-		_Pon.Hide();
-		_Kan.Hide();
-		_Riichi.Hide();
-		_Tsumo.Hide();
-		_Ron.Hide();
-		_ChiTileOptionsUI.Hide();
-		_KanTileOptionsUI.Hide();
+		HideAll();
 	}
 	
 	public void SetChiTileOptions(List<List<Mahjong.Model.Tile>> poChiTileOptions)
@@ -83,6 +79,17 @@ public partial class CallOptionsUI : Node2D
 		//_Events.EmitSignal(Events.SignalName.KanButtonPressed);
 		_KanTileOptionsUI.Show();
 	}
+	
+	private void _on_daiminkan_pressed()
+	{
+		_Events.EmitSignal(Events.SignalName.DaiminKanButtonPressed);
+	}
+
+
+	private void _on_shouminkan_pressed()
+	{
+		// Replace with function body.
+	}
 
 	private void _on_riichi_pressed()
 	{
@@ -107,6 +114,8 @@ public partial class CallOptionsUI : Node2D
 		_Chi.Hide();
 		_Pon.Hide();
 		_Kan.Hide();
+		_DaiminKan.Hide();
+		_ShouminKan.Hide();
 		_Riichi.Hide();
 		_Tsumo.Hide();
 		_Ron.Hide();

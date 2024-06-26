@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://dewi7jnqklmld"]
 
-[ext_resource type="Script" path="res://Tanyao/scenes/UI/LockedBlock.cs" id="1_j5ial"]
-[ext_resource type="PackedScene" uid="uid://5643582tkyan" path="res://Tanyao/scenes/TileUI/TileUI.tscn" id="2_jcx2u"]
+[ext_resource type="Script" path="res://Tanyao/scenes/UI/LockedBlock.cs" id="1_xn8t4"]
+[ext_resource type="PackedScene" uid="uid://5643582tkyan" path="res://Tanyao/scenes/TileUI/TileUI.tscn" id="2_ffq1g"]
 
 [node name="LockedBlock" type="Control"]
 custom_minimum_size = Vector2(206, 80)
@@ -9,9 +9,9 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 206.0
 offset_bottom = 80.0
-script = ExtResource("1_j5ial")
+script = ExtResource("1_xn8t4")
 
-[node name="TileUI" parent="." instance=ExtResource("2_jcx2u")]
+[node name="TileUI" parent="." instance=ExtResource("2_ffq1g")]
 anchors_preset = 0
 anchor_right = 0.0
 anchor_bottom = 0.0
@@ -22,7 +22,7 @@ grow_vertical = 1
 _IsInteractable = false
 _Tile = "1p"
 
-[node name="TileUI2" parent="." instance=ExtResource("2_jcx2u")]
+[node name="TileUI2" parent="." instance=ExtResource("2_ffq1g")]
 anchors_preset = 0
 anchor_right = 0.0
 anchor_bottom = 0.0
@@ -36,7 +36,7 @@ rotation = 1.5708
 _IsInteractable = false
 _Tile = "1p"
 
-[node name="TileUI4" parent="." instance=ExtResource("2_jcx2u")]
+[node name="TileUI4" parent="." instance=ExtResource("2_ffq1g")]
 anchors_preset = 0
 anchor_right = 0.0
 anchor_bottom = 0.0
@@ -50,7 +50,7 @@ rotation = 1.5708
 _IsInteractable = false
 _Tile = "1p"
 
-[node name="TileUI3" parent="." instance=ExtResource("2_jcx2u")]
+[node name="TileUI3" parent="." instance=ExtResource("2_ffq1g")]
 anchors_preset = 0
 anchor_right = 0.0
 anchor_bottom = 0.0
