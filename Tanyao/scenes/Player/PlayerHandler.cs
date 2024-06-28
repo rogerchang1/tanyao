@@ -186,13 +186,21 @@ public partial class PlayerHandler : BaseHandler
 		
 		//TODO: Make sure kan while in riichi doesn't change waits.
 		//TODO: Needs checks if it's not the last tile in the wall 
-		List<Mahjong.Model.Tile> oKannableTiles = GetKannableTiles();
+		//List<Mahjong.Model.Tile> oKannableTiles = GetKannableTiles();
+		List<KanOptionConfiguration> oKannableTiles = GetKanTiles();
 		if(oKannableTiles.Count > 0)
 		{
 			_CallOptionsUI.Show();
 			_CallOptionsUI._Kan.Show();
 			_CallOptionsUI.SetKanTileOptions(oKannableTiles);
 		}
+		//List<Mahjong.Model.Tile> oShouminKannableTiles = GetShouminKannableTiles();
+		//if(oShouminKannableTiles.Count > 0)
+		//{
+			//_CallOptionsUI.Show();
+			//_CallOptionsUI._ShouminKan.Show();
+			////_CallOptionsUI.SetKanTileOptions(oShouminKannableTiles);
+		//}
 		
 		if(nShanten == 0 && IsRiichi == false && !HasOpenBlocks())
 		{
@@ -348,6 +356,19 @@ public partial class PlayerHandler : BaseHandler
 		EndTurn(oTileUI._TileModel);
 	}
 	
+	public List<KanOptionConfiguration> GetKanTiles(){
+		List<Mahjong.Model.Tile> oDaiminKannableTiles = GetKannableTiles();
+		List<KanOptionConfiguration> oKanTiles = new List<KanOptionConfiguration>();
+		foreach(Mahjong.Model.Tile oTile in oDaiminKannableTiles){
+			oKanTiles.Add(new KanOptionConfiguration(oTile, "daiminkan"));
+		}
+		List<Mahjong.Model.Tile> oShouminKannableTiles = GetShouminKannableTiles();
+		foreach(Mahjong.Model.Tile oTile in oShouminKannableTiles){
+			oKanTiles.Add(new KanOptionConfiguration(oTile, "shouminkan"));
+		}
+		return oKanTiles;
+	}
+	
 	public List<Mahjong.Model.Tile> GetKannableTiles()
 	{
 		Mahjong.CTilesManager oTilesManager = new Mahjong.CTilesManager();
@@ -371,6 +392,20 @@ public partial class PlayerHandler : BaseHandler
 			}
 		}
 		return oKannableTiles;
+	}
+	
+	public List<Mahjong.Model.Tile> GetShouminKannableTiles()
+	{
+		List<Mahjong.Model.Tile> oShounminKannableTiles = new List<Mahjong.Model.Tile>();
+		Mahjong.CTilesManager oTilesManager = new Mahjong.CTilesManager();
+		List<Mahjong.Model.Tile> oTempList = oTilesManager.GetTileListWithBlocksRemoved(_Hand.Tiles,_Hand.LockedBlocks);
+		for(int i = 0;i<_Hand.LockedBlocks.Count;i++){
+			Mahjong.Model.Block oBlock = _Hand.LockedBlocks[i];
+			if(oBlock.Type == Enums.Mentsu.Koutsu && oTilesManager.CountNumberOfTilesOf(oTempList, oBlock.Tiles[0]) >= 1){
+				oShounminKannableTiles.Add(oBlock.Tiles[0]);
+			}
+		}
+		return oShounminKannableTiles;
 	}
 	
 	public List<List<Mahjong.Model.Tile>> IsChi(Mahjong.Model.Tile poTile)
@@ -606,46 +641,90 @@ public partial class PlayerHandler : BaseHandler
 	}
 	
 	//TODO: This is for closed kan
-	public void OnKanButtonPressed(string psTile)
+	public void OnKanButtonPressed(string psTile, string psKanType)
 	{
 		GD.Print("PlayerHandler: OnKanButtonPressed");
 		
-		LockedBlock oClosedKanBlock = (LockedBlock) ClosedKanScene.Instantiate();
-		_CalledHand.AddChild(oClosedKanBlock);
-		_CalledHand.MoveChild(oClosedKanBlock, 0);
-		
-		int nCntKanTiles = 0;
-		foreach(TileUI oTileUI in _PlayerHand._HandClosed.GetChildren())
-		{
-			if(oTileUI._TileModel.ToString() == psTile && nCntKanTiles < 4)
+		if(psKanType == "daiminkan"){
+			LockedBlock oClosedKanBlock = (LockedBlock) ClosedKanScene.Instantiate();
+			_CalledHand.AddChild(oClosedKanBlock);
+			_CalledHand.MoveChild(oClosedKanBlock, 0);
+			
+			int nCntKanTiles = 0;
+			foreach(TileUI oTileUI in _PlayerHand._HandClosed.GetChildren())
 			{
-				oTileUI.QueueFree();
-				nCntKanTiles++;
+				if(oTileUI._TileModel.ToString() == psTile && nCntKanTiles < 4)
+				{
+					oTileUI.QueueFree();
+					nCntKanTiles++;
+				}
 			}
+			
+			Mahjong.Model.Tile oTileModel = new Mahjong.Model.Tile(psTile);
+			
+			oClosedKanBlock.SetUp(oTileModel,oTileModel,oTileModel,oTileModel);
+			
+			Mahjong.CTilesManager oTilesManager = new Mahjong.CTilesManager();
+			Mahjong.Model.Block oBlock = new Mahjong.Model.Block();
+			oBlock.Tiles.Add(oTileModel);
+			oBlock.Tiles.Add(oTileModel);
+			oBlock.Tiles.Add(oTileModel);
+			oBlock.Tiles.Add(oTileModel);
+			oTilesManager.SortTiles(oBlock.Tiles);
+			oBlock.IsOpen = false;
+			oBlock.Type = Enums.Mentsu.Kantsu;
+			_Hand.LockedBlocks.Add(oBlock);
+			
+			foreach(TileUI oTsumoTile in _PlayerHand._HandTsumo.GetChildren())
+			{
+				oTsumoTile.Reparent(_PlayerHand._HandClosed);
+			}
+			_Events.EmitSignal(Events.SignalName.DrawKanTileRequested, this, true);
+		}else if(psKanType == "shouminkan"){
+			LockedBlock oShouminKanBlock = (LockedBlock) ShouminKanScene.Instantiate();
+			
+			int index = 0;
+			foreach(LockedBlock oBlock in _CalledHand.GetChildren()){
+				if(oBlock._TileUI1._Tile.ToString() == psTile){
+					oBlock.QueueFree();
+					break;
+				}else{
+					index++;
+				}
+			}
+			_CalledHand.AddChild(oShouminKanBlock);
+			_CalledHand.MoveChild(oShouminKanBlock, index);
+			
+			foreach(TileUI oTileUI in _PlayerHand._HandClosed.GetChildren())
+			{
+				if(oTileUI._TileModel.ToString() == psTile)
+				{
+					oTileUI.QueueFree();
+					break;
+				}
+			}
+			
+			Mahjong.Model.Tile oTileModel = new Mahjong.Model.Tile(psTile);
+			
+			oShouminKanBlock.SetUp(oTileModel,oTileModel,oTileModel,oTileModel);
+			
+			Mahjong.CTilesManager oTilesManager = new Mahjong.CTilesManager();
+			foreach(Mahjong.Model.Block oBlock in _Hand.LockedBlocks){
+				if(oBlock.Type == Enums.Mentsu.Koutsu && oBlock.Tiles[0].ToString() == psTile){
+					oBlock.Type = Enums.Mentsu.Kantsu;
+					oBlock.Tiles.Add(oTileModel);
+					break;
+				}
+			}
+			
+			foreach(TileUI oTsumoTile in _PlayerHand._HandTsumo.GetChildren())
+			{
+				oTsumoTile.Reparent(_PlayerHand._HandClosed);
+			}
+			_RequestFlipKanDora = true;
+			_Events.EmitSignal(Events.SignalName.DrawKanTileRequested, this, false);
 		}
-		
-		Mahjong.Model.Tile oTileModel = new Mahjong.Model.Tile(psTile);
-		
-		oClosedKanBlock.SetUp(oTileModel,oTileModel,oTileModel,oTileModel);
-		
-		Mahjong.CTilesManager oTilesManager = new Mahjong.CTilesManager();
-		Mahjong.Model.Block oBlock = new Mahjong.Model.Block();
-		oBlock.Tiles.Add(oTileModel);
-		oBlock.Tiles.Add(oTileModel);
-		oBlock.Tiles.Add(oTileModel);
-		oBlock.Tiles.Add(oTileModel);
-		oTilesManager.SortTiles(oBlock.Tiles);
-		oBlock.IsOpen = false;
-		oBlock.Type = Enums.Mentsu.Kantsu;
-		_Hand.LockedBlocks.Add(oBlock);
-		
-		foreach(TileUI oTsumoTile in _PlayerHand._HandTsumo.GetChildren())
-		{
-			oTsumoTile.Reparent(_PlayerHand._HandClosed);
-		}
-		
 		_CallOptionsUI.HideAll();
-		_Events.EmitSignal(Events.SignalName.DrawKanTileRequested, this, true);
 		_PlayerHand.EnableAllTilesInteractability();
 	}
 	

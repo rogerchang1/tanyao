@@ -9,7 +9,7 @@ public partial class KanTileButton : Button
 	
 	Events _Events;
 	
-	public Mahjong.Model.Tile _Tile1;
+	public KanOptionConfiguration _Tile1;
 	
 	public TileUI _TileUI;
 	// Called when the node enters the scene tree for the first time.
@@ -19,16 +19,16 @@ public partial class KanTileButton : Button
 		_TileUI = GetNode<TileUI>("TileUI");
 	}
 	
-	public void SetUpWithTile(Mahjong.Model.Tile poTile1)
+	public void SetUpWithTile(KanOptionConfiguration poTile1)
 	{
-		_TileUI.SetTile(poTile1);
+		_TileUI.SetTile(poTile1._Tile);
 		_Tile1 = poTile1;
 	}
 	
 	public void _on_pressed()
 	{
 		GD.Print("KanTileButton Pressed: " +  _Tile1.ToString());
-		_Events.EmitSignal(Events.SignalName.KanButtonPressed, _Tile1.ToString());
+		_Events.EmitSignal(Events.SignalName.KanButtonPressed, _Tile1._Tile.ToString(), _Tile1._KanType);
 	}
 
 }

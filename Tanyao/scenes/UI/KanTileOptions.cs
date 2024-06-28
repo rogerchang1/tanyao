@@ -14,7 +14,7 @@ public partial class KanTileOptions : Node2D
 		_HBoxContainer = GetNode<HBoxContainer>("HBoxContainer");
 	}
 	
-	public void AddKanTileOption(Mahjong.Model.Tile poTile1)
+	public void AddKanTileOption(KanOptionConfiguration poTile1)
 	{
 		KanTileButton NewKanTileButton = (KanTileButton) KanTileButton.Instantiate();
 		_HBoxContainer.AddChild(NewKanTileButton);

@@ -49,10 +49,10 @@ public partial class CallOptionsUI : Node2D
 		}
 	}
 	
-	public void SetKanTileOptions(List<Mahjong.Model.Tile> poKanTileOptions)
+	public void SetKanTileOptions(List<KanOptionConfiguration> poKanTileOptions)
 	{
 		_KanTileOptionsUI.ClearButtons();
-		foreach(Mahjong.Model.Tile oKanTileOption in poKanTileOptions)
+		foreach(KanOptionConfiguration oKanTileOption in poKanTileOptions)
 		{
 			_KanTileOptionsUI.AddKanTileOption(oKanTileOption);
 		}
