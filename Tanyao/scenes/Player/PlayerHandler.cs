@@ -362,6 +362,10 @@ public partial class PlayerHandler : BaseHandler
 		foreach(Mahjong.Model.Tile oTile in oDaiminKannableTiles){
 			oKanTiles.Add(new KanOptionConfiguration(oTile, "daiminkan"));
 		}
+		List<Mahjong.Model.Tile> oShouminKannableTiles = GetShouminKannableTiles();
+		foreach(Mahjong.Model.Tile oTile in oShouminKannableTiles){
+			oKanTiles.Add(new KanOptionConfiguration(oTile, "shouminkan"));
+		}
 		return oKanTiles;
 	}
 	
@@ -676,7 +680,49 @@ public partial class PlayerHandler : BaseHandler
 				oTsumoTile.Reparent(_PlayerHand._HandClosed);
 			}
 			_Events.EmitSignal(Events.SignalName.DrawKanTileRequested, this, true);
+		}else if(psKanType == "shouminkan"){
+			LockedBlock oShouminKanBlock = (LockedBlock) ShouminKanScene.Instantiate();
 			
+			int index = 0;
+			foreach(LockedBlock oBlock in _CalledHand.GetChildren()){
+				if(oBlock._TileUI1._Tile.ToString() == psTile){
+					oBlock.QueueFree();
+					break;
+				}else{
+					index++;
+				}
+			}
+			_CalledHand.AddChild(oShouminKanBlock);
+			_CalledHand.MoveChild(oShouminKanBlock, index);
+			
+			foreach(TileUI oTileUI in _PlayerHand._HandClosed.GetChildren())
+			{
+				if(oTileUI._TileModel.ToString() == psTile)
+				{
+					oTileUI.QueueFree();
+					break;
+				}
+			}
+			
+			Mahjong.Model.Tile oTileModel = new Mahjong.Model.Tile(psTile);
+			
+			oShouminKanBlock.SetUp(oTileModel,oTileModel,oTileModel,oTileModel);
+			
+			Mahjong.CTilesManager oTilesManager = new Mahjong.CTilesManager();
+			foreach(Mahjong.Model.Block oBlock in _Hand.LockedBlocks){
+				if(oBlock.Type == Enums.Mentsu.Koutsu && oBlock.Tiles[0].ToString() == psTile){
+					oBlock.Type = Enums.Mentsu.Kantsu;
+					oBlock.Tiles.Add(oTileModel);
+					break;
+				}
+			}
+			
+			foreach(TileUI oTsumoTile in _PlayerHand._HandTsumo.GetChildren())
+			{
+				oTsumoTile.Reparent(_PlayerHand._HandClosed);
+			}
+			_RequestFlipKanDora = true;
+			_Events.EmitSignal(Events.SignalName.DrawKanTileRequested, this, false);
 		}
 		_CallOptionsUI.HideAll();
 		_PlayerHand.EnableAllTilesInteractability();
