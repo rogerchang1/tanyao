@@ -17,6 +17,8 @@ public partial class EnemyHandler : BaseHandler
 	public Enums.Wind _SeatWind;
 	public int _Honba = 0;
 	public int _NumKanDoraActive = 0;
+	public int _RiichiTileCounter;
+	public int _WallTileCounter;
 	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()

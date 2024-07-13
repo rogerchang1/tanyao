@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://di1esy8a6t51g"]
+[gd_scene load_steps=9 format=3 uid="uid://di1esy8a6t51g"]
 
 [ext_resource type="Theme" uid="uid://lq7ql6qc76jt" path="res://main_theme.tres" id="1_5oe11"]
 [ext_resource type="Script" path="res://Tanyao/scenes/Table/HandScore.cs" id="1_f2eb2"]
@@ -6,6 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://dfkae4wigcd01" path="res://Tanyao/scenes/UI/LockedBlockChi.tscn" id="3_mioxf"]
 [ext_resource type="PackedScene" uid="uid://co16r34821rvf" path="res://Tanyao/scenes/UI/LockedBlockPon.tscn" id="4_0c1jk"]
 [ext_resource type="PackedScene" uid="uid://e71n8kqfnkj1" path="res://Tanyao/scenes/UI/LockedBlockKan.tscn" id="5_ekl6x"]
+[ext_resource type="PackedScene" uid="uid://txailfyobk4r" path="res://Tanyao/scenes/UI/LockedBlockDaiminKan.tscn" id="6_3jqvc"]
+[ext_resource type="PackedScene" uid="uid://dewi7jnqklmld" path="res://Tanyao/scenes/UI/LockedBlockShouminKan.tscn" id="7_ff7tk"]
 
 [node name="HandScore" type="Node2D"]
 script = ExtResource("1_f2eb2")
@@ -13,6 +15,8 @@ _TileUIScene = ExtResource("2_h2yqa")
 _ChiScene = ExtResource("3_mioxf")
 _PonScene = ExtResource("4_0c1jk")
 _ClosedKanScene = ExtResource("5_ekl6x")
+_DaiminKanScene = ExtResource("6_3jqvc")
+_ShouminKanScene = ExtResource("7_ff7tk")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 offset_left = 64.0
@@ -43,9 +47,9 @@ offset_right = 712.0
 offset_bottom = 168.0
 
 [node name="OpenHand" type="HBoxContainer" parent="."]
-offset_left = 368.0
+offset_left = 400.0
 offset_top = 88.0
-offset_right = 992.0
+offset_right = 1024.0
 offset_bottom = 168.0
 alignment = 2
 

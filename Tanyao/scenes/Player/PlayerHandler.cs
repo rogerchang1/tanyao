@@ -46,6 +46,8 @@ public partial class PlayerHandler : BaseHandler
 	public Mahjong.Model.Tile[] _UraDoraTileArr;
 	public int _NumKanDoraActive = 0;
 	public bool _RequestFlipKanDora = false;
+	public int _RiichiTileCounter;
+	public int _WallTileCounter;
 	
 	//TODO: change this to an enum
 	//Values are: START, BEFOREDRAW, AFTERDRAW, END
@@ -289,6 +291,11 @@ public partial class PlayerHandler : BaseHandler
 		_Hand.WinTile = poWinTile;
 		_Hand.DoraCount = 0;
 		_Hand.UraDoraCount = 0;
+		
+		
+		if(_RiichiTileCounter != -1 && _RiichiTileCounter <= 2){
+			_Hand.IsDoubleRiichi = true;
+		}
 		foreach(Mahjong.Model.Tile oTile in _Hand.Tiles)
 		{
 			for(int i = 0; i <= _NumKanDoraActive; i++)
@@ -367,6 +374,16 @@ public partial class PlayerHandler : BaseHandler
 			oKanTiles.Add(new KanOptionConfiguration(oTile, "shouminkan"));
 		}
 		return oKanTiles;
+	}
+	
+	public void IppatsuCheck()
+	{
+		//TODO: Consider making ippatsu break be having riichitilecounter go back to -1?
+		GD.Print("_RiichiTilecounter: " + _RiichiTileCounter + " _WallTileCounter: " + _WallTileCounter);
+		if(_RiichiTileCounter != -1 && _RiichiTileCounter + 2 >= _WallTileCounter){
+			GD.Print("IsIppatsu = true");
+			_Hand.IsIppatsu = true;
+		}
 	}
 	
 	public List<Mahjong.Model.Tile> GetKannableTiles()
@@ -590,6 +607,7 @@ public partial class PlayerHandler : BaseHandler
 		oTilesManager.SortTiles(oBlock.Tiles);
 		oBlock.IsOpen = true;
 		oBlock.Type = Enums.Mentsu.Kantsu;
+		oBlock.KanType = Enums.KanType.Daiminkan;
 		_Hand.LockedBlocks.Add(oBlock);
 		
 		oEnemyTileUI.QueueFree();
@@ -607,6 +625,9 @@ public partial class PlayerHandler : BaseHandler
 		TileUI oEnemyTileUI = (TileUI) EnemyDiscardsGroup.GetChild(EnemyDiscardsGroup.GetChildren().Count - 1);
 		
 		_Hand.Tiles.Add(oEnemyTileUI._TileModel);
+		
+		IppatsuCheck();
+		
 		Mahjong.CScoreEvaluator oScoreEvaluator = new Mahjong.CScoreEvaluator();
 		Mahjong.Model.Score oScore = oScoreEvaluator.EvaluateScore(_Hand);
 		if(oScore != null && oScore.YakuList.Count > 0)
@@ -619,6 +640,9 @@ public partial class PlayerHandler : BaseHandler
 	public void OnTsumoButtonPressed()
 	{
 		GD.Print("PlayerHandler: OnTsumoButtonPressed");
+		
+		IppatsuCheck();
+		
 		Mahjong.CScoreEvaluator oScoreEvaluator = new Mahjong.CScoreEvaluator();
 		Mahjong.Model.Score oScore = oScoreEvaluator.EvaluateScore(_Hand);
 		if(oScore != null && oScore.YakuList.Count > 0)
@@ -673,6 +697,7 @@ public partial class PlayerHandler : BaseHandler
 			oTilesManager.SortTiles(oBlock.Tiles);
 			oBlock.IsOpen = false;
 			oBlock.Type = Enums.Mentsu.Kantsu;
+			oBlock.KanType = Enums.KanType.Ankan;
 			_Hand.LockedBlocks.Add(oBlock);
 			
 			foreach(TileUI oTsumoTile in _PlayerHand._HandTsumo.GetChildren())
@@ -712,6 +737,7 @@ public partial class PlayerHandler : BaseHandler
 			foreach(Mahjong.Model.Block oBlock in _Hand.LockedBlocks){
 				if(oBlock.Type == Enums.Mentsu.Koutsu && oBlock.Tiles[0].ToString() == psTile){
 					oBlock.Type = Enums.Mentsu.Kantsu;
+					oBlock.KanType = Enums.KanType.Shouminkan;
 					oBlock.Tiles.Add(oTileModel);
 					break;
 				}

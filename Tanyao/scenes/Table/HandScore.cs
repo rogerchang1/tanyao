@@ -22,7 +22,9 @@ public partial class HandScore : Node2D
 	[Export]
 	public PackedScene _ClosedKanScene;
 	[Export]
-	public PackedScene _OpenKanScene;
+	public PackedScene _DaiminKanScene;
+	[Export]
+	public PackedScene _ShouminKanScene;
 	
 	Label _WinLabel;
 	Label _AgariLabel;
@@ -151,9 +153,23 @@ public partial class HandScore : Node2D
 					_OpenHand.MoveChild(PonBlock, 0);
 					PonBlock.SetUp(oBlock.Tiles[0], oBlock.Tiles[1], oBlock.Tiles[2]);
 				}
-				if(oBlock.Type == Enums.Mentsu.Kantsu && oBlock.IsOpen == false)
+				if(oBlock.Type == Enums.Mentsu.Kantsu && oBlock.KanType == Enums.KanType.Ankan)
 				{
 					LockedBlock KanBlock = (LockedBlock) _ClosedKanScene.Instantiate();
+					_OpenHand.AddChild(KanBlock);
+					_OpenHand.MoveChild(KanBlock, 0);
+					KanBlock.SetUp(oBlock.Tiles[0], oBlock.Tiles[1], oBlock.Tiles[2],oBlock.Tiles[3]);
+				}
+				if(oBlock.Type == Enums.Mentsu.Kantsu && oBlock.KanType == Enums.KanType.Daiminkan)
+				{
+					LockedBlock KanBlock = (LockedBlock) _DaiminKanScene.Instantiate();
+					_OpenHand.AddChild(KanBlock);
+					_OpenHand.MoveChild(KanBlock, 0);
+					KanBlock.SetUp(oBlock.Tiles[0], oBlock.Tiles[1], oBlock.Tiles[2],oBlock.Tiles[3]);
+				}
+				if(oBlock.Type == Enums.Mentsu.Kantsu && oBlock.KanType == Enums.KanType.Shouminkan)
+				{
+					LockedBlock KanBlock = (LockedBlock) _ShouminKanScene.Instantiate();
 					_OpenHand.AddChild(KanBlock);
 					_OpenHand.MoveChild(KanBlock, 0);
 					KanBlock.SetUp(oBlock.Tiles[0], oBlock.Tiles[1], oBlock.Tiles[2],oBlock.Tiles[3]);

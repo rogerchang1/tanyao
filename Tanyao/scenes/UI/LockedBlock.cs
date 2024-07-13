@@ -23,7 +23,6 @@ public partial class LockedBlock : Control
 	public void SetUp(Mahjong.Model.Tile poTile1, Mahjong.Model.Tile poTile2, 
 					Mahjong.Model.Tile poTile3, Mahjong.Model.Tile poTile4 = null)
 	{
-		GD.Print("LockedBlock SetUp");
 		_TileUI1.SetTile(poTile1);
 		_TileUI2.SetTile(poTile2);
 		_TileUI3.SetTile(poTile3);
