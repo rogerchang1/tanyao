@@ -367,7 +367,7 @@ public partial class PlayerHandler : BaseHandler
 		List<Mahjong.Model.Tile> oDaiminKannableTiles = GetKannableTiles();
 		List<KanOptionConfiguration> oKanTiles = new List<KanOptionConfiguration>();
 		foreach(Mahjong.Model.Tile oTile in oDaiminKannableTiles){
-			oKanTiles.Add(new KanOptionConfiguration(oTile, "daiminkan"));
+			oKanTiles.Add(new KanOptionConfiguration(oTile, "ankan"));
 		}
 		List<Mahjong.Model.Tile> oShouminKannableTiles = GetShouminKannableTiles();
 		foreach(Mahjong.Model.Tile oTile in oShouminKannableTiles){
@@ -669,7 +669,7 @@ public partial class PlayerHandler : BaseHandler
 	{
 		GD.Print("PlayerHandler: OnKanButtonPressed");
 		
-		if(psKanType == "daiminkan"){
+		if(psKanType == "ankan"){
 			LockedBlock oClosedKanBlock = (LockedBlock) ClosedKanScene.Instantiate();
 			_CalledHand.AddChild(oClosedKanBlock);
 			_CalledHand.MoveChild(oClosedKanBlock, 0);
