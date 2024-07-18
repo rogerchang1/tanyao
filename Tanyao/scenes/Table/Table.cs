@@ -140,92 +140,18 @@ public partial class Table : Godot.Node2D
 		_PlayerHandler._RoundWind = _RoundWind;
 		_DoraIndicatorLabel.Text = "DoraIndicator: " + _DoraIndicatorArr[0].ToString() + "\nDora: " + _DoraTileArr[0].ToString();
 		
+		
+		TableWallModder oTableWallModder = new TableWallModder();
 		//Kan testing
-		//_TableModel.Wall[0] = new Mahjong.Model.Tile("1z");
-		//_TableModel.Wall[1] = new Mahjong.Model.Tile("1z");
-		//_TableModel.Wall[2] = new Mahjong.Model.Tile("1z");
-		//_TableModel.Wall[3] = new Mahjong.Model.Tile("1z");
-		//_TableModel.Wall[4] = new Mahjong.Model.Tile("1z");
-		//_TableModel.Wall[5] = new Mahjong.Model.Tile("1z");
-		//_TableModel.Wall[6] = new Mahjong.Model.Tile("1z");
-		//_TableModel.Wall[7] = new Mahjong.Model.Tile("1z");
-		//
-		//_TableModel.Wall[26] = new Mahjong.Model.Tile("1z");
-		//_TableModel.Wall[27] = new Mahjong.Model.Tile("1z");
-		
+		//oTableWallModder.ModTable("6666z","6666z","66z",_TableModel);
 		//call tiles debug
-		_TableModel.Wall[0] = new Mahjong.Model.Tile("6s");
-		_TableModel.Wall[1] = new Mahjong.Model.Tile("2p");
-		_TableModel.Wall[2] = new Mahjong.Model.Tile("3p");
-		_TableModel.Wall[3] = new Mahjong.Model.Tile("4p");
-		_TableModel.Wall[4] = new Mahjong.Model.Tile("6s");
-		_TableModel.Wall[5] = new Mahjong.Model.Tile("2p");
-		_TableModel.Wall[6] = new Mahjong.Model.Tile("3p");
-		_TableModel.Wall[7] = new Mahjong.Model.Tile("4p");
-		_TableModel.Wall[8] = new Mahjong.Model.Tile("5p");
-		_TableModel.Wall[9] = new Mahjong.Model.Tile("6p");
-		_TableModel.Wall[10] = new Mahjong.Model.Tile("7p");
-		_TableModel.Wall[11] = new Mahjong.Model.Tile("8p");
-		_TableModel.Wall[12] = new Mahjong.Model.Tile("5p");
-		_TableModel.Wall[13] = new Mahjong.Model.Tile("6p");
-		_TableModel.Wall[14] = new Mahjong.Model.Tile("7p");
-		_TableModel.Wall[15] = new Mahjong.Model.Tile("8p");
-		_TableModel.Wall[16] = new Mahjong.Model.Tile("2s");
-		_TableModel.Wall[17] = new Mahjong.Model.Tile("3s");
-		_TableModel.Wall[18] = new Mahjong.Model.Tile("4s");
-		_TableModel.Wall[19] = new Mahjong.Model.Tile("5s");
-		_TableModel.Wall[20] = new Mahjong.Model.Tile("2s");
-		_TableModel.Wall[21] = new Mahjong.Model.Tile("3s");
-		_TableModel.Wall[22] = new Mahjong.Model.Tile("4s");
-		_TableModel.Wall[23] = new Mahjong.Model.Tile("5s");
-		_TableModel.Wall[24] = new Mahjong.Model.Tile("1m");
-		_TableModel.Wall[25] = new Mahjong.Model.Tile("1m");
-		
-		_TableModel.Wall[26] = new Mahjong.Model.Tile("4s");
-		_TableModel.Wall[27] = new Mahjong.Model.Tile("4s");
-		_TableModel.Wall[28] = new Mahjong.Model.Tile("4p");
-		_TableModel.Wall[29] = new Mahjong.Model.Tile("4p");
-		_TableModel.Wall[30] = new Mahjong.Model.Tile("4p");
-		_TableModel.Wall[31] = new Mahjong.Model.Tile("4p");
-		_TableModel.Wall[32] = new Mahjong.Model.Tile("8p");
-		_TableModel.Wall[33] = new Mahjong.Model.Tile("8p");
-		
-		////chiitoi debug
-		//_TableModel.Wall[0] = new Mahjong.Model.Tile("1s");
-		//_TableModel.Wall[1] = new Mahjong.Model.Tile("1s");
-		//_TableModel.Wall[2] = new Mahjong.Model.Tile("4s");
-		//_TableModel.Wall[3] = new Mahjong.Model.Tile("4s");
-		//_TableModel.Wall[4] = new Mahjong.Model.Tile("6s");
-		//_TableModel.Wall[5] = new Mahjong.Model.Tile("2p");
-		//_TableModel.Wall[6] = new Mahjong.Model.Tile("3p");
-		//_TableModel.Wall[7] = new Mahjong.Model.Tile("4p");
-		//_TableModel.Wall[8] = new Mahjong.Model.Tile("8s");
-		//_TableModel.Wall[9] = new Mahjong.Model.Tile("8s");
-		//_TableModel.Wall[10] = new Mahjong.Model.Tile("9s");
-		//_TableModel.Wall[11] = new Mahjong.Model.Tile("9s");
-		//_TableModel.Wall[12] = new Mahjong.Model.Tile("5p");
-		//_TableModel.Wall[13] = new Mahjong.Model.Tile("6p");
-		//_TableModel.Wall[14] = new Mahjong.Model.Tile("7p");
-		//_TableModel.Wall[15] = new Mahjong.Model.Tile("8p");
-		//_TableModel.Wall[16] = new Mahjong.Model.Tile("1z");
-		//_TableModel.Wall[17] = new Mahjong.Model.Tile("1z");
-		//_TableModel.Wall[18] = new Mahjong.Model.Tile("2z");
-		//_TableModel.Wall[19] = new Mahjong.Model.Tile("2z");
-		//_TableModel.Wall[20] = new Mahjong.Model.Tile("2s");
-		//_TableModel.Wall[21] = new Mahjong.Model.Tile("3s");
-		//_TableModel.Wall[22] = new Mahjong.Model.Tile("4s");
-		//_TableModel.Wall[23] = new Mahjong.Model.Tile("5s");
-		//_TableModel.Wall[24] = new Mahjong.Model.Tile("2s");
-		//_TableModel.Wall[25] = new Mahjong.Model.Tile("2s");
-		//
-		//_TableModel.Wall[26] = new Mahjong.Model.Tile("3s");
-		//_TableModel.Wall[27] = new Mahjong.Model.Tile("3s");
-		//_TableModel.Wall[28] = new Mahjong.Model.Tile("2s");
-		//_TableModel.Wall[29] = new Mahjong.Model.Tile("2s");
-		//_TableModel.Wall[30] = new Mahjong.Model.Tile("4p");
-		//_TableModel.Wall[31] = new Mahjong.Model.Tile("4p");
-		//_TableModel.Wall[32] = new Mahjong.Model.Tile("8p");
-		//_TableModel.Wall[33] = new Mahjong.Model.Tile("8p");
+		//oTableWallModder.ModTable("23456s2345678p1m","23456s2345678p1m","44s444488p",_TableModel);
+		//chiitoi debug
+		//oTableWallModder.ModTable("11448899s1122z2s","11448899s1122z2s","2233s4488p",_TableModel);
+		//Kan Riichi debug (Should not be allowed to kan due to waits will change)
+		//oTableWallModder.ModTable("234567p5556789s","234567p5556789s","11z556699s",_TableModel);
+		//Kan Riichi debug (Should be allowed to kan due to waits will not change)
+		oTableWallModder.ModTable("11144567p555678s","11144567p555678s","11z556699s",_TableModel);
 		
 		bool bDealToPlayerFirst = true;
 		if(_PlayerHandler._SeatWind != Enums.Wind.East)
