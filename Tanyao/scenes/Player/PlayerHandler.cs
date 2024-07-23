@@ -40,6 +40,7 @@ public partial class PlayerHandler : BaseHandler
 	public int _Honba = 0;
 	
 	public bool IsRiichi = false;
+	private List<Mahjong.Model.Tile> _RiichiWaits = new List<Mahjong.Model.Tile>();
 	public Enums.Wind _SeatWind;
 	public Enums.Wind _RoundWind;
 	public Mahjong.Model.Tile[] _DoraTileArr;
@@ -172,6 +173,22 @@ public partial class PlayerHandler : BaseHandler
 		_ShantenLabel.Text = "Shanten: " + nShanten;
 		PrintHandForDebugging();
 		
+		bool bPauseAutoDiscardForCalls = false;
+		
+		//TODO: should be allowed to riichi/tsumo/kan when drawn from dead wall
+		//TODO: Needs checks if it's not the last tile in the wall 
+		List<KanOptionConfiguration> oKannableTiles = GetKanTiles();
+		if(oKannableTiles.Count > 0)
+		{
+			_CallOptionsUI.Show();
+			_CallOptionsUI._Kan.Show();
+			_CallOptionsUI.SetKanTileOptions(oKannableTiles);
+			if(IsRiichi)
+			{
+				bPauseAutoDiscardForCalls = true;
+			}
+		}
+		
 		if(nShanten == -1)
 		{
 			Mahjong.Model.Score oScore = IsValidHand(poNewTileModel, Enums.Agari.Tsumo);
@@ -182,20 +199,14 @@ public partial class PlayerHandler : BaseHandler
 			}
 			if(IsRiichi)
 			{
-				return;
+				bPauseAutoDiscardForCalls = true;
 			}
 		}
 		
-		//TODO: Make sure kan while in riichi doesn't change waits.
-		//TODO: Needs checks if it's not the last tile in the wall 
-		//List<Mahjong.Model.Tile> oKannableTiles = GetKannableTiles();
-		List<KanOptionConfiguration> oKannableTiles = GetKanTiles();
-		if(oKannableTiles.Count > 0)
-		{
-			_CallOptionsUI.Show();
-			_CallOptionsUI._Kan.Show();
-			_CallOptionsUI.SetKanTileOptions(oKannableTiles);
+		if(bPauseAutoDiscardForCalls){
+			return;
 		}
+
 		//List<Mahjong.Model.Tile> oShouminKannableTiles = GetShouminKannableTiles();
 		//if(oShouminKannableTiles.Count > 0)
 		//{
@@ -360,6 +371,11 @@ public partial class PlayerHandler : BaseHandler
 		int nShanten = oShantenEvaluator.EvaluateShanten(_Hand);
 		_ShantenLabel.Text = "Shanten: " + nShanten;
 		
+		if(IsRiichi && _RiichiWaits.Count == 0){
+			Mahjong.CHandWaitEvaluator oHandWaitEvaluator = new Mahjong.CHandWaitEvaluator();
+			_RiichiWaits = oHandWaitEvaluator.EvaluateWaits(_Hand);
+		}
+		
 		EndTurn(oTileUI._TileModel);
 	}
 	
@@ -406,6 +422,27 @@ public partial class PlayerHandler : BaseHandler
 			if(cnt == 4)
 			{
 				oKannableTiles.Add(oCurTile);
+			}
+		}
+		if(IsRiichi == true && oKannableTiles.Count > 0){
+			for(int i = 0; i < oKannableTiles.Count; i++){
+				Mahjong.Model.Tile oKanTile = oKannableTiles[i];
+				Mahjong.CHandUtility oHandUtility = new Mahjong.CHandUtility();
+				Mahjong.Model.Hand oTempHand = oHandUtility.Clone(_Hand);
+				Mahjong.Model.Block oBlock = new Mahjong.Model.Block();
+				oBlock.KanType = Enums.KanType.Ankan;
+				oBlock.Type = Enums.Mentsu.Kantsu;
+				oBlock.Tiles.Add(oKanTile);
+				oBlock.Tiles.Add(oKanTile);
+				oBlock.Tiles.Add(oKanTile);
+				oBlock.Tiles.Add(oKanTile);
+				oTempHand.LockedBlocks.Add(oBlock);
+				Mahjong.CHandWaitEvaluator oHandWaitEvaluator = new Mahjong.CHandWaitEvaluator();
+				List<Mahjong.Model.Tile> oNewWaits = oHandWaitEvaluator.EvaluateWaits(oTempHand);
+				
+				if(oNewWaits.Count != _RiichiWaits.Count){
+					oKannableTiles.RemoveAt(i);
+				}
 			}
 		}
 		return oKannableTiles;
@@ -683,6 +720,14 @@ public partial class PlayerHandler : BaseHandler
 					nCntKanTiles++;
 				}
 			}
+			foreach(TileUI oTileUI in _PlayerHand._HandTsumo.GetChildren())
+			{
+				if(oTileUI._TileModel.ToString() == psTile && nCntKanTiles < 4)
+				{
+					oTileUI.QueueFree();
+					nCntKanTiles++;
+				}
+			}
 			
 			Mahjong.Model.Tile oTileModel = new Mahjong.Model.Tile(psTile);
 			
@@ -726,6 +771,13 @@ public partial class PlayerHandler : BaseHandler
 				{
 					oTileUI.QueueFree();
 					break;
+				}
+			}
+			foreach(TileUI oTileUI in _PlayerHand._HandTsumo.GetChildren())
+			{
+				if(oTileUI._TileModel.ToString() == psTile)
+				{
+					oTileUI.QueueFree();
 				}
 			}
 			
@@ -793,6 +845,7 @@ public partial class PlayerHandler : BaseHandler
 		
 		//TODO: maybe make an init function for this.
 		_Hand = new Mahjong.Model.Hand();
+		_RiichiWaits = new List<Mahjong.Model.Tile>();
 		IsRiichi = false;
 	}
 	
@@ -810,6 +863,16 @@ public partial class PlayerHandler : BaseHandler
 			s += _Hand.Tiles[i].ToString();
 		}
 		GD.Print("PlayerHandler PrintHandForDebugging(): " + s);
+		for(int i = 0;i<_Hand.LockedBlocks.Count;i++)
+		{
+			Mahjong.Model.Block oBlock = _Hand.LockedBlocks[i];
+			string b = "LockedBlock " + i + ": ";
+			for(int j = 0;j<oBlock.Tiles.Count;j++)
+			{
+				b += oBlock.Tiles[j].ToString();
+			}
+			GD.Print(b);
+		}
 	}
 	
 	public void DisconnectSignals()

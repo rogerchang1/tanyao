@@ -151,7 +151,9 @@ public partial class Table : Godot.Node2D
 		//Kan Riichi debug (Should not be allowed to kan due to waits will change)
 		//oTableWallModder.ModTable("234567p5556789s","234567p5556789s","11z556699s",_TableModel);
 		//Kan Riichi debug (Should be allowed to kan due to waits will not change)
-		oTableWallModder.ModTable("11144567p555678s","11144567p555678s","11z556699s",_TableModel);
+		//oTableWallModder.ModTable("11144567p55567s","11144567p55567s","11z556699s",_TableModel);
+		//two kans and riichi
+		oTableWallModder.ModTable("11144567p55567s","11144567p55567s","11p556699s",_TableModel);
 		
 		bool bDealToPlayerFirst = true;
 		if(_PlayerHandler._SeatWind != Enums.Wind.East)
