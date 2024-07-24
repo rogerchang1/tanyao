@@ -11,7 +11,6 @@ public partial class LockedBlock : Control
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		GD.Print("LockedBlock ready");
 		_TileUI1 = GetNode<TileUI>("TileUI");
 		_TileUI2 = GetNode<TileUI>("TileUI2");
 		_TileUI3 = GetNode<TileUI>("TileUI3");

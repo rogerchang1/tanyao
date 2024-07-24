@@ -82,7 +82,7 @@ public partial class PlayerHandler : BaseHandler
 		_PlayerHand.DisableAllTilesInteractability();
 		if(psDiscardedTile != "")
 		{
-			GD.Print("Enemy discarded " + psDiscardedTile);
+			GD.Print("PlayerHandler: Enemy discarded " + psDiscardedTile);
 			Mahjong.Model.Tile oDiscardedTile = new Mahjong.Model.Tile(psDiscardedTile);
 			
 			List<List<Mahjong.Model.Tile>> oChiAbleTiles = IsChi(oDiscardedTile);
@@ -207,14 +207,6 @@ public partial class PlayerHandler : BaseHandler
 			return;
 		}
 
-		//List<Mahjong.Model.Tile> oShouminKannableTiles = GetShouminKannableTiles();
-		//if(oShouminKannableTiles.Count > 0)
-		//{
-			//_CallOptionsUI.Show();
-			//_CallOptionsUI._ShouminKan.Show();
-			////_CallOptionsUI.SetKanTileOptions(oShouminKannableTiles);
-		//}
-		
 		if(nShanten == 0 && IsRiichi == false && !HasOpenBlocks())
 		{
 			_CallOptionsUI.Show();
@@ -509,6 +501,7 @@ public partial class PlayerHandler : BaseHandler
 	public void OnChiButtonPressed(string psTile1, string psTile2)
 	{
 		GD.Print("PlayerHandler: OnChiButtonPressed");
+		_CallOptionsUI.HideAll();
 		GridContainer EnemyDiscardsGroup = (GridContainer) GetTree().GetFirstNodeInGroup("EnemyDiscardsGroup");
 		TileUI oEnemyTileUI = (TileUI) EnemyDiscardsGroup.GetChild(EnemyDiscardsGroup.GetChildren().Count - 1);
 		
@@ -557,13 +550,13 @@ public partial class PlayerHandler : BaseHandler
 		oTileUI1.QueueFree();
 		oTileUI2.QueueFree();
 		
-		_CallOptionsUI.HideAll();
 		_PlayerHand.EnableAllTilesInteractability();
 	}
 	
 	public void OnPonButtonPressed()
 	{
 		GD.Print("PlayerHandler: OnPonButtonPressed");
+		_CallOptionsUI.HideAll();
 		GridContainer EnemyDiscardsGroup = (GridContainer) GetTree().GetFirstNodeInGroup("EnemyDiscardsGroup");
 		TileUI oEnemyTileUI = (TileUI) EnemyDiscardsGroup.GetChild(EnemyDiscardsGroup.GetChildren().Count - 1);
 		
@@ -602,13 +595,13 @@ public partial class PlayerHandler : BaseHandler
 		
 		oEnemyTileUI.QueueFree();
 		
-		_CallOptionsUI.HideAll();
 		_PlayerHand.EnableAllTilesInteractability();
 	}
 	
 	public void OnDaiminKanButtonPressed()
 	{
 		GD.Print("PlayerHandler: OnDaiminKanButtonPressed");
+		_CallOptionsUI.HideAll();
 		GridContainer EnemyDiscardsGroup = (GridContainer) GetTree().GetFirstNodeInGroup("EnemyDiscardsGroup");
 		TileUI oEnemyTileUI = (TileUI) EnemyDiscardsGroup.GetChild(EnemyDiscardsGroup.GetChildren().Count - 1);
 		
@@ -649,7 +642,6 @@ public partial class PlayerHandler : BaseHandler
 		
 		oEnemyTileUI.QueueFree();
 		
-		_CallOptionsUI.HideAll();
 		_Events.EmitSignal(Events.SignalName.DrawKanTileRequested, this, false);
 		_RequestFlipKanDora = true;
 		_PlayerHand.EnableAllTilesInteractability();
@@ -658,6 +650,7 @@ public partial class PlayerHandler : BaseHandler
 	public void OnRonButtonPressed()
 	{
 		GD.Print("PlayerHandler: OnRonButtonPressed");
+		_CallOptionsUI.HideAll();
 		GridContainer EnemyDiscardsGroup = (GridContainer) GetTree().GetFirstNodeInGroup("EnemyDiscardsGroup");
 		TileUI oEnemyTileUI = (TileUI) EnemyDiscardsGroup.GetChild(EnemyDiscardsGroup.GetChildren().Count - 1);
 		
@@ -671,13 +664,12 @@ public partial class PlayerHandler : BaseHandler
 		{
 			Win(oScore);
 		}
-		_CallOptionsUI.HideAll();
 	}
 	
 	public void OnTsumoButtonPressed()
 	{
 		GD.Print("PlayerHandler: OnTsumoButtonPressed");
-		
+		_CallOptionsUI.HideAll();
 		IppatsuCheck();
 		
 		Mahjong.CScoreEvaluator oScoreEvaluator = new Mahjong.CScoreEvaluator();
@@ -686,18 +678,17 @@ public partial class PlayerHandler : BaseHandler
 		{
 			Win(oScore);
 		}
-		_CallOptionsUI.HideAll();
 	}
 	
 	
 	public void OnRiichiButtonPressed()
 	{
 		GD.Print("PlayerHandler: OnRiichiButtonPressed");
+		_CallOptionsUI.HideAll();
 		IsRiichi = true;
 		//TODO: double riichi?
 		_Hand.IsRiichi = true;
 		_PlayerPoints = _PlayerPoints - 1000;
-		_CallOptionsUI.HideAll();
 		_Events.EmitSignal(Events.SignalName.RiichiDeclared);
 	}
 	
@@ -705,7 +696,7 @@ public partial class PlayerHandler : BaseHandler
 	public void OnKanButtonPressed(string psTile, string psKanType)
 	{
 		GD.Print("PlayerHandler: OnKanButtonPressed");
-		
+		_CallOptionsUI.HideAll();
 		if(psKanType == "ankan"){
 			LockedBlock oClosedKanBlock = (LockedBlock) ClosedKanScene.Instantiate();
 			_CalledHand.AddChild(oClosedKanBlock);
@@ -802,7 +793,6 @@ public partial class PlayerHandler : BaseHandler
 			_RequestFlipKanDora = true;
 			_Events.EmitSignal(Events.SignalName.DrawKanTileRequested, this, false);
 		}
-		_CallOptionsUI.HideAll();
 		_PlayerHand.EnableAllTilesInteractability();
 	}
 	
@@ -866,7 +856,7 @@ public partial class PlayerHandler : BaseHandler
 		for(int i = 0;i<_Hand.LockedBlocks.Count;i++)
 		{
 			Mahjong.Model.Block oBlock = _Hand.LockedBlocks[i];
-			string b = "LockedBlock " + i + ": ";
+			string b = "PlayerHandler PrintHandForDebugging(): LockedBlock " + i + ": ";
 			for(int j = 0;j<oBlock.Tiles.Count;j++)
 			{
 				b += oBlock.Tiles[j].ToString();
