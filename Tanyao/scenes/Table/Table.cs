@@ -145,7 +145,7 @@ public partial class Table : Godot.Node2D
 		//Kan testing
 		//oTableWallModder.ModTable("6666z","6666z","66z",_TableModel);
 		//call tiles debug
-		//oTableWallModder.ModTable("23456s2345678p1m","23456s2345678p1m","44s444488p",_TableModel);
+		oTableWallModder.ModTable("23456s2345678p1m","23456s2345678p1m","44s444488p",_TableModel);
 		//chiitoi debug
 		//oTableWallModder.ModTable("11448899s1122z2s","11448899s1122z2s","2233s4488p",_TableModel);
 		//Kan Riichi debug (Should not be allowed to kan due to waits will change)
@@ -153,7 +153,9 @@ public partial class Table : Godot.Node2D
 		//Kan Riichi debug (Should be allowed to kan due to waits will not change)
 		//oTableWallModder.ModTable("11144567p55567s","11144567p55567s","11z556699s",_TableModel);
 		//two kans and riichi
-		oTableWallModder.ModTable("11144567p55567s","11144567p55567s","11p556699s",_TableModel);
+		//oTableWallModder.ModTable("11144567p55567s","11144567p55567s","11p556699s",_TableModel);
+		//chi shouldn't allow immediate kan
+		//oTableWallModder.ModTable("11114567p55567s","11114567p55567s","88p556699s",_TableModel);
 		
 		bool bDealToPlayerFirst = true;
 		if(_PlayerHandler._SeatWind != Enums.Wind.East)
@@ -427,6 +429,10 @@ public partial class Table : Godot.Node2D
 		
 		UpdateDebugInfoLabel();
 		
+		//TODO: I had to adjust the size of the Hand HBoxContainer and placement of HandScore confirm button
+		//because they were overlapping with each other. The Hand HBoxContainer was eating the mouse click input
+		//so parts of the Confirm button area cannot be highlighted on hover and cannot be clicked.
+		//I have no idea how to adjust input event handling order such that Confirm button takes precedence for mouse clicks
 		HandScore oHandScore = (HandScore) _HandScoreScene.Instantiate();
 		AddChild(oHandScore);
 		oHandScore._Score = poScore._Score;
@@ -435,7 +441,6 @@ public partial class Table : Godot.Node2D
 		oHandScore._UraDoraIndicatorArr = _UraDoraIndicatorArr;
 		oHandScore._NumKanDoraActive = _NumKanDoraActive;
 		oHandScore.SetLabels();
-		
 	}
 	
 	public void UpdateDebugInfoLabel()
