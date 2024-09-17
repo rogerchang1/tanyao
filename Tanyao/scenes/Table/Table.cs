@@ -13,6 +13,7 @@ public partial class Table : Godot.Node2D
 	public EnemyHandler _EnemyHandler;
 	
 	public DeadWall _DeadWall;
+	public HonbaUI _HonbaUI;
 	
 	public Label _TilesLeftLabel;
 	public Label _EnemyPointsLabel;
@@ -58,6 +59,7 @@ public partial class Table : Godot.Node2D
 		_EnemyHandler = GetNode<EnemyHandler>("EnemyHandler");
 		
 		_DeadWall = GetNode<DeadWall>("TableUI/DeadWall");
+		_HonbaUI = GetNode<HonbaUI>("TableUI/HonbaUI");
 		
 		_TilesLeftLabel = GetNode<Label>("DebugInfoContainer/TilesLeftLabel");
 		_EnemyPointsLabel = GetNode<Label>("DebugInfoContainer/EnemyPointsLabel");
@@ -83,6 +85,7 @@ public partial class Table : Godot.Node2D
 		
 		InitializeTableValues();
 		UpdateDebugInfoLabel();
+		UpdateHonbaUI();
 		InitializeTable();
 	}
 	
@@ -145,7 +148,7 @@ public partial class Table : Godot.Node2D
 		//Kan testing
 		//oTableWallModder.ModTable("6666z","6666z","66z",_TableModel);
 		//call tiles debug
-		oTableWallModder.ModTable("23456s2345678p1m","23456s2345678p1m","44s444488p",_TableModel);
+		//oTableWallModder.ModTable("23456s2345678p1m","23456s2345678p1m","44s444488p",_TableModel);
 		//chiitoi debug
 		//oTableWallModder.ModTable("11448899s1122z2s","11448899s1122z2s","2233s4488p",_TableModel);
 		//Kan Riichi debug (Should not be allowed to kan due to waits will change)
@@ -164,6 +167,7 @@ public partial class Table : Godot.Node2D
 		}
 		InitializeHands(bDealToPlayerFirst);
 		UpdateDebugInfoLabel();
+		UpdateHonbaUI();
 		UpdateTilesLeftLabel();
 		StartRound();
 	}
@@ -358,6 +362,7 @@ public partial class Table : Godot.Node2D
 		}
 		_Honba += 1;
 		UpdateDebugInfoLabel();
+		UpdateHonbaUI();
 		OnRoundEnded();
 		await ToSignal(GetTree().CreateTimer(2), "timeout");
 		InitializeTable();
@@ -428,6 +433,8 @@ public partial class Table : Godot.Node2D
 		}
 		
 		UpdateDebugInfoLabel();
+		UpdateHonbaUI();
+		_HonbaUI.Hide();
 		
 		//TODO: I had to adjust the size of the Hand HBoxContainer and placement of HandScore confirm button
 		//because they were overlapping with each other. The Hand HBoxContainer was eating the mouse click input
@@ -459,6 +466,8 @@ public partial class Table : Godot.Node2D
 		HandScore oHandScore = GetNode<HandScore>("HandScore");
 		oHandScore.QueueFree();
 		
+		_HonbaUI.Show();
+		
 		if(_RoundNumber > 4)
 		{
 			EndGame oEndGame = (EndGame) ResourceLoader.Load<PackedScene>("res://Tanyao/scenes/EndGame.tscn").Instantiate();
@@ -477,6 +486,7 @@ public partial class Table : Godot.Node2D
 		_Pot += 1000;
 		_PlayerHandler._RiichiTileCounter = _TileDrawCounter;
 		UpdateDebugInfoLabel();
+		UpdateHonbaUI();
 	}
 	
 	public void OnFlipKanDoraDeclared()
@@ -509,5 +519,11 @@ public partial class Table : Godot.Node2D
 		_Events.HandScoreConfirmButtonPressed -= OnHandScoreConfirmButtonPressed;
 		_PlayerHandler.DisconnectSignals();
 		_EnemyHandler.DisconnectSignals();
+	}
+	
+	private void UpdateHonbaUI()
+	{
+		_HonbaUI.SetHonbaLabelText(_Honba);
+		_HonbaUI.SetRiichiLabelText(_Pot/1000);
 	}
 }

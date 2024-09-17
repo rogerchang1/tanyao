@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://dvpig2rtau57s"]
+[gd_scene load_steps=16 format=3 uid="uid://dvpig2rtau57s"]
 
 [ext_resource type="Script" path="res://Tanyao/scenes/Table/Table.cs" id="1_kw13y"]
 [ext_resource type="Script" path="res://Tanyao/scenes/Table/Hand.cs" id="2_3n81g"]
@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://di1esy8a6t51g" path="res://Tanyao/scenes/Table/HandScore.tscn" id="8_eyxk5"]
 [ext_resource type="PackedScene" uid="uid://dewi7jnqklmld" path="res://Tanyao/scenes/UI/LockedBlockShouminKan.tscn" id="9_o1fel"]
 [ext_resource type="Script" path="res://Tanyao/scenes/Table/DeadWall.cs" id="10_6w16q"]
+[ext_resource type="PackedScene" uid="uid://bvuld5x6h6q0v" path="res://Tanyao/scenes/UI/HonbaUI.tscn" id="14_c25pc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5qduj"]
 size = Vector2(1280, 512)
@@ -131,6 +132,12 @@ _EnemyHand = NodePath("../TableUI/EnemyHand")
 TileUIScene = ExtResource("2_wqckx")
 
 [node name="TableUI" type="CanvasLayer" parent="." groups=["UILayer"]]
+
+[node name="HonbaUI" parent="TableUI" instance=ExtResource("14_c25pc")]
+offset_left = 496.0
+offset_top = 324.0
+offset_right = -688.0
+offset_bottom = -364.0
 
 [node name="EnemyHand" type="HBoxContainer" parent="TableUI"]
 anchors_preset = 1

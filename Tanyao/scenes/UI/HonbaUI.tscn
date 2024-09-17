@@ -1,0 +1,44 @@
+[gd_scene load_steps=3 format=3 uid="uid://bvuld5x6h6q0v"]
+
+[ext_resource type="Texture2D" uid="uid://b3wir58ugmb5j" path="res://Tanyao/assets/Sprite-0002.png" id="1_ktbbh"]
+[ext_resource type="Script" path="res://Tanyao/scenes/UI/HonbaUI.cs" id="1_x4ctn"]
+
+[node name="HonbaUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1184.0
+offset_bottom = -688.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_x4ctn")
+
+[node name="RiichiSprite2D" type="Sprite2D" parent="."]
+position = Vector2(32, 8)
+texture = ExtResource("1_ktbbh")
+region_enabled = true
+region_rect = Rect2(16, 18, 64, 12)
+
+[node name="HonbaSprite2D" type="Sprite2D" parent="."]
+position = Vector2(32, 24)
+texture = ExtResource("1_ktbbh")
+region_enabled = true
+region_rect = Rect2(16, 50, 64, 12)
+
+[node name="RiichiLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 72.0
+offset_right = 112.0
+offset_bottom = 23.0
+scale = Vector2(0.87255, 0.656932)
+text = "x0"
+
+[node name="HonbaLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 72.0
+offset_top = 15.0
+offset_right = 112.0
+offset_bottom = 38.0
+scale = Vector2(0.87255, 0.656932)
+text = "x0"
