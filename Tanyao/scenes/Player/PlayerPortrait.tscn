@@ -1,0 +1,57 @@
+[gd_scene load_steps=6 format=3 uid="uid://diabo4a4xt12q"]
+
+[ext_resource type="Texture2D" uid="uid://rtfr6ginuvle" path="res://Tanyao/assets/Sprite-0003.png" id="1_hmo5p"]
+[ext_resource type="Script" path="res://Tanyao/scenes/Player/PlayerPortrait.cs" id="1_hojti"]
+
+[sub_resource type="Animation" id="Animation_jlxj0"]
+resource_name = "blink"
+length = 3.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.6, 0.8, 1, 1.2, 1.4, 1.6, 1.8, 2, 2.2, 2.4, 2.6, 2.8, 3, 3.2, 3.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17]
+}
+
+[sub_resource type="Animation" id="Animation_mww5k"]
+resource_name = "new_animation"
+length = 3.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.6, 0.8, 1, 1.2, 1.4, 1.6, 1.8, 2, 2.2, 2.4, 2.6, 2.8, 3, 3.2, 3.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_os3ch"]
+_data = {
+"blink": SubResource("Animation_jlxj0"),
+"new_animation": SubResource("Animation_mww5k")
+}
+
+[node name="PlayerPortrait" type="Node2D"]
+script = ExtResource("1_hojti")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("1_hmo5p")
+hframes = 18
+frame = 17
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_os3ch")
+}

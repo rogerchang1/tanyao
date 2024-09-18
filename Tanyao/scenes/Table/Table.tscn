@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://dvpig2rtau57s"]
+[gd_scene load_steps=17 format=3 uid="uid://dvpig2rtau57s"]
 
 [ext_resource type="Script" path="res://Tanyao/scenes/Table/Table.cs" id="1_kw13y"]
 [ext_resource type="Script" path="res://Tanyao/scenes/Table/Hand.cs" id="2_3n81g"]
@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://dewi7jnqklmld" path="res://Tanyao/scenes/UI/LockedBlockShouminKan.tscn" id="9_o1fel"]
 [ext_resource type="Script" path="res://Tanyao/scenes/Table/DeadWall.cs" id="10_6w16q"]
 [ext_resource type="PackedScene" uid="uid://bvuld5x6h6q0v" path="res://Tanyao/scenes/UI/HonbaUI.tscn" id="14_c25pc"]
+[ext_resource type="PackedScene" uid="uid://diabo4a4xt12q" path="res://Tanyao/scenes/Player/PlayerPortrait.tscn" id="15_o6uim"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5qduj"]
 size = Vector2(1280, 512)
@@ -236,3 +237,6 @@ grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.7, 0.7)
 columns = 6
+
+[node name="PlayerPortrait" parent="." instance=ExtResource("15_o6uim")]
+position = Vector2(64, 584)

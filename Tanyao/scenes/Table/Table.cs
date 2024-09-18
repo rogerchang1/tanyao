@@ -14,6 +14,7 @@ public partial class Table : Godot.Node2D
 	
 	public DeadWall _DeadWall;
 	public HonbaUI _HonbaUI;
+	public PlayerPortrait _PlayerPortrait;
 	
 	public Label _TilesLeftLabel;
 	public Label _EnemyPointsLabel;
@@ -60,6 +61,7 @@ public partial class Table : Godot.Node2D
 		
 		_DeadWall = GetNode<DeadWall>("TableUI/DeadWall");
 		_HonbaUI = GetNode<HonbaUI>("TableUI/HonbaUI");
+		_PlayerPortrait = GetNode<PlayerPortrait>("PlayerPortrait");
 		
 		_TilesLeftLabel = GetNode<Label>("DebugInfoContainer/TilesLeftLabel");
 		_EnemyPointsLabel = GetNode<Label>("DebugInfoContainer/EnemyPointsLabel");
@@ -435,6 +437,7 @@ public partial class Table : Godot.Node2D
 		UpdateDebugInfoLabel();
 		UpdateHonbaUI();
 		_HonbaUI.Hide();
+		_PlayerPortrait.Hide();
 		
 		//TODO: I had to adjust the size of the Hand HBoxContainer and placement of HandScore confirm button
 		//because they were overlapping with each other. The Hand HBoxContainer was eating the mouse click input
@@ -467,6 +470,7 @@ public partial class Table : Godot.Node2D
 		oHandScore.QueueFree();
 		
 		_HonbaUI.Show();
+		_PlayerPortrait.Show();
 		
 		if(_RoundNumber > 4)
 		{
