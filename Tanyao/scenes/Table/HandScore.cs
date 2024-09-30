@@ -117,6 +117,7 @@ public partial class HandScore : Node2D
 			TileUI oWinTile = (TileUI) _TileUIScene.Instantiate();
 			_WinTile.AddChild(oWinTile);
 			oWinTile.SetTile(_Hand.WinTile);
+			oWinTile._IsInteractable = false;
 			
 			if(_Hand.Agari == Enums.Agari.Tsumo)
 			{
