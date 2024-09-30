@@ -213,7 +213,7 @@ public partial class PlayerHandler : BaseHandler
 			return;
 		}
 
-		if(nShanten == 0 && IsRiichi == false && !HasOpenBlocks())
+		if(nShanten <= 0 && IsRiichi == false && !HasOpenBlocks())
 		{
 			_CallOptionsUI.Show();
 			_CallOptionsUI._Riichi.Show();
