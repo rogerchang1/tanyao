@@ -50,6 +50,9 @@ public partial class PlayerHandler : BaseHandler
 	public int _RiichiTileCounter;
 	public int _WallTileCounter;
 	
+	//For testing purposes and convenience. Should be set to false when not testing.
+	public bool _BypassFuriten = false;
+	
 	//TODO: change this to an enum
 	//Values are: START, BEFOREDRAW, AFTERDRAW, END
 	public string TurnState = "START";
@@ -112,9 +115,12 @@ public partial class PlayerHandler : BaseHandler
 			oTilesManager.RemoveSingleTileOf(_Hand.Tiles, oDiscardedTile);
 			if(oScore != null && oScore.YakuList.Count > 0)
 			{
-				_CallOptionsUI.Show();
-				_CallOptionsUI._Ron.Show();
-				bShowCallOptions = true;
+				FuritenChecker oFuritenChecker = new FuritenChecker();
+				if(!oFuritenChecker.IsFuriten(_Hand.DiscardedTiles,oDiscardedTile) || _BypassFuriten){
+					_CallOptionsUI.Show();
+					_CallOptionsUI._Ron.Show();
+					bShowCallOptions = true;
+				}
 			}
 			
 			if(!bShowCallOptions)

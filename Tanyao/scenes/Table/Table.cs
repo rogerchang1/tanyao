@@ -145,8 +145,10 @@ public partial class Table : Godot.Node2D
 		_PlayerHandler._RoundWind = _RoundWind;
 		_DoraIndicatorLabel.Text = "DoraIndicator: " + _DoraIndicatorArr[0].ToString() + "\nDora: " + _DoraTileArr[0].ToString();
 		
-		
+		//_PlayerHandler._BypassFuriten = true;
 		TableWallModder oTableWallModder = new TableWallModder();
+		//Furiten testing
+		oTableWallModder.ModTable("23456788s34567p","23456788s34567p","8888p",_TableModel);
 		//Kan testing
 		//oTableWallModder.ModTable("6666z","6666z","66z",_TableModel);
 		//call tiles debug
